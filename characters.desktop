@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Characters
+Comment=Browse and search for non-standard characters
+
+Exec=audacious -f
+OnlyShowIn=Unity;
