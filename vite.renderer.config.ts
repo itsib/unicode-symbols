@@ -1,6 +1,8 @@
 import type { ConfigEnv, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
 import { pluginExposeRenderer } from './vite.base.config';
+import { join } from 'path';
+import svg from 'vite-plugin-svgr';
 
 // https://vitejs.dev/config
 export default defineConfig((env) => {
@@ -12,12 +14,23 @@ export default defineConfig((env) => {
     root,
     mode,
     base: './',
+    // html: {
+    //   cspNonce: '2726c7f26c'
+    // },
     build: {
       outDir: `.vite/renderer/${name}`,
+      assetsInlineLimit: 0,
+      cssCodeSplit: false,
     },
-    plugins: [pluginExposeRenderer(name)],
+    plugins: [
+      svg(),
+      pluginExposeRenderer(name)
+    ],
     resolve: {
       preserveSymlinks: true,
+      alias: {
+        '/@': join(__dirname, 'renderer')
+      }
     },
     clearScreen: false,
   } as UserConfig;

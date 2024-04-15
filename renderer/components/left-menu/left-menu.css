@@ -1,0 +1,47 @@
+.left-menu {
+  width: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  background-color: rgb(var(--second-bg));
+  border-right: 1px solid rgb(var(--border-primary));
+
+  .menu-item {
+    height: 44px;
+    color: rgb(var(--text-primary));
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: all .2s ease-in-out;
+
+    .menu-icon {
+      width: 44px;
+      text-align: center;
+      line-height: 0;
+
+      svg {
+        width: 20px;
+        height: auto;
+      }
+    }
+
+    .label {
+      margin-left: 2px;
+    }
+
+    &:hover {
+      background-color: color-mix(in srgb, rgb(var(--second-bg)) 95%, rgb(var(--text-primary)) 5%);
+    }
+
+    &.active {
+      background-color: rgb(var(--accent));
+      color: rgb(255 255 255);
+
+      &:hover {
+        background-color: color-mix(in srgb, rgb(var(--accent)) 95%, rgb(var(--text-primary)) 5%);
+      }
+    }
+  }
+}

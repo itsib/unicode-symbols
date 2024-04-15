@@ -1,4 +1,6 @@
-window.addEventListener('DOMContentLoaded', () => {
+// window.addEventListener('DOMContentLoaded', () => {
+  // systemPreferences.getColor('window-background')
+
   // const replaceText = (selector: string, text: string) => {
   //   const element = document.getElementById(selector);
   //   if (element) {
@@ -9,4 +11,4 @@ window.addEventListener('DOMContentLoaded', () => {
   // for (const dependency of ['chrome', 'node', 'electron']) {
   //   replaceText(`${dependency}-version`, process.versions[dependency]);
   // }
-});
+// });

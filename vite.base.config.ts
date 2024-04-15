@@ -43,16 +43,17 @@ export function getBuildDefine(env: ConfigEnv<'build'>) {
   const { command, forgeConfig } = env;
   const names = forgeConfig.renderer.filter(({ name }) => name != null).map(({ name }) => name!);
   const defineKeys = getDefineKeys(names);
-  const define = Object.entries(defineKeys).reduce((acc, [name, keys]) => {
+
+  return Object.entries(defineKeys).reduce((acc, [name, keys]) => {
     const { VITE_DEV_SERVER_URL, VITE_NAME } = keys;
+
     const def = {
       [VITE_DEV_SERVER_URL]: command === 'serve' ? JSON.stringify(process.env[VITE_DEV_SERVER_URL]) : undefined,
       [VITE_NAME]: JSON.stringify(name),
     };
+
     return { ...acc, ...def };
   }, {} as Record<string, any>);
-
-  return define;
 }
 
 export function pluginExposeRenderer(name: string): Plugin {
@@ -80,12 +81,13 @@ export function pluginHotRestart(command: 'reload' | 'restart'): Plugin {
     closeBundle() {
       if (command === 'reload') {
         for (const server of Object.values(process.viteDevServers)) {
-          // Preload scripts hot reload.
-          server.ws.send({ type: 'full-reload' });
+
+          const ws = server.hot.channels.find(({ name }) => name === 'ws');
+          if (ws) {
+            ws.send({ type: 'full-reload' });
+          }
         }
       } else {
-        // Main process hot restart.
-        // https://github.com/electron/forge/blob/v7.2.0/packages/api/core/src/api/start.ts#L216-L223
         process.stdin.emit('data', 'rs');
       }
     },

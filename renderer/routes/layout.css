@@ -1,0 +1,18 @@
+.layout {
+  display: flex;
+
+  .menu-overlay {
+    width: 260px;
+    height: 100vh;
+  }
+
+  .pages-content {
+    height: 100vh;
+    width: calc(100vw - 260px);
+    overflow-y: auto;
+
+    .scroll-overlay {
+
+    }
+  }
+}

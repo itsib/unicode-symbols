@@ -1,0 +1,76 @@
+@import-glob "components/**/*.css";
+@import-glob "routes/**/*.css";
+
+:root {
+  /* Constants */
+  --modal-z-index: 99;
+
+  /* Colors */
+  --accent: 0 115 229;
+  --base-bg: 255 255 255;
+  --second-bg: 248 248 248;
+  --scroll-thumb: 248 248 248;
+  --text-primary: 0 0 0;
+  --text-secondary: 65 65 65;
+  --border-primary: 199 199 199;
+
+  /* Modal color */
+  --modal-bg-overlay: 0 0 0;
+  --modal-background: 0 0 0;
+  --modal-shadow: 0 0 50px rgba(10, 10, 10, 0.9);
+  --modal-border-radius: 16px;
+  --modal-border-color: 199 199 199;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --base-bg: 30 30 30;
+    --second-bg: 44 44 44;
+    --scroll-thumb: 44 44 44;
+    --text-primary: 255 255 255;
+    --text-secondary: 209 209 209;
+    --border-primary: 24 24 24;
+
+    /* Modal color */
+    --modal-bg-overlay: 0 0 0;
+    --modal-bg-header: 34 34 34;
+    --modal-shadow: 0 0 50px rgba(10, 10, 10, 0.9);
+
+    --modal-border-radius: 10px;
+    --modal-border-color: 24 24 24;
+  }
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+  color: rgb(var(--text-primary));
+  background-color: rgb(var(--base-bg));
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  padding: 4px 0;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-button {
+  height: 6px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgb(var(--scroll-thumb));
+}
+
+::-webkit-scrollbar-corner {
+  display: none;
+}
