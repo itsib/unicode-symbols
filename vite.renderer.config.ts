@@ -14,9 +14,6 @@ export default defineConfig((env) => {
     root,
     mode,
     base: './',
-    // html: {
-    //   cspNonce: '2726c7f26c'
-    // },
     build: {
       outDir: `.vite/renderer/${name}`,
       assetsInlineLimit: 0,
@@ -24,7 +21,7 @@ export default defineConfig((env) => {
     },
     plugins: [
       svg(),
-      pluginExposeRenderer(name)
+      pluginExposeRenderer(name),
     ],
     resolve: {
       preserveSymlinks: true,

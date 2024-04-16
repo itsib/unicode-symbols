@@ -1,90 +1,121 @@
 import CurrenciesIcon from '../svg/currencies.svg?react'
 import ArrowsIcon from '../svg/arrows.svg?react'
-import RomanIcon from '../svg/roman.svg?react'
+import AnimalsIcon from '../svg/animals.svg?react'
 import MathIcon from '../svg/math.svg?react'
 import LettersIcon from '../svg/letters.svg?react'
 import SuperscriptIcon from '../svg/superscript.svg?react'
 import OtherIcon from '../svg/other-signs.svg?react'
 import DingbatsIcon from '../svg/dingbats.svg?react'
+import NumbersIcon from '../svg/numbers.svg?react'
+import SmilesIcon from '../svg/smiles.svg?react'
+import FoodIcon from '../svg/food.svg?react'
+import { CategoryIcons } from '../types';
 
-export const SYMBOLS = [
+export const SYMBOLS: CategoryIcons[] = [
   {
-    id: 'U+20A0',
-    name: 'Currencies',
-    Icon: CurrenciesIcon,
-    ranges: [
-      { from: 'U+20A0', to: 'U+20BF' }
+    id: 'RDd28cQb1YHCBPI',
+    name: 'Smiles & People',
+    color: true,
+    Icon: SmilesIcon,
+    chars: [
+      { start: 128064, end: 128159 },
+      { start: 128512, end: 128591 },
     ],
   },
   {
-    id: 'U+2150',
-    name: 'Numbers',
-    Icon: RomanIcon,
-    ranges: [
-      { from: 'U+2150', to: 'U+215F' },
-      { from: 'U+2460', to: 'U+249B' },
-      { from: 'U+24EA', to: 'U+24FF' },
-      // { from: 'U+2700', to: 'U+27BF' },
-    ]
-  },
-  {
-    id: 'U+22A0',
-    name: 'Math Operators',
-    Icon: MathIcon,
-    ranges: [
-      { from: 'U+22A0', to: 'U+22FF' },
+    id: '1bnMzYlh3FC1Wsu',
+    name: 'Animals & Nature',
+    Icon: AnimalsIcon,
+    color: true,
+    chars: [
+      // { encode: 'UTF-8', start: 4036989056, end: 4036989119 },
+      { start: 128000, end: 128063 },
     ],
   },
   {
-    id: 'U+2100',
-    name: 'The Letters',
-    Icon: LettersIcon,
-    ranges: [
-      { from: 'U+2100', to: 'U+214F' },
-      { from: 'U+249C', to: 'U+24E9' },
-    ]
-  },
-  {
-    id: 'U+2070',
-    name: 'Superscript & Subscript',
-    Icon: SuperscriptIcon,
-    ranges: [
-      { from: 'U+2070', to: 'U+209C' }
-    ]
-  },
-
-  {
-    id: 'U+2190',
-    name: 'Arrows',
-    Icon: ArrowsIcon,
-    ranges: [
-      { from: 'U+2190', to: 'U+21FF' },
-      { from: 'U+20D0', to: 'U+20D1' },
-      { from: 'U+20D4', to: 'U+20D7' },
-      { from: 'U+20E1', to: 'U+20E1' },
-      { from: 'U+20EA', to: 'U+20EA' },
-      { from: 'U+20EC', to: 'U+20EF' },
+    id: 'T2OVtTvtGMkScf5',
+    name: 'Food & Drink',
+    Icon: FoodIcon,
+    color: true,
+    chars: [
+      { start: 127812, end: 127874 },
     ],
   },
   {
-    id: 'U+2600',
-    name: 'Other Signs',
-    Icon: OtherIcon,
-    ranges: [
-      { from: 'U+2600', to: 'U+26C5' },
-      { from: 'U+26C8', to: 'U+26C8' },
-      { from: 'U+26CE', to: 'U+26FF' },
-      { from: 'U+20D0', to: 'U+20F0' },
-      { from: 'U+2300', to: 'U+23FF' },
-      { from: 'U+2500', to: 'U+259F' },
-    ],
-  },
-  {
-    id: 'U+2700',
+    id: 'hZkuqmzMdUISpo9',
     name: 'Dingbats',
     Icon: DingbatsIcon,
-    ranges: [
-      { from: 'U+2700', to: 'U+27BF' }
+    color: true,
+    chars: [
+      { start: 9984, end: 10175 },
+    ],
+  },
+  // Mono
+  {
+    id: 'ES3mw6pDVxdo1Mx',
+    name: 'The Letters',
+    Icon: LettersIcon,
+    color: false,
+    chars: [
+      { start: 8448, end: 8527 },
+      { start: 9372, end: 9449 },
+    ]
+  },
+  {
+    id: 'kGFo5XcZrKVlXe7',
+    name: 'Numbers',
+    Icon: NumbersIcon,
+    color: false,
+    chars: [
+      { start: 8528, end: 8543 },
+      { start: 9312, end: 9371 },
+      { start: 9450, end: 9471 },
+    ]
+  },
+  {
+    id: 'THKYGS24Fn01Fev',
+    name: 'Currencies',
+    Icon: CurrenciesIcon,
+    color: false,
+    chars: [
+      { start: 8352, end: 8383 },
+    ],
+  },
+  {
+    id: 'ooiX0xNYdIhzsAc',
+    name: 'Arrows',
+    Icon: ArrowsIcon,
+    color: false,
+    chars: [
+      { start: 8592, end: 8703 },
+      { start: 8400, end: 8401 },
+      { start: 8404, end: 8407 },
+      { code: 8417, name: 'Superscript right-left arrow' },
+      { code: 8426, name: 'Overlapping arrow to the left' },
+      { start: 8428, end: 8431 },
+    ],
+  },
+  {
+    id: 'w5gCFen6ic2HpmP',
+    name: 'Math Operators',
+    Icon: MathIcon,
+    color: false,
+    chars: [
+      { start: 8864, end: 8959 },
+    ],
+  },
+  {
+    id: 'cEWsKj2hJmBcGEz',
+    name: 'Other Signs',
+    Icon: OtherIcon,
+    color: false,
+    chars: [
+      { start: 9728, end: 9925 },
+      { code: 9928, name: 'A thundercloud with rain' },
+      { start: 9934, end: 9983 },
+      { start: 8400, end: 8432 },
+      { start: 8960, end: 9215 },
+      { start: 9472, end: 9631 },
     ],
   },
 ];

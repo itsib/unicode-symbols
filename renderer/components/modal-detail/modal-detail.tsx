@@ -1,12 +1,12 @@
 import { FC, useEffect, useRef } from 'react';
-import Modal, { ModalProps } from '../modal/modal';
 import CloseIcon from '../../svg/close.svg?react';
+import Modal, { ModalProps } from '../modal/modal';
 
-export interface IModalDetail extends ModalProps {
+export interface IModalDetail extends Omit<ModalProps, 'isOpen'> {
   code?: number;
 }
 
-export const ModalDetail: FC<IModalDetail> = ({ code, isOpen, onDismiss }) => {
+export const ModalDetail: FC<IModalDetail> = ({ onDismiss, code }) => {
   const codeRef = useRef<number | undefined>(code);
 
   useEffect(() => {
@@ -16,8 +16,8 @@ export const ModalDetail: FC<IModalDetail> = ({ code, isOpen, onDismiss }) => {
   }, [code]);
 
   return (
-    <Modal isOpen={isOpen} onDismiss={onDismiss}>
-      {codeRef.current || isOpen || code ? <ModalContent code={codeRef.current || code} isOpen={true} onDismiss={onDismiss} /> : null}
+    <Modal isOpen={!!code} onDismiss={onDismiss}>
+      {codeRef.current || code ? <ModalContent onDismiss={onDismiss} code={code || codeRef.current} /> : null}
     </Modal>
   );
 };
@@ -40,7 +40,7 @@ const ModalContent: FC<Required<IModalDetail>> = ({ code, onDismiss }) => {
       <div className="modal-content">
 
         <div className="symbol">
-          <span dangerouslySetInnerHTML={{ __html: String.fromCharCode(code) }}/>
+          <span dangerouslySetInnerHTML={{ __html: html }}/>
         </div>
 
         <div className="presentation unicode">

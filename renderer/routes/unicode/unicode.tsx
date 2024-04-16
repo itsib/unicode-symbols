@@ -1,51 +1,81 @@
-import { FC, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ModalDetail } from '../../components/modal-detail/modal-detail';
 import { SYMBOLS } from '../../constants/symbols';
+import { UnicodeRange } from '../../types';
+
+const isRange = (value: any): value is UnicodeRange => {
+  return value.start != null && value.end != null;
+}
 
 export const UnicodePage: FC = () => {
-  const charCode = useParams().char;
-  const [activeCode, setActiveCode] = useState<number | undefined>();
+  const navigate = useNavigate();
+  const groupId = useParams().groupId as string | undefined;
+  const [active, setActive] = useState<number | undefined>();
 
-  const config = useMemo(() => (SYMBOLS.find(({ id }) => id === charCode)), [charCode])
+  const config = useMemo(() => (groupId ? SYMBOLS.find(({ id }) => id === groupId) : undefined), [groupId])
 
   const characters = useMemo(() => {
-    return config.ranges.flatMap(({ from, to }) => {
-      const start = parseInt(from.replace('U+', ''), 16);
-      const end = parseInt(to.replace('U+', ''), 16);
-      const characters: { id: string, code: number, html: string; }[] = [];
+    return config ? config.chars.flatMap(char => {
+      const characters: { id: string, code: number, html: string }[] = [];
 
-      for(let i = start; i <= end; i++) {
+      if (isRange(char)) {
+        for(let i = char.start; i <= char.end; i++) {
+          characters.push({
+            id: i.toString(16).toUpperCase(),
+            code: i,
+            html: `&#${i};`,
+          });
+        }
+      } else {
         characters.push({
-          id: i.toString(16).toUpperCase(),
-          code: i,
-          html: String.fromCharCode(i),
-        })
+          id: char.code.toString(16).toUpperCase(),
+          code: char.code,
+          html:`&#${char.code};`,
+        });
       }
+
       return characters;
-    });
+    }) : undefined;
   }, [config]);
+
+  useEffect(() => {
+    if (groupId) {
+      return;
+    }
+    const lastGroupId = localStorage.getItem('last-group-id') || SYMBOLS[0].id;
+    navigate(`/unicode/${lastGroupId}`, { replace: true })
+  }, [groupId, navigate]);
+
+  useEffect(() => {
+    if (!groupId) {
+      return;
+    }
+    localStorage.setItem('last-group-id', groupId);
+  }, [groupId]);
 
   return (
     <>
       <div className="unicode-page">
-        <div className="table">
-          {characters.map(({ id, html, code }) => {
-            return (
-              <div className="character" key={code} onClick={() => setActiveCode(code)}>
-                <div className="symbol">
-                  <span dangerouslySetInnerHTML={{ __html: html }}/>
+        {config ? (
+          <div className="table">
+            {characters.map(({ id, html, code }) => {
+              return (
+                <div className="character" key={code} onClick={() => setActive(code)}>
+                  <div className="symbol">
+                    <span dangerouslySetInnerHTML={{ __html: html }}/>
+                  </div>
+                  <div className="code">
+                    <span>{id}</span>
+                  </div>
                 </div>
-                <div className="code">
-                  <span>{id}</span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        ) : null}
       </div>
 
-      <ModalDetail code={activeCode} isOpen={!!activeCode} onDismiss={() => setActiveCode(undefined)} />
+      <ModalDetail code={active} onDismiss={() => setActive(undefined)} />
     </>
   );
 };
