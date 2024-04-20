@@ -1,7 +1,3 @@
-:root {
-  --unicode-page-size: 5;
-}
-
 .unicode-page {
   min-height: calc(100% - 20px);
   max-height: calc(100% - 20px);
@@ -12,8 +8,6 @@
   .table {
     max-width: 740px;
     margin: 0 auto;
-    /*font-size: 40px; grid: 6 */
-    /*font-size: 20px; grid: 9 */
 
     display: grid;
     grid-template-columns: repeat(auto-fill, 2.4em);
@@ -22,10 +16,5 @@
     align-content: center;
     grid-column-gap: 4px;
     grid-row-gap: 8px;
-
-
-    .table-cell {
-
-    }
   }
 }

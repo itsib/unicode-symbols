@@ -17,7 +17,7 @@ function createWindow() {
     show: false,
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
-    icon: getAssetPath('brand/64x64.png'),
+    icon: getAssetPath('brand/96x96.png'),
     webPreferences: {
       preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, './preload.js'),
       nodeIntegration: true,
