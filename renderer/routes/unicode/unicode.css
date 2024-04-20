@@ -8,7 +8,6 @@
   .table {
     max-width: 740px;
     margin: 0 auto;
-
     display: grid;
     grid-template-columns: repeat(auto-fill, 2.4em);
     justify-content: center;

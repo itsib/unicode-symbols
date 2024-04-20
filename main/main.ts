@@ -49,7 +49,7 @@ app.on('window-all-closed', () => {
 app.whenReady()
   .then(() => {
     ipcMain.on('copy-text', (_: IpcMainEvent, text: string) => copyText(text));
-    ipcMain.on('show-context-menu', (event: IpcMainEvent, meta?: any) => createContextmenu(event, meta));
+    ipcMain.on('show-context-menu', (event: IpcMainEvent, meta?: any) => createContextmenu(event, meta, getAssetPath));
 
     createWindow();
 

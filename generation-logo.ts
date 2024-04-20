@@ -18,9 +18,9 @@ export default defineConfig({
     assetName(type: AssetType, size: ResolvedAssetSize) {
       switch (type) {
         case 'transparent':
-          return `brand/${size.width}x${size.height}.png`;
+          return `logos/${size.width}x${size.height}.png`;
       }
     }
   },
-  images: ['assets/icon.svg'],
+  images: ['assets/logo.svg'],
 })

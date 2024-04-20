@@ -7,12 +7,12 @@
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
+    "build": "electron-forge make",
     "package": "electron-forge package",
-    "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "build:icons": "node scripts/generate-icons.js",
-    "build:brand": "pwa-assets-generator --manifest false --html.xhtml false --html.includeId false --config generation-brand.ts"
+    "build:logo": "pwa-assets-generator --manifest false --html.xhtml false --html.includeId false --config generation-logo.ts"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
@@ -46,6 +46,7 @@
     "postcss-import": "^16.1.0",
     "postcss-import-ext-glob": "^2.1.1",
     "postcss-nesting": "^12.1.1",
+    "svgo": "^3.2.0",
     "ts-node": "^10.9.2",
     "typescript": "~4.5.4",
     "vite": "^5.2.8",
