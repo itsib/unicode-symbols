@@ -6,15 +6,7 @@ export const Layout: FC = () => {
   const pageRef = useRef<HTMLDivElement | null>();
   const { pathname } = useLocation();
 
-  useEffect(() => {
-    const div = pageRef.current;
-    if (!div) {
-      return;
-    }
-
-    // div.addEventListener('scroll', console.log)
-    div.scrollTo(0, 0);
-  }, [pathname]);
+  useEffect(() => pageRef.current?.scrollTo(0, 0), [pathname]);
 
   return (
     <div className="layout">

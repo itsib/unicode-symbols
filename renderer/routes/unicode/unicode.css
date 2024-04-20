@@ -1,38 +1,31 @@
+:root {
+  --unicode-page-size: 5;
+}
+
 .unicode-page {
   min-height: calc(100% - 20px);
   max-height: calc(100% - 20px);
   padding: 10px;
+  font-size: 60px;
   overflow-y: auto;
 
   .table {
     max-width: 740px;
     margin: 0 auto;
+    /*font-size: 40px; grid: 6 */
+    /*font-size: 20px; grid: 9 */
+
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-auto-rows: 120px;
+    grid-template-columns: repeat(auto-fill, 2.4em);
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    grid-column-gap: 4px;
+    grid-row-gap: 8px;
 
-    .character {
-      height: 120px;
-      display: flex;
-      border-radius: 6px;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
 
-      .symbol {
-        font-size: 50px;
-      }
+    .table-cell {
 
-      .code {
-        margin-top: 10px;
-        color: rgb(var(--text-secondary));
-        font-size: 13px;
-      }
-
-      &:hover {
-        background-color: color-mix(in srgb, rgb(var(--base-bg)) 95%, rgb(var(--text-primary)) 5%);
-      }
     }
   }
 }

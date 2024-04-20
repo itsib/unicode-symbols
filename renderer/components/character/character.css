@@ -1,0 +1,29 @@
+.character {
+  height: 2em;
+  width: 1.6em;
+  padding: .2em .1em;
+  display: flex;
+  border-radius: 6px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .15s linear;
+
+  .symbol {
+    font-size: 1em;
+  }
+
+  .separator {
+    height: .3em;
+  }
+
+  .code {
+    color: rgb(var(--text-secondary));
+    font-size: .3em;
+  }
+
+  &:hover {
+    background-color: color-mix(in srgb, rgb(var(--base-bg)) 95%, rgb(var(--text-primary)) 5%);
+  }
+}

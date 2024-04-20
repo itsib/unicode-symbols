@@ -1,14 +1,6 @@
-// window.addEventListener('DOMContentLoaded', () => {
-  // systemPreferences.getColor('window-background')
+import { contextBridge, ipcRenderer } from 'electron';
 
-  // const replaceText = (selector: string, text: string) => {
-  //   const element = document.getElementById(selector);
-  //   if (element) {
-  //     element.innerText = text;
-  //   }
-  // }
-  //
-  // for (const dependency of ['chrome', 'node', 'electron']) {
-  //   replaceText(`${dependency}-version`, process.versions[dependency]);
-  // }
-// });
+contextBridge.exposeInMainWorld('appAPI', {
+  copyText: (text: string) => ipcRenderer.send('copy-text', text),
+  showContextMenu: (meta?: any) => ipcRenderer.send('show-context-menu', meta),
+});

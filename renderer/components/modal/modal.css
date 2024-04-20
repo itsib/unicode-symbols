@@ -11,7 +11,6 @@
   justify-content: center;
   position: fixed;
   z-index: var(--modal-z-index);
-  /*backdrop-filter: blur(3px);*/
 
   .modal-overlay-content {
     width: unset;
@@ -36,7 +35,6 @@
 
   .modal-header {
     height: 42px;
-    /*padding: 9px 24px 0;*/
     display: flex;
     align-items: center;
     justify-content: center;

@@ -27,10 +27,10 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({ isOpen, onDismiss, children 
 
   const [contentStyles, contentApi] = useSpring(
     () => ({
-      from: { y: 24 },
+      from: { y: 16 },
       to: { y: 0 },
       config: {
-        easing: easings.easeInBack(200),
+        easing: easings.easeInBack(100),
       },
     }),
     [],
@@ -57,11 +57,11 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({ isOpen, onDismiss, children 
       setIsAnimated(true);
       overlayApi.set({ opacity: 0 });
       overlayApi.start({ opacity: 1 });
-      contentApi.set({ y: 24 });
+      contentApi.set({ y: 16 });
       contentApi.start({ y: 0 });
     } else if (isAnimatedRef.current) {
       overlayApi.start({ opacity: 0 });
-      contentApi.start({ y: 24 })[0].then(() => setIsAnimated(false));
+      contentApi.start({ y: 16 })[0].then(() => setIsAnimated(false));
     }
   }, [contentApi, overlayApi, isOpen]);
 

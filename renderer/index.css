@@ -1,11 +1,14 @@
 @import-glob "components/**/*.css";
 @import-glob "routes/**/*.css";
+@import-glob "css/**/*.css";
 
 :root {
   /* Constants */
   --modal-z-index: 99;
 
   /* Colors */
+  --black: 0 0 0;
+  --white: 255 255 255;
   --accent: 0 115 229;
   --base-bg: 255 255 255;
   --second-bg: 248 248 248;
@@ -35,9 +38,10 @@
     --modal-bg-overlay: 0 0 0;
     --modal-bg-header: 34 34 34;
     --modal-shadow: 0 0 50px rgba(10, 10, 10, 0.9);
-
-    --modal-border-radius: 10px;
     --modal-border-color: 24 24 24;
+
+    /* Tooltip */
+    --tooltip-bg-color: 9 9 9;
   }
 }
 

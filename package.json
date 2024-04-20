@@ -10,7 +10,9 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "build:icons": "node scripts/generate-icons.js",
+    "build:brand": "pwa-assets-generator --manifest false --html.xhtml false --html.includeId false --config generation-brand.ts"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
@@ -34,7 +36,9 @@
     "@types/react-dom": "^18.2.25",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "@vite-pwa/assets-generator": "^0.2.4",
     "autoprefixer": "^10.4.19",
+    "convert-svg-to-png": "^0.6.4",
     "electron": "^29.3.0",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1",

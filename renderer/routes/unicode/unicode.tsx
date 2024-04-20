@@ -1,14 +1,33 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { CSSProperties, FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Character } from '../../components/character/character';
 import { ModalDetail } from '../../components/modal-detail/modal-detail';
 import { SYMBOLS } from '../../constants/symbols';
 import { UnicodeRange } from '../../types';
+
+const MIN_FONT_SIZE = 30;
+const MAX_FONT_SIZE = 65;
+const STEP_SIZE_PERCENT = 5;
 
 const isRange = (value: any): value is UnicodeRange => {
   return value.start != null && value.end != null;
 }
 
+const resize = (page: HTMLDivElement, delta?: number) => {
+  const zoomPrev = parseInt(localStorage.getItem('zoom') ?? '50');
+  const zoomNext = delta == null ? zoomPrev : delta < 0 ? zoomPrev + STEP_SIZE_PERCENT : zoomPrev - STEP_SIZE_PERCENT;
+  const zoom =  Math.round(Math.max(Math.min(zoomNext, 100), 0)); // in %
+
+  localStorage.setItem('zoom', `${zoom}`);
+
+  const fontSize = MIN_FONT_SIZE + ((MAX_FONT_SIZE - MIN_FONT_SIZE) * (zoom / 100));
+  page.style.fontSize = `${fontSize}px`;
+};
+
 export const UnicodePage: FC = () => {
+  const pageRef = useRef<HTMLDivElement>()
+  const tableRef = useRef<HTMLDivElement>()
+
   const navigate = useNavigate();
   const groupId = useParams().groupId as string | undefined;
   const [active, setActive] = useState<number | undefined>();
@@ -17,60 +36,61 @@ export const UnicodePage: FC = () => {
 
   const characters = useMemo(() => {
     return config ? config.chars.flatMap(char => {
-      const characters: { id: string, code: number, html: string }[] = [];
+      const characters: number[] = [];
 
       if (isRange(char)) {
         for(let i = char.start; i <= char.end; i++) {
-          characters.push({
-            id: i.toString(16).toUpperCase(),
-            code: i,
-            html: `&#${i};`,
-          });
+          characters.push(i);
         }
       } else {
-        characters.push({
-          id: char.code.toString(16).toUpperCase(),
-          code: char.code,
-          html:`&#${char.code};`,
-        });
+        characters.push(char.code);
       }
-
       return characters;
     }) : undefined;
   }, [config]);
 
+  // Save and restore page id
   useEffect(() => {
     if (groupId) {
+      localStorage.setItem('last-page-id', groupId);
       return;
     }
-    const lastGroupId = localStorage.getItem('last-group-id') || SYMBOLS[0].id;
-    navigate(`/unicode/${lastGroupId}`, { replace: true })
+    const lastPageId = localStorage.getItem('last-page-id') || SYMBOLS[0].id;
+    navigate(`/unicode/${lastPageId}`, { replace: true })
   }, [groupId, navigate]);
 
+  // Size of icons
   useEffect(() => {
-    if (!groupId) {
-      return;
+    const page = pageRef.current;
+
+    resize(page);
+
+    const onResize = (event: WheelEvent) => {
+      if (!event.ctrlKey) {
+        return;
+      }
+
+      // New size computation
+      const page = event.currentTarget as HTMLDivElement;
+      resize(page, event.deltaY);
     }
-    localStorage.setItem('last-group-id', groupId);
-  }, [groupId]);
+
+    page.addEventListener('wheel', onResize);
+    return () => {
+      page.removeEventListener('wheel', onResize);
+    }
+  }, []);
 
   return (
     <>
-      <div className="unicode-page">
+      <div className="unicode-page" ref={pageRef}>
         {config ? (
-          <div className="table">
-            {characters.map(({ id, html, code }) => {
-              return (
-                <div className="character" key={code} onClick={() => setActive(code)}>
-                  <div className="symbol">
-                    <span dangerouslySetInnerHTML={{ __html: html }}/>
-                  </div>
-                  <div className="code">
-                    <span>{id}</span>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="table" ref={tableRef}>
+            {characters.map(code => (
+              <div className="table-cell" key={code}>
+                <Character code={code} onClick={_code => setActive(_code)} />
+              </div>
+            ))}
           </div>
         ) : null}
       </div>

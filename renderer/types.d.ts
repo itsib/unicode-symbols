@@ -1,6 +1,16 @@
 /// <reference types="vite-plugin-svgr/client" />
 /// <reference types="react" />
 
+declare global {
+  export interface AppApi {
+    copyText(text: string): void;
+    showContextMenu(meta?: any): void;
+  }
+
+  interface Window {
+    appAPI: AppApi;
+  }
+}
 
 interface UnicodeBase {
   tags?: string[];

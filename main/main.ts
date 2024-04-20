@@ -1,70 +1,16 @@
-import { app, BrowserWindow, Menu } from 'electron';
+import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import path from 'path';
+import { createMenu } from './app-menu';
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from './constants';
+import { copyText, createContextmenu } from './context-menu';
 
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const DEVTOOLS_WIDTH = 500;
-const WINDOW_WIDTH = 900;
-const WINDOW_HEIGHT = 600;
-
 const RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, 'assets') : path.join(__dirname, '../../assets');
 
 const getAssetPath = (...paths: string[]): string => path.join(RESOURCES_PATH, ...paths);
-
-function createMenu(mainWindow: BrowserWindow) {
-  if (!(process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true')) {
-    return;
-  }
-
-  const menu = Menu.buildFromTemplate([{
-    label: 'Develop',
-    submenu: [
-      {
-        label: 'Reload',
-        icon: getAssetPath('icons/reload.png'),
-        registerAccelerator: true,
-        acceleratorWorksWhenHidden: true,
-        accelerator: 'F5',
-        click: async () => {
-          mainWindow.webContents.reload();
-        },
-      },
-      {
-        label: 'Hide Menu',
-        icon: getAssetPath('icons/hide-menu.png'),
-        registerAccelerator: true,
-        acceleratorWorksWhenHidden: true,
-        accelerator: 'Ctrl+M',
-        click: async () => {
-          mainWindow.setMenuBarVisibility(!mainWindow.menuBarVisible);
-        },
-      },
-      { type: 'separator' },
-      {
-        label: 'Dev Tools',
-        icon: getAssetPath('icons/code.png'),
-        registerAccelerator: true,
-        acceleratorWorksWhenHidden: true,
-        accelerator: 'F12',
-        click: async () => {
-          const [_, height] = mainWindow.getSize();
-
-          if (mainWindow.webContents.isDevToolsOpened()) {
-            mainWindow.setSize(WINDOW_WIDTH, height);
-            mainWindow.webContents.closeDevTools();
-          } else {
-            mainWindow.setSize(WINDOW_WIDTH + DEVTOOLS_WIDTH, height);
-            mainWindow.webContents.toggleDevTools();
-          }
-        },
-      },
-    ],
-  }]);
-
-  Menu.setApplicationMenu(menu);
-}
 
 function createWindow() {
   const window = new BrowserWindow({
@@ -75,8 +21,6 @@ function createWindow() {
     webPreferences: {
       preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, './preload.js'),
       nodeIntegration: true,
-      // contextIsolation: true,
-
     },
   });
 
@@ -86,12 +30,12 @@ function createWindow() {
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    window.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+    window.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL).catch(console.error);
   } else {
-    window.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+    window.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)).catch(console.error);
   }
 
-  createMenu(window);
+  createMenu(window, getAssetPath);
 
   window.once('ready-to-show', () => window.show());
 }
@@ -104,6 +48,9 @@ app.on('window-all-closed', () => {
 
 app.whenReady()
   .then(() => {
+    ipcMain.on('copy-text', (_: IpcMainEvent, text: string) => copyText(text));
+    ipcMain.on('show-context-menu', (event: IpcMainEvent, meta?: any) => createContextmenu(event, meta));
+
     createWindow();
 
     app.on('activate', () => {

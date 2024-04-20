@@ -1,5 +1,6 @@
 import { FC, useEffect, useRef } from 'react';
 import CloseIcon from '../../svg/close.svg?react';
+import { BtnCopy } from '../btn-copy/btn-copy';
 import Modal, { ModalProps } from '../modal/modal';
 
 export interface IModalDetail extends Omit<ModalProps, 'isOpen'> {
@@ -39,20 +40,22 @@ const ModalContent: FC<Required<IModalDetail>> = ({ code, onDismiss }) => {
       </div>
       <div className="modal-content">
 
-        <div className="symbol">
+        <BtnCopy className="symbol" text={String.fromCodePoint(code)}>
           <span dangerouslySetInnerHTML={{ __html: html }}/>
-        </div>
+        </BtnCopy>
 
-        <div className="presentation unicode">
-          <span>Unicode <b>{unicode}</b></span>
-        </div>
-        <div className="presentation html">
-          <span>HTML code <b>{html}</b></span>
-        </div>
-        <div className="presentation html">
-          <span>CSS code <b>{css}</b></span>
+
+        <div className="table-codes">
+          <div className="label">Unicode</div>
+          <BtnCopy className="value" text={unicode}>{unicode}</BtnCopy>
+
+          <div className="label">HTML code</div>
+          <BtnCopy className="value" text={html}>{html}</BtnCopy>
+
+          <div className="label">CSS code</div>
+          <BtnCopy className="value" text={css}>{css}</BtnCopy>
         </div>
       </div>
     </div>
   );
-}
+};
