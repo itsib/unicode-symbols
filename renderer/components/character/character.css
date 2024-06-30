@@ -11,14 +11,36 @@
   transition: all .15s linear;
 
   .symbol {
-    font-size: 1em;
+    height: 1.3em;
+    width: auto;
+    aspect-ratio: 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .code {
+      font-size: 1em;
+    }
+
+    .mnemonic {
+      width: 86%;
+      height: 86%;
+      font-size: 0.4em;
+      text-align: center;
+      border: 1px dashed rgb(var(--text-secondary));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   .separator {
     height: .3em;
   }
 
-  .code {
+  .subscribe {
     color: rgb(var(--text-secondary));
     font-size: .3em;
   }

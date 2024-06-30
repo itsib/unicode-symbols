@@ -1,36 +1,34 @@
-import { memo, useEffect, useRef } from 'react';
+import { memo } from 'react';
 
 interface ICharacter {
   code: number;
-  onClick?: (code: number) => void;
+  name?: string;
+  mnemonic?: string;
+  description?: string;
+  onClick?: () => void;
 }
 
-export const Character = memo(function Character({ code, onClick }: ICharacter) {
-  const ref = useRef<HTMLDivElement>()
-  const id = code.toString(16).toUpperCase();
-
-  useEffect(() => {
-    const element = ref.current;
-
-    const onContextmenu = () => {
-      window.appAPI.showContextMenu(code);
-    }
-
-    element.addEventListener('contextmenu', onContextmenu);
-    return () => {
-      element.removeEventListener('contextmenu', onContextmenu);
-    }
-  }, [code]);
-
+export const Character = memo(function Character({ code, name, mnemonic, description, onClick }: ICharacter) {
   return (
-    <div className="character" key={code} onClick={() => onClick?.(code)} ref={ref}>
-      <div className="symbol">
-        <span dangerouslySetInnerHTML={{ __html: `&#${code};` }}/>
+    <div className="character" onClick={onClick}>
+      <div className="symbol" aria-label={name} data-tooltip-pos="top">
+        {mnemonic ? (
+          <div className="mnemonic">
+            <div>{mnemonic.slice(0, -2)}</div>
+            <div>{mnemonic.slice(-2)}</div>
+          </div>
+        ) : (
+          <div className="code">
+            <span dangerouslySetInnerHTML={{ __html: `&#${code};` }}/>
+          </div>
+        )}
       </div>
-      <div className="separator" />
-      <div className="code">
-        <span>{id}</span>
+
+      <div className="separator"/>
+
+      <div className="subscribe">
+        <span>{code.toString(16).toUpperCase()}</span>
       </div>
     </div>
   );
-});
+}, (prevProps, nextProps) => prevProps.code !== nextProps.code);

@@ -1,32 +1,31 @@
 import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import path from 'path';
-import { createMenu } from './app-menu';
-import { WINDOW_HEIGHT, WINDOW_WIDTH } from './constants';
-import { copyText, createContextmenu } from './context-menu';
+import { createMenu } from './menu/app-menu';
+import { ASSETS_PATH, WINDOW_HEIGHT, WINDOW_WIDTH } from './constants';
+import { copyText, createContextmenu } from './menu/context-menu';
+
 
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, 'assets') : path.join(__dirname, '../../assets');
-
-const getAssetPath = (...paths: string[]): string => path.join(RESOURCES_PATH, ...paths);
+const getAssetPath = (...paths: string[]): string => path.join(ASSETS_PATH, ...paths);
 
 function createWindow() {
   const window = new BrowserWindow({
     show: false,
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
-    icon: getAssetPath('brand/96x96.png'),
+    icon: getAssetPath('logos/96x96.png'),
     webPreferences: {
+      sandbox: true,
       preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, './preload.js'),
-      nodeIntegration: true,
+      nodeIntegration: false,
     },
   });
 
-  window.setMinimumSize(WINDOW_WIDTH, WINDOW_HEIGHT)
-
-  window.setMenuBarVisibility(false);
+  window.setMinimumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+  window.setMenuBarVisibility(true);
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -40,6 +39,12 @@ function createWindow() {
   window.once('ready-to-show', () => window.show());
 }
 
+async function createConfig() {
+  path.resolve(app.getPath('userData'), '')
+
+  // console.log('Config path',  ));
+}
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -47,6 +52,7 @@ app.on('window-all-closed', () => {
 });
 
 app.whenReady()
+  .then(() => createConfig())
   .then(() => {
     ipcMain.on('copy-text', (_: IpcMainEvent, text: string) => copyText(text));
     ipcMain.on('show-context-menu', (event: IpcMainEvent, meta?: any) => createContextmenu(event, meta, getAssetPath));

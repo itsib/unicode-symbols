@@ -12,22 +12,39 @@ declare global {
   }
 }
 
+export type UnicodeType = 'single' | 'Range' | 'divider' | 'special';
+
 interface UnicodeBase {
-  tags?: string[];
+  type: UnicodeType;
 }
 
-export interface UnicodeChar extends UnicodeBase {
+export interface UnicodeDivider extends UnicodeBase {
+  type: 'divider';
+}
+
+export interface UnicodeSpecial extends UnicodeBase {
+  type: 'special';
   code: number;
+  mnemonic: string;
   name: string;
 }
 
-export interface UnicodeRange extends UnicodeBase {
-  start: number;
-  end: number;
-  prefix?: string;
+export interface UnicodeChar extends UnicodeBase {
+  type: 'single';
+  code: number;
+  name: string;
+  tags?: string[];
 }
 
-export type Unicode = UnicodeChar | UnicodeRange;
+export interface UnicodeRange extends UnicodeBase {
+  type: 'range';
+  start: number;
+  end: number;
+  skip?: number[];
+  tags?: string[];
+}
+
+export type Unicode = UnicodeChar | UnicodeRange | UnicodeDivider | UnicodeSpecial;
 
 export interface CategoryIcons {
   id: string,

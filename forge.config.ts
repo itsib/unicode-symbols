@@ -9,9 +9,9 @@ import { FuseV1Options, FuseVersion } from '@electron/fuses';
 
 const config: ForgeConfig = {
   packagerConfig: {
-    name: 'Characters',
+    name: 'characters',
     asar: true,
-    icon: 'assets/brand/96x96',
+    icon: 'assets/logos/96x96',
   },
   rebuildConfig: {},
   makers: [
@@ -21,7 +21,7 @@ const config: ForgeConfig = {
     new MakerDeb({
       options: {
         name: 'Characters',
-        icon: 'assets/brand/96x96.png',
+        icon: 'assets/logos/96x96.png',
         categories: ['Graphics', 'Utility'],
         genericName: 'Characters',
         description: 'Browse and search for non-standard characters',

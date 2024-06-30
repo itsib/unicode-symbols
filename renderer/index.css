@@ -16,6 +16,7 @@
   --text-primary: 0 0 0;
   --text-secondary: 65 65 65;
   --border-primary: 199 199 199;
+  --divider: 199 199 199;
 
   /* Modal color */
   --modal-bg-overlay: 0 0 0;
@@ -33,6 +34,7 @@
     --text-primary: 255 255 255;
     --text-secondary: 209 209 209;
     --border-primary: 24 24 24;
+    --divider: 71 71 71;
 
     /* Modal color */
     --modal-bg-overlay: 0 0 0;
@@ -53,6 +55,21 @@ body {
   margin: 0;
   color: rgb(var(--text-primary));
   background-color: rgb(var(--base-bg));
+}
+
+hr {
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+  border: 1px solid transparent;
+  border-bottom-color: rgb(var(--divider));
+}
+
+.text-primary {
+  color: rgb(var(--text-primary));
+}
+
+.text-secondary {
+  color: rgb(var(--text-secondary));
 }
 
 ::-webkit-scrollbar {

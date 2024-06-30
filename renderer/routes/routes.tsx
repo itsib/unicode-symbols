@@ -12,9 +12,9 @@ export const ROUTES = createMemoryRouter([
         Component: UnicodePage,
       },
       {
-        path: 'unicode/:groupId',
+        path: 'unicode/:iconGroupId',
         Component: UnicodePage,
-      }
+      },
     ],
   }
 ]);

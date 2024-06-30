@@ -1,101 +1,86 @@
-import { CSSProperties, FC, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { FC, useMemo, useRef, useState } from 'react';
 import { Character } from '../../components/character/character';
 import { ModalDetail } from '../../components/modal-detail/modal-detail';
 import { SYMBOLS } from '../../constants/symbols';
-import { UnicodeRange } from '../../types';
-
-const MIN_FONT_SIZE = 30;
-const MAX_FONT_SIZE = 65;
-const STEP_SIZE_PERCENT = 5;
-
-const isRange = (value: any): value is UnicodeRange => {
-  return value.start != null && value.end != null;
-}
-
-const resize = (page: HTMLDivElement, delta?: number) => {
-  const zoomPrev = parseInt(localStorage.getItem('zoom') ?? '50');
-  const zoomNext = delta == null ? zoomPrev : delta < 0 ? zoomPrev + STEP_SIZE_PERCENT : zoomPrev - STEP_SIZE_PERCENT;
-  const zoom =  Math.round(Math.max(Math.min(zoomNext, 100), 0)); // in %
-
-  localStorage.setItem('zoom', `${zoom}`);
-
-  const fontSize = MIN_FONT_SIZE + ((MAX_FONT_SIZE - MIN_FONT_SIZE) * (zoom / 100));
-  page.style.fontSize = `${fontSize}px`;
-};
+import { useIconGroupId } from '../../hooks/use-icon-group-id';
+import { useResizeHandler } from '../../hooks/use-resize-handler';
 
 export const UnicodePage: FC = () => {
   const pageRef = useRef<HTMLDivElement>()
-  const tableRef = useRef<HTMLDivElement>()
+  const iconGroupId = useIconGroupId();
+  const [active, setActive] = useState<{ code: number, mnemonic?: string; name?: string } | undefined>();
 
-  const navigate = useNavigate();
-  const groupId = useParams().groupId as string | undefined;
-  const [active, setActive] = useState<number | undefined>();
+  const config = useMemo(() => (iconGroupId ? SYMBOLS.find(({ id }) => id === iconGroupId) : undefined), [iconGroupId])
 
-  const config = useMemo(() => (groupId ? SYMBOLS.find(({ id }) => id === groupId) : undefined), [groupId])
+  const tables = useMemo(() => {
+    if (!config) {
+      return [];
+    }
+    const tables: ({ code: number, name?: string, mnemonic?: string })[][] = [[]];
 
-  const characters = useMemo(() => {
-    return config ? config.chars.flatMap(char => {
-      const characters: number[] = [];
+    for (let i = 0; i < config.chars.length; i++) {
+      const chars = config.chars[i];
 
-      if (isRange(char)) {
-        for(let i = char.start; i <= char.end; i++) {
-          characters.push(i);
+      if (chars.type === 'single') {
+        tables[tables.length - 1].push({ code: chars.code, name: chars.name })
+      } else if (chars.type === 'range') {
+        for(let i = chars.start; i <= chars.end; i++) {
+          if (!chars.skip?.includes(i)) {
+            tables[tables.length - 1].push({ code: i });
+          }
         }
-      } else {
-        characters.push(char.code);
+      } else if (chars.type === 'special') {
+        tables[tables.length - 1].push({ code: chars.code, mnemonic: chars.mnemonic, name: chars.name });
+      } else if (chars.type === 'divider') {
+        tables.push([]);
       }
-      return characters;
-    }) : undefined;
+    }
+
+    return tables;
   }, [config]);
 
-  // Save and restore page id
-  useEffect(() => {
-    if (groupId) {
-      localStorage.setItem('last-page-id', groupId);
-      return;
-    }
-    const lastPageId = localStorage.getItem('last-page-id') || SYMBOLS[0].id;
-    navigate(`/unicode/${lastPageId}`, { replace: true })
-  }, [groupId, navigate]);
-
-  // Size of icons
-  useEffect(() => {
-    const page = pageRef.current;
-
-    resize(page);
-
-    const onResize = (event: WheelEvent) => {
-      if (!event.ctrlKey) {
-        return;
-      }
-
-      // New size computation
-      const page = event.currentTarget as HTMLDivElement;
-      resize(page, event.deltaY);
-    }
-
-    page.addEventListener('wheel', onResize);
-    return () => {
-      page.removeEventListener('wheel', onResize);
-    }
-  }, []);
+  useResizeHandler(pageRef);
 
   return (
     <>
       <div className="unicode-page" ref={pageRef}>
-        {config ? (
-          <div className="table" ref={tableRef}>
-            {characters.map(code => (
-              <div className="table-cell" key={code}>
-                <Character code={code} onClick={_code => setActive(_code)} />
-              </div>
-            ))}
+        {tables.map((table, index) => (
+          <div className="table-owerlay" key={`table-${index}`}>
+            <div className="table">
+              {table.map(character => (
+                <div className="table-cell" id={`char-${index}-${character.code}`} key={`${index}-${character.code}`}>
+                  <Character
+                    code={character.code}
+                    name={character.name}
+                    mnemonic={character.mnemonic}
+                    onClick={() => setActive({ code: character.code, name: character.name, mnemonic: character.mnemonic })}
+                  />
+                </div>
+              ))}
+            </div>
+            {tables.length - 1 !== index ? (
+              <hr className="divider"/>
+            ) : null}
           </div>
-        ) : null}
+        ))}
       </div>
 
-      <ModalDetail code={active} onDismiss={() => setActive(undefined)} />
+      <ModalDetail code={active?.code} name={active?.name} onDismiss={() => setActive(undefined)}/>
     </>
   );
 };
+
+// const ref = useRef<HTMLDivElement>()
+//
+// useEffect(() => {
+//     const element = ref.current;
+//
+//     const onContextmenu = () => {
+//       window.appAPI.showContextMenu(code);
+//     }
+//
+//     element.addEventListener('contextmenu', onContextmenu);
+//     return () => {
+//       element.removeEventListener('contextmenu', onContextmenu);
+//     }
+//   }, [code]);
