@@ -1,6 +1,6 @@
 @import-glob "assets/css/**/*.css";
 @import-glob "components/**/*.css";
-@import-glob "routes/**/*.css";
+@import-glob "pages/**/*.css";
 
 :root {
   color: rgba(0, 119, 226, 0.99);

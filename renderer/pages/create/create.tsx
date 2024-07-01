@@ -3,6 +3,7 @@ import { FixedSizeGrid as Grid, GridChildComponentProps } from 'react-window';
 import { FormCreateRange } from '../../components/form-create-range/form-create-range';
 import { SymbolsRange } from '../../types';
 import { useNavigate } from 'react-router-dom';
+import { ModalCreateSymbol } from '../../components/modal-create-symbol/modal-create-symbol';
 
 const SCROLL_THUMB_WIDTH = 4;
 const ITEM_HEIGHT = 100;
@@ -21,20 +22,19 @@ interface GridParams {
 
 export const CreatePage: FC = () => {
   const navigate = useNavigate();
-  const pageRef = useRef<HTMLDivElement>();
-  const itemDataRef = useRef<ListRowParams | null>({
-    onClick: (code: number) => {
-      console.log(`code: %s`, code);
-    },
-    columnCount: 0,
-    begin: 0,
-    end: 0,
-  });
 
   const [size, setSize] = useState<{ width: number; height: number }>();
   const [gridParams, setGridParams] = useState<GridParams | null>(null);
   const [range, setRange] = useState<SymbolsRange | null>(null);
-  const [active, setActive] = useState<{ code: number, mnemonic?: string; name?: string } | undefined>();
+  const [active, setActive] = useState<{ code: number } | null>(null);
+
+  const pageRef = useRef<HTMLDivElement>();
+  const itemDataRef = useRef<ListRowParams | null>({
+    onClick: (code: number) => setActive({ code }),
+    columnCount: 0,
+    begin: 0,
+    end: 0,
+  });
 
   // Window resize handler
   useEffect(() => {
@@ -95,6 +95,7 @@ export const CreatePage: FC = () => {
         </div>
       </div>
 
+      <ModalCreateSymbol isOpen={!!active} code={active?.code} onDismiss={() => setActive(null)} />
     </div>
   );
 };
