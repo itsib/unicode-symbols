@@ -13,7 +13,7 @@ export function useIconGroupId(): string | undefined {
       return;
     }
     const lastPageId = localStorage.getItem('last-page-id') || SYMBOLS[0].id;
-    navigate(`/unicode/${lastPageId}`, { replace: true })
+    navigate(`/symbols/${lastPageId}`, { replace: true })
   }, [iconGroupId, navigate]);
 
   return iconGroupId;

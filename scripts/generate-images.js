@@ -5,7 +5,7 @@ const { optimize, render } = require('svgo');
 
 const SIZES = [16, 24, 32, 48, 64, 96, 128, 256, 512, 768, 1024];
 const ICON_SIZE = 20;
-const ICON_COLOR = 'rgba(255, 255, 255, 0.7)';
+const ICON_COLOR = 'rgba(255, 255, 255, 1)';
 const LOGO_SVG = path.resolve(process.cwd(), 'assets/logo.svg');
 const ICONS_SVG = path.resolve(process.cwd(), 'assets/svg');
 const LOGOS_DIR = path.resolve(process.cwd(), 'assets/logos/');

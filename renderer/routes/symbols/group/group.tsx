@@ -1,11 +1,11 @@
 import { FC, useMemo, useRef, useState } from 'react';
-import { Character } from '../../components/character/character';
-import { ModalDetail } from '../../components/modal-detail/modal-detail';
-import { SYMBOLS } from '../../constants/symbols';
-import { useIconGroupId } from '../../hooks/use-icon-group-id';
-import { useResizeHandler } from '../../hooks/use-resize-handler';
+import { Character } from '../../../components/character/character';
+import { ModalDetail } from '../../../components/modal-detail/modal-detail';
+import { SYMBOLS } from '../../../constants/symbols';
+import { useIconGroupId } from '../../../hooks/use-icon-group-id';
+import { useResizeHandler } from '../../../hooks/use-resize-handler';
 
-export const UnicodePage: FC = () => {
+export const GroupPage: FC = () => {
   const pageRef = useRef<HTMLDivElement>()
   const iconGroupId = useIconGroupId();
   const [active, setActive] = useState<{ code: number, mnemonic?: string; name?: string } | undefined>();
@@ -43,7 +43,7 @@ export const UnicodePage: FC = () => {
 
   return (
     <>
-      <div className="unicode-page" ref={pageRef}>
+      <div className="group-page" ref={pageRef}>
         {tables.map((table, index) => (
           <div className="table-owerlay" key={`table-${index}`}>
             <div className="table">

@@ -1,4 +1,4 @@
-.layout {
+.symbols-page {
   display: flex;
 
   .menu-overlay {
@@ -12,7 +12,7 @@
     overflow-y: auto;
 
     .scroll-overlay {
-
+      min-height: 100%;
     }
   }
 }

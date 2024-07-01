@@ -1,0 +1,24 @@
+.settings-page {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .container {
+
+    .back-link {
+      margin-bottom: 16px;
+      color: rgb(var(--text-primary));
+      font-size: 18px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card {
+      width: 500px;
+      height: 400px;
+    }
+  }
+}
