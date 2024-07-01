@@ -1,34 +1,25 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { FixedSizeGrid as Grid, GridChildComponentProps } from 'react-window';
+import { FixedSizeGrid as Grid, FixedSizeGridProps, GridChildComponentProps } from 'react-window';
 import { FormCreateRange } from '../../components/form-create-range/form-create-range';
 import { SymbolsRange } from '../../types';
 import { useNavigate } from 'react-router-dom';
 import { ModalCreateSymbol } from '../../components/modal-create-symbol/modal-create-symbol';
-
-const SCROLL_THUMB_WIDTH = 4;
-const ITEM_HEIGHT = 100;
-const MIN_ITEM_WIDTH = 80;
+import { useSize } from '../../hooks/use-size';
+import { ITEM_HEIGHT, MIN_ITEM_WIDTH, SCROLL_THUMB_WIDTH } from '../../constants/common';
 
 interface ListRowParams extends SymbolsRange {
   onClick: (code: number) => void;
   columnCount: number;
 }
 
-interface GridParams {
-  columnCount: number;
-  columnWidth: number;
-  rowCount: number;
-}
-
 export const CreatePage: FC = () => {
   const navigate = useNavigate();
 
-  const [size, setSize] = useState<{ width: number; height: number }>();
-  const [gridParams, setGridParams] = useState<GridParams | null>(null);
+  const size = useSize('create-page-grid-container');
+  const [gridProps, setGridProps] = useState<Omit<FixedSizeGridProps, 'children'> | null>(null);
   const [range, setRange] = useState<SymbolsRange | null>(null);
   const [active, setActive] = useState<{ code: number } | null>(null);
 
-  const pageRef = useRef<HTMLDivElement>();
   const itemDataRef = useRef<ListRowParams | null>({
     onClick: (code: number) => setActive({ code }),
     columnCount: 0,
@@ -36,24 +27,9 @@ export const CreatePage: FC = () => {
     end: 0,
   });
 
-  // Window resize handler
-  useEffect(() => {
-    const div = pageRef.current;
-    const updateSize = () => {
-      setSize({ width: div.offsetWidth, height: div.offsetHeight });
-    };
-    updateSize();
-
-    window.addEventListener('resize', updateSize);
-
-    return () => {
-      window.removeEventListener('resize', updateSize);
-    };
-  }, []);
-
   // Compute items count
   useEffect(() => {
-    if (!size) {
+    if (!size || !range) {
       return;
     }
 
@@ -68,7 +44,14 @@ export const CreatePage: FC = () => {
     itemDataRef.current.begin = range.begin;
     itemDataRef.current.end = range.end;
 
-    setGridParams({ columnCount, rowCount, columnWidth });
+    setGridProps({
+      columnCount,
+      columnWidth,
+      height: size.height,
+      rowCount,
+      rowHeight: ITEM_HEIGHT,
+      width: size.width,
+    });
   }, [size, range]);
 
   return (
@@ -78,19 +61,9 @@ export const CreatePage: FC = () => {
       </div>
 
       <div className="page-content">
-        <div className="container" ref={pageRef}>
-          {size && gridParams ? (
-            <Grid
-              columnCount={gridParams.columnCount}
-              columnWidth={gridParams.columnWidth}
-              height={size.height}
-              rowCount={gridParams.rowCount}
-              rowHeight={ITEM_HEIGHT}
-              width={size.width}
-              itemData={itemDataRef.current}
-            >
-              {Cell}
-            </Grid>
+        <div id="create-page-grid-container" className="container">
+          {size && gridProps ? (
+            <Grid itemData={itemDataRef.current} {...gridProps}>{Cell}</Grid>
           ) : null}
         </div>
       </div>

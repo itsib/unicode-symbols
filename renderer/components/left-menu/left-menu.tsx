@@ -1,19 +1,26 @@
 import { FC } from 'react';
-import { NavLink } from 'react-router-dom';
 import { SYMBOLS } from '../../constants/symbols';
+import { useIconCategory } from '../../hooks/use-icon-category';
 
 export const LeftMenu: FC = () => {
+  const [activeCategory, setActiveCategory] = useIconCategory();
+
   return (
     <menu className="left-menu">
       {SYMBOLS.map(({ Icon, name, id }) => (
-        <NavLink key={id} to={`/symbols/${id}`} className="menu-item">
+        <button
+          type="button"
+          key={id}
+          className={`btn btn-menu-item ${id === activeCategory ? 'active' : ''}`}
+          onClick={() => setActiveCategory(id)}
+        >
           <div className="menu-icon">
             <Icon />
           </div>
           <div className="label">
             <span>{name}</span>
           </div>
-        </NavLink>
+        </button>
       ))}
     </menu>
   );

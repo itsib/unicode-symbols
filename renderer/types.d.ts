@@ -58,3 +58,8 @@ export interface SymbolsRange {
   begin: number;
   end: number;
 }
+
+export interface Size {
+  width: number;
+  height: number;
+}

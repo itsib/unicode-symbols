@@ -2,12 +2,11 @@ import { FC, useMemo, useRef, useState } from 'react';
 import { Character } from '../../../components/character/character';
 import { ModalDetail } from '../../../components/modal-detail/modal-detail';
 import { SYMBOLS } from '../../../constants/symbols';
-import { useIconGroupId } from '../../../hooks/use-icon-group-id';
-import { useResizeHandler } from '../../../hooks/use-resize-handler';
+import { useIconCategory } from '../../../hooks/use-icon-category';
 
-export const GroupPage: FC = () => {
+export const CategoryPage: FC = () => {
   const pageRef = useRef<HTMLDivElement>()
-  const iconGroupId = useIconGroupId();
+  const [iconGroupId] = useIconCategory();
   const [active, setActive] = useState<{ code: number, mnemonic?: string; name?: string } | undefined>();
 
   const config = useMemo(() => (iconGroupId ? SYMBOLS.find(({ id }) => id === iconGroupId) : undefined), [iconGroupId])
@@ -39,11 +38,9 @@ export const GroupPage: FC = () => {
     return tables;
   }, [config]);
 
-  useResizeHandler(pageRef);
-
   return (
     <>
-      <div className="group-page" ref={pageRef}>
+      <div className="category-page" ref={pageRef}>
         {tables.map((table, index) => (
           <div className="table-owerlay" key={`table-${index}`}>
             <div className="table">

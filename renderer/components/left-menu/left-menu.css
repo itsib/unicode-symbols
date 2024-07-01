@@ -14,10 +14,10 @@
     color: rgb(var(--text-secondary));
   }
 
-  .menu-item {
+  .btn-menu-item {
     height: 44px;
+    width: 100%;
     color: rgb(var(--text-primary));
-    text-decoration: none;
     display: flex;
     align-items: center;
     transition: all .2s ease-in-out;
