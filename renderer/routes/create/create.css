@@ -1,61 +1,57 @@
 .create-page {
-  width: 100vw;
-  height: 100vh;
+  display: flex;
 
-  .container {
-    min-height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
+  .form-overlay {
+    width: var(--main-menu-width);
+    height: 100vh;
+  }
 
-    .cell {
-      font-size: 40px;
+  .page-content {
+    height: 100vh;
+    width: calc(100vw - var(--main-menu-width));
+    overflow-y: auto;
+
+    .container {
+      min-height: 100%;
+      width: 100%;
+    }
+  }
+}
+
+.symbol-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .inner-container {
+    padding: 8px 8px;
+    font-size: 36px;
+    text-align: center;
+    border-radius: 6px;
+    transition: all .15s linear;
+    cursor: pointer;
+
+    .symbol {
+      height: 1.3em;
+      width: auto;
+      aspect-ratio: 1 auto;
       display: flex;
-      border-radius: 6px;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: all .15s linear;
+    }
 
-      .symbol {
-        height: 1.3em;
-        width: auto;
-        aspect-ratio: 1 auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+    .separator {
+      height: .3em;
+    }
 
-        .code {
-          font-size: 1em;
-        }
+    .subscribe {
+      color: rgb(var(--text-secondary) / 0.8);
+      font-size: .3em;
+    }
 
-        .mnemonic {
-          width: 86%;
-          height: 86%;
-          font-size: 0.4em;
-          text-align: center;
-          border: 1px dashed rgb(var(--text-secondary));
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-
-      .separator {
-        height: .3em;
-      }
-
-      .subscribe {
-        color: rgb(var(--text-secondary));
-        font-size: .3em;
-      }
-
-      &:hover {
-        background-color: color-mix(in srgb, rgb(var(--base-bg)) 95%, rgb(var(--text-primary)) 5%);
-      }
+    &:hover {
+      background-color: color-mix(in srgb, rgb(var(--base-bg)) 95%, rgb(var(--theme-negative)) 5%);
     }
   }
 }

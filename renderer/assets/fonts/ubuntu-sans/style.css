@@ -1,0 +1,24 @@
+@font-face {
+    font-family: "UbuntuSans";
+    font-style: italic;
+    font-weight: 400;
+    font-stretch: 98%;
+    font-display: swap;
+    src: url("/fonts/ubuntu-sans/UbuntuSans-Italic.eot?07263998820282274#iefix") format("embedded-opentype"),
+         url("/fonts/ubuntu-sans/UbuntuSans-Italic.woff2?07263998820282274") format("woff2"),
+         url("/fonts/ubuntu-sans/UbuntuSans-Italic.woff?07263998820282274") format("woff"),
+         url("/fonts/ubuntu-sans/UbuntuSans-Italic.ttf?07263998820282274") format("truetype"),
+         url("/fonts/ubuntu-sans/UbuntuSans-Italic.svg?07263998820282274#UbuntuSans") format("svg");
+}
+@font-face {
+    font-family: "UbuntuSans";
+    font-style: normal;
+    font-weight: 400;
+    font-stretch: 98%;
+    font-display: swap;
+    src: url("/fonts/ubuntu-sans/UbuntuSans.eot?07263998820282274#iefix") format("embedded-opentype"),
+         url("/fonts/ubuntu-sans/UbuntuSans.woff2?07263998820282274") format("woff2"),
+         url("/fonts/ubuntu-sans/UbuntuSans.woff?07263998820282274") format("woff"),
+         url("/fonts/ubuntu-sans/UbuntuSans.ttf?07263998820282274") format("truetype"),
+         url("/fonts/ubuntu-sans/UbuntuSans.svg?07263998820282274#UbuntuSans") format("svg");
+}

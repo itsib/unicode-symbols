@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 import { LeftMenu } from '../../components/left-menu/left-menu';
-import './symbols.css';
 
 export const SymbolsPage: FC = () => {
   return (
@@ -10,7 +9,7 @@ export const SymbolsPage: FC = () => {
         <LeftMenu />
       </div>
 
-      <div className="pages-content">
+      <div className="page-content">
         <Outlet />
       </div>
     </div>

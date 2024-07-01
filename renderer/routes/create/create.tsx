@@ -1,23 +1,39 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { FixedSizeGrid as Grid, GridChildComponentProps } from 'react-window';
-import './create.css';
+import { FormCreateRange } from '../../components/form-create-range/form-create-range';
+import { SymbolsRange } from '../../types';
+import { useNavigate } from 'react-router-dom';
 
+const SCROLL_THUMB_WIDTH = 4;
 const ITEM_HEIGHT = 100;
-const ITEM_WIDTH = 80;
+const MIN_ITEM_WIDTH = 80;
 
-type ListRowData = { callback: (code: number) => void; totalColumns: number };
+interface ListRowParams extends SymbolsRange {
+  onClick: (code: number) => void;
+  columnCount: number;
+}
 
-export const CreatePage: FC = ({}) => {
+interface GridParams {
+  columnCount: number;
+  columnWidth: number;
+  rowCount: number;
+}
+
+export const CreatePage: FC = () => {
+  const navigate = useNavigate();
   const pageRef = useRef<HTMLDivElement>();
-  const itemDataRef = useRef<ListRowData | null>({
-    callback: (code: number) => {
+  const itemDataRef = useRef<ListRowParams | null>({
+    onClick: (code: number) => {
       console.log(`code: %s`, code);
     },
-    totalColumns: 0,
+    columnCount: 0,
+    begin: 0,
+    end: 0,
   });
 
   const [size, setSize] = useState<{ width: number; height: number }>();
-  const [counts, setCounts] = useState<{ columnCount: number; rowCount: number }>();
+  const [gridParams, setGridParams] = useState<GridParams | null>(null);
+  const [range, setRange] = useState<SymbolsRange | null>(null);
   const [active, setActive] = useState<{ code: number, mnemonic?: string; name?: string } | undefined>();
 
   // Window resize handler
@@ -41,54 +57,61 @@ export const CreatePage: FC = ({}) => {
       return;
     }
 
-    const begin = 0x2700;
-    const finish = 0x27BF;
-    let columnCount = Math.floor((size.width - 4) / ITEM_WIDTH);
-    columnCount = Math.max(columnCount, 1);
-    columnCount = Math.min(columnCount, 10);
-    const rowCount = Math.ceil((finish - begin) / columnCount);
+    const offsetWidth = size.width - SCROLL_THUMB_WIDTH;
 
-    itemDataRef.current.totalColumns = columnCount;
+    const columnCount = Math.max(Math.floor(offsetWidth / MIN_ITEM_WIDTH), 1);
+    const columnWidth = Math.floor((offsetWidth / columnCount) * 100) / 100;
 
-    setCounts(old => {
-      if (!old || (old && (old.columnCount !== columnCount || old.rowCount !== rowCount))) {
-        return { columnCount, rowCount };
-      }
-      return old;
-    });
-  }, [size]);
+    const rowCount = Math.ceil((range.end - range.begin) / columnCount);
+
+    itemDataRef.current.columnCount = columnCount;
+    itemDataRef.current.begin = range.begin;
+    itemDataRef.current.end = range.end;
+
+    setGridParams({ columnCount, rowCount, columnWidth });
+  }, [size, range]);
 
   return (
     <div className="create-page">
-      <div className="container" ref={pageRef}>
-        {size && counts ? (
-          <Grid
-            columnCount={counts.columnCount}
-            columnWidth={ITEM_WIDTH}
-            height={size.height}
-            rowCount={counts.rowCount}
-            rowHeight={ITEM_HEIGHT}
-            width={size.width}
-            itemData={itemDataRef.current}
-          >
-            {Cell}
-          </Grid>
-        ) : null}
+      <div className="form-overlay">
+        <FormCreateRange onChange={setRange} onGoBack={() => navigate('/')} />
       </div>
+
+      <div className="page-content">
+        <div className="container" ref={pageRef}>
+          {size && gridParams ? (
+            <Grid
+              columnCount={gridParams.columnCount}
+              columnWidth={gridParams.columnWidth}
+              height={size.height}
+              rowCount={gridParams.rowCount}
+              rowHeight={ITEM_HEIGHT}
+              width={size.width}
+              itemData={itemDataRef.current}
+            >
+              {Cell}
+            </Grid>
+          ) : null}
+        </div>
+      </div>
+
     </div>
   );
 };
 
-const Cell: FC<GridChildComponentProps<ListRowData>> = ({ columnIndex, rowIndex, style, data: { callback, totalColumns } }) => {
-  const code = (totalColumns * rowIndex) + columnIndex;
+const Cell: FC<GridChildComponentProps<ListRowParams>> = ({ columnIndex, rowIndex, style, data }) => {
+  const { onClick, columnCount, begin } = data;
+  const code = begin + (columnCount * rowIndex) + columnIndex;
   return (
-    <div style={style} className="cell" onClick={() => callback(code)}>
-      <div className="symbol">
-        <span dangerouslySetInnerHTML={{ __html: `&#${code};` }}/>
-      </div>
-      <div className="separator"/>
-      <div className="subscribe">
-        <span>0x{code.toString(16).toUpperCase()}</span>
+    <div style={style} className="symbol-cell" onClick={() => onClick(code)}>
+      <div className="inner-container">
+        <div className="symbol">
+          <span dangerouslySetInnerHTML={{ __html: `&#${code};` }}/>
+        </div>
+        <div className="separator"/>
+        <div className="subscribe">
+          <span>0x{code.toString(16).toUpperCase()}</span>
+        </div>
       </div>
     </div>
   )

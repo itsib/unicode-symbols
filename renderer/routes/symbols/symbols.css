@@ -2,13 +2,13 @@
   display: flex;
 
   .menu-overlay {
-    width: 260px;
+    width: var(--main-menu-width);
     height: 100vh;
   }
 
-  .pages-content {
+  .page-content {
     height: 100vh;
-    width: calc(100vw - 260px);
+    width: calc(100vw - var(--main-menu-width));
     overflow-y: auto;
 
     .scroll-overlay {

@@ -53,3 +53,8 @@ export interface CategoryIcons {
   color: boolean;
   chars: Unicode[];
 }
+
+export interface SymbolsRange {
+  begin: number;
+  end: number;
+}

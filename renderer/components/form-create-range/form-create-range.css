@@ -1,0 +1,35 @@
+.form-create-range {
+  width: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  background-color: rgb(var(--second-bg));
+  border-right: 1px solid rgb(var(--border-primary));
+
+  .caption {
+    margin: 18px 0 0;
+    padding: 0 0 10px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    color: rgb(var(--text-primary));
+  }
+
+  .create-form {
+    padding: 10px 16px;
+
+    .form-control {
+      margin-bottom: 8px;
+    }
+
+    .button-block {
+      width: 100%;
+
+      .btn {
+        width: inherit;
+        margin: 0 0 16px;
+      }
+    }
+  }
+}
