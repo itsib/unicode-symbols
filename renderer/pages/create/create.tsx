@@ -1,13 +1,13 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { FixedSizeGrid as Grid, FixedSizeGridProps, GridChildComponentProps } from 'react-window';
 import { FormCreateRange } from '../../components/form-create-range/form-create-range';
-import { SymbolsRange } from '../../types';
+import { TSymbolRange } from '../../types';
 import { useNavigate } from 'react-router-dom';
 import { ModalCreateSymbol } from '../../components/modal-create-symbol/modal-create-symbol';
 import { useSize } from '../../hooks/use-size';
 import { ITEM_HEIGHT, MIN_ITEM_WIDTH, SCROLL_THUMB_WIDTH } from '../../constants/common';
 
-interface ListRowParams extends SymbolsRange {
+interface ListRowParams extends Pick<TSymbolRange, 'begin' | 'end'> {
   onClick: (code: number) => void;
   columnCount: number;
 }
@@ -17,7 +17,7 @@ export const CreatePage: FC = () => {
 
   const size = useSize('create-page-grid-container');
   const [gridProps, setGridProps] = useState<Omit<FixedSizeGridProps, 'children'> | null>(null);
-  const [range, setRange] = useState<SymbolsRange | null>(null);
+  const [range, setRange] = useState<Pick<TSymbolRange, 'begin' | 'end'> | null>(null);
   const [active, setActive] = useState<{ code: number } | null>(null);
 
   const itemDataRef = useRef<ListRowParams | null>({
@@ -29,12 +29,11 @@ export const CreatePage: FC = () => {
 
   // Compute items count
   useEffect(() => {
-    if (!size || !range) {
+    if (!range || !size || !size.height || !size.width) {
       return;
     }
 
     const offsetWidth = size.width - SCROLL_THUMB_WIDTH;
-
     const columnCount = Math.max(Math.floor(offsetWidth / MIN_ITEM_WIDTH), 1);
     const columnWidth = Math.floor((offsetWidth / columnCount) * 100) / 100;
 

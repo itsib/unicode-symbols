@@ -1,16 +1,19 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { LeftMenu } from '../../components/left-menu/left-menu';
 import { useIconCategory } from '../../hooks/use-icon-category';
 import { SYMBOLS } from '../../constants/symbols';
-import { CategoryIcons, SymbolsRange } from '../../types';
+import { TSymbolRange } from '../../types';
 import { useSize } from '../../hooks/use-size';
 import { FixedSizeGrid as Grid, FixedSizeGridProps, GridChildComponentProps } from 'react-window';
 import { ITEM_HEIGHT, MIN_ITEM_WIDTH, SCROLL_THUMB_WIDTH } from '../../constants/common';
+import { sortSymbols } from '../../utils/sort-symbols';
+import { getSymbolCallback } from '../../utils/get-symbol-callback';
+import { ModalCreateSymbol } from '../../components/modal-create-symbol/modal-create-symbol';
 
-interface ListRowParams extends SymbolsRange {
+interface ListRowParams extends Pick<TSymbolRange, 'begin' | 'end'> {
   onClick: (code: number) => void;
+  getSymbolInfo: (index: number) => any;
   columnCount: number;
-  config: CategoryIcons;
 }
 
 export const SymbolsPage: FC = () => {
@@ -19,46 +22,38 @@ export const SymbolsPage: FC = () => {
 
   const [gridProps, setGridProps] = useState<Omit<FixedSizeGridProps, 'children'> | null>(null);
   const [active, setActive] = useState<{ code: number } | null>(null);
+  const symbols = useMemo(() => {
+    const category = SYMBOLS.find(({ id }) => id === activeCategory);
+    if (!category) {
+      return;
+    }
+    return sortSymbols(category);
+  }, [activeCategory]);
 
   const itemDataRef = useRef<ListRowParams | null>({
     onClick: (code: number) => setActive({ code }),
+    getSymbolInfo: getSymbolCallback(symbols),
     columnCount: 0,
     begin: 0,
     end: 0,
-    config: SYMBOLS[0],
   });
 
   useEffect(() => {
-    const config = SYMBOLS.find(({ id }) => id === activeCategory);
-    if (!config) {
+    if (!symbols || !size.height || !size.width) {
       return;
     }
     const offsetWidth = size.width - SCROLL_THUMB_WIDTH;
-
     const columnCount = Math.max(Math.floor(offsetWidth / MIN_ITEM_WIDTH), 1);
     const columnWidth = Math.floor((offsetWidth / columnCount) * 100) / 100;
 
-    let rowCount = 0;
+    const rowCount = Math.ceil((symbols[symbols.length - 1].idxTo) / columnCount);
     let begin: number | undefined = undefined;
     let end: number | undefined = undefined;
-    for (const item of config.chars) {
-      if (item.type === 'single') {
-        rowCount += 1;
-        begin = begin == null ? item.code : Math.min(begin, item.code);
-        end = end == null ? item.code : Math.max(end, item.code);
-
-      } else if (item.type === 'range') {
-        rowCount += (Math.max(item.end, item.start) - Math.min(item.end, item.start));
-
-        begin = begin == null ? Math.min(item.end, item.start) : Math.min(item.end, item.start, begin);
-        end = end == null ? Math.max(item.end, item.start) : Math.max(item.end, item.start, begin);
-      }
-    }
 
     itemDataRef.current.columnCount = columnCount;
     itemDataRef.current.begin = begin ?? 0;
     itemDataRef.current.end = end ?? (begin ?? 0);
-    itemDataRef.current.config = config;
+    itemDataRef.current.getSymbolInfo = getSymbolCallback(symbols);
 
     setGridProps({
       columnCount,
@@ -68,7 +63,7 @@ export const SymbolsPage: FC = () => {
       rowHeight: ITEM_HEIGHT,
       width: size.width,
     });
-  }, [activeCategory, size]);
+  }, [symbols, size]);
 
   return (
     <div className="symbols-page">
@@ -83,16 +78,17 @@ export const SymbolsPage: FC = () => {
           ) : null}
         </div>
       </div>
+
+      <ModalCreateSymbol isOpen={!!active} code={active?.code} onDismiss={() => setActive(null)} />
     </div>
   );
 };
 
 const Cell: FC<GridChildComponentProps<ListRowParams>> = ({ columnIndex, rowIndex, style, data }) => {
-  const { onClick, columnCount, config } = data;
-  config.chars
-
-  const code = (columnCount * rowIndex) + columnIndex;
-  return (
+  const { onClick, columnCount, getSymbolInfo } = data;
+  const index = (columnCount * rowIndex) + columnIndex;
+  const code = getSymbolInfo(index);
+  return code == null ? null : (
     <div style={style} className="symbol-cell" onClick={() => onClick(code)}>
       <div className="inner-container">
         <div className="symbol">

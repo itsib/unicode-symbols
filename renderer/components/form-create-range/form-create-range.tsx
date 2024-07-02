@@ -1,9 +1,9 @@
 import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import { FormControlHex } from '../forms/form-control-hex/form-control-hex';
-import { SymbolsRange } from '../../types';
+import { TSymbolRange } from '../../types';
 
 export interface IFormCreateRange {
-  onChange?: (range: SymbolsRange) => void;
+  onChange?: (range: Pick<TSymbolRange, 'begin' | 'end'>) => void;
   onGoBack?: () => void;
 }
 

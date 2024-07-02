@@ -1,11 +1,11 @@
 import { createContext, FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { SYMBOLS } from '../constants/symbols';
-import { SymbolsRange } from '../types';
+import { TSymbolRange } from '../types';
 
 export interface IAppContext {
   iconSize: number;
   activeCategory: string;
-  range: SymbolsRange;
+  range: Pick<TSymbolRange, 'begin' | 'end'>;
 
   setConfig<K extends AppConfigKey, T extends IAppContext[K]>(key: K, value: T): void;
 }
@@ -27,7 +27,7 @@ export const AppContext = createContext<IAppContext>(DEFAULT_VALUES);
 export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
   const [iconSize, setIconSize] = useState<IAppContext['iconSize']>(DEFAULT_VALUES.iconSize);
   const [activeCategory, setActiveCategory] = useState<string>(DEFAULT_VALUES.activeCategory);
-  const [range, setRange] = useState<SymbolsRange>(DEFAULT_VALUES.range);
+  const [range, setRange] = useState<Pick<TSymbolRange, 'begin' | 'end'>>(DEFAULT_VALUES.range);
 
   const setStateByKey = useCallback(function <K extends AppConfigKey, T extends IAppContext[K]>(key: K, value: T) {
     switch (key) {

@@ -12,54 +12,41 @@ declare global {
   }
 }
 
-export type UnicodeType = 'single' | 'Range' | 'divider' | 'special';
-
-interface UnicodeBase {
-  type: UnicodeType;
+export interface Size {
+  width: number;
+  height: number;
 }
 
-export interface UnicodeDivider extends UnicodeBase {
-  type: 'divider';
+export type TSymbolType = 'single' | 'range' | 'special';
+
+interface TSymbolBase {
+  type: TSymbolType;
+  name: string;
 }
 
-export interface UnicodeSpecial extends UnicodeBase {
+export interface TSymbolSpecial extends TSymbolBase {
   type: 'special';
   code: number;
   mnemonic: string;
-  name: string;
 }
 
-export interface UnicodeChar extends UnicodeBase {
+export interface TSymbolSingle extends TSymbolBase {
   type: 'single';
   code: number;
-  name: string;
-  tags?: string[];
 }
 
-export interface UnicodeRange extends UnicodeBase {
+export interface TSymbolRange extends TSymbolBase {
   type: 'range';
-  start: number;
-  end: number;
-  skip?: number[];
-  tags?: string[];
-}
-
-export type Unicode = UnicodeChar | UnicodeRange | UnicodeDivider | UnicodeSpecial;
-
-export interface CategoryIcons {
-  id: string,
-  name: string,
-  Icon: ReactNode,
-  color: boolean;
-  chars: Unicode[];
-}
-
-export interface SymbolsRange {
   begin: number;
   end: number;
 }
 
-export interface Size {
-  width: number;
-  height: number;
+export type TSymbol = TSymbolSingle | TSymbolRange | TSymbolSpecial;
+
+export interface CategoryOfSymbols {
+  id: string,
+  name: string,
+  Icon: ReactNode,
+  color: boolean;
+  chars: TSymbol[];
 }

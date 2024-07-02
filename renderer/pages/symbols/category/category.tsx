@@ -66,18 +66,3 @@ export const CategoryPage: FC = () => {
     </>
   );
 };
-
-// const ref = useRef<HTMLDivElement>()
-//
-// useEffect(() => {
-//     const element = ref.current;
-//
-//     const onContextmenu = () => {
-//       window.appAPI.showContextMenu(code);
-//     }
-//
-//     element.addEventListener('contextmenu', onContextmenu);
-//     return () => {
-//       element.removeEventListener('contextmenu', onContextmenu);
-//     }
-//   }, [code]);
