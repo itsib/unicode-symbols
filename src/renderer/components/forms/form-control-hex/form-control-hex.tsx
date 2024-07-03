@@ -1,16 +1,8 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { debounce } from '../../../utils/debounce';
+import { IFormControlBase } from '../types';
 
-export interface IFormControlHex {
-  id: string;
-  name?: string;
-  label?: string;
-  value?: number;
-  onChange?: (value?: number) => void;
-  validate?: (value?: number) => string | null;
-}
-
-export const FormControlHex: FC<IFormControlHex> = ({ id, name, label, onChange, value, validate }) => {
+export const FormControlHex: FC<IFormControlBase<number>> = ({ id, name, label, onChange, value, validate }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
 

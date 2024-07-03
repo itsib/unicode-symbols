@@ -1,0 +1,132 @@
+:root {
+  --max: 100;
+  --min: 0;
+  --value: 0;
+}
+
+.form-control-slider {
+  --form-field-slider-thumb-size: 24px;
+  --form-field-slider-thumb-scale-hover: 1.2;
+  --form-field-slider-track-width: 4px;
+  --form-field-slider-track-half-width: calc(var(--form-field-slider-track-width) / 2);
+  /* Slider colors */
+  --form-field-slider-thumb-color: rgb(var(--input-slider-thumb));
+  --form-field-slider-track-color: rgb(var(--input-slider-track));
+  --form-field-slider-track-color-active: rgb(var(--accent));
+  --form-field-slider-disabled: color-mix(in srgb, rgb(var(--black)) 70%, rgb(var(--white)) 30%);
+  /* Internal */
+  --range: calc(var(--max) - var(--min));
+  --ratio: calc((var(--value) - var(--min)) / var(--range));
+  --sx: calc(.5 * var(--form-field-slider-thumb-size) + var(--ratio) * (100% - var(--form-field-slider-thumb-size)));
+  --track-gradient: linear-gradient(var(--form-field-slider-track-color-active), var(--form-field-slider-track-color-active)) 0/var(--sx) 100% no-repeat, var(--form-field-slider-track-color);
+
+  .control {
+    padding: calc(var(--form-field-slider-thumb-size) / 2) 0;
+
+    .slider {
+      height: var(--form-field-slider-track-width);
+      width: 100%; /* Specific width is required for Firefox. */
+      padding: 0;
+      margin: 0;
+      -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+      background: transparent; /* Otherwise white in Chrome */
+      cursor: pointer;
+      display: block;
+
+      &:focus {
+        outline: none;
+      }
+
+      &::-moz-focus-outer {
+        border: 0;
+      }
+
+      &::-webkit-slider-thumb {
+        top: var(--form-field-slider-track-half-width);
+        -webkit-appearance: none;
+        height: var(--form-field-slider-thumb-size);
+        width: var(--form-field-slider-thumb-size);
+        background-color: var(--form-field-slider-thumb-color);
+        border-radius: 100%;
+        border: none;
+        transform: translateY(-50%);
+        color: var(--form-field-slider-thumb-color);
+        transition: all .15s ease-out;
+        position: relative;
+
+        &:hover,
+        &:focus {
+          --form-field-slider-thumb-color: color-mix(in srgb, rgb(var(--input-slider-thumb)) 60%, rgb(var(--theme-negative)) 40%);
+        }
+      }
+
+      &::-moz-range-thumb {
+        height: var(--form-field-slider-thumb-size);
+        width: var(--form-field-slider-thumb-size);
+        background-color: var(--form-field-slider-thumb-color);
+        border-radius: 100%;
+        border: none;
+        color: var(--form-field-slider-thumb-color);
+        transition: all .15s ease-out;
+
+        &:hover,
+        &:focus {
+          --form-field-slider-thumb-color: color-mix(in srgb, rgb(var(--input-slider-thumb)) 60%, rgb(var(--theme-negative)) 40%);
+        }
+      }
+
+      &::-ms-thumb {
+        height: var(--form-field-slider-thumb-size);
+        width: var(--form-field-slider-thumb-size);
+        background-color: var(--form-field-slider-thumb-color);
+        border-radius: 100%;
+        color: var(--form-field-slider-thumb-color);
+        transition: all .15s ease-out;
+
+        &:hover,
+        &:focus {
+          --form-field-slider-thumb-color: color-mix(in srgb, rgb(var(--input-slider-thumb)) 60%, rgb(var(--theme-negative)) 40%);
+        }
+      }
+
+      &::-webkit-slider-runnable-track {
+        height: var(--form-field-slider-track-width);
+        background: var(--form-field-slider-track-color);
+        background: var(--track-gradient);
+        border-radius: var(--form-field-slider-track-width);
+      }
+
+      &::-moz-range-track {
+        height: var(--form-field-slider-track-width);
+        background: var(--form-field-slider-track-color);
+        background: var(--track-gradient);
+        border-radius: var(--form-field-slider-track-width);
+      }
+
+      &::-ms-track {
+        width: 100%;
+        border-color: transparent;
+        color: transparent;
+        height: var(--form-field-slider-track-width);
+        background: var(--form-field-slider-track-color);
+        background: var(--track-gradient);
+        border-radius: var(--form-field-slider-track-width);
+      }
+
+      &::-ms-fill-lower {
+        background: var(--form-field-slider-thumb-color);
+      }
+
+      &::-ms-fill-upper {
+        background: var(--form-field-slider-track-color);
+      }
+    }
+  }
+
+  .error {
+    height: 16px;
+    margin-top: 4px;
+    color: rgb(var(--error));
+    font-size: 12px;
+  }
+}

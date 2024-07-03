@@ -1,8 +1,8 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Characters
-Comment=Browse and search for non-standard characters
+Name=Unicode Symbols
+Comment=Browse and search for non-standard unicode symbols
 
 Exec=audacious -f
 OnlyShowIn=Unity;

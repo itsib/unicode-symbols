@@ -4,7 +4,7 @@ const path = require('path');
 const { optimize, render } = require('svgo');
 
 const SIZES = [16, 24, 32, 48, 64, 96, 128, 256, 512, 768, 1024];
-const ICON_SIZE = 20;
+const ICON_SIZE = [20, 24, 32];
 const ICON_COLOR = 'rgba(255, 255, 255, 1)';
 const LOGO_SVG = path.resolve(__dirname, 'logo.svg');
 const ICONS_SVG = path.resolve(__dirname, 'svg');
@@ -92,7 +92,7 @@ async function genIcons(page) {
     if (!svgIconName.endsWith('.svg')) {
       continue;
     }
-    const pngIconName = svgIconName.replace('.svg', '.png');
+    const baseIconName = svgIconName.replace('.svg', '');
     const svgIconHtmlSrc = fs.readFileSync(path.resolve(ICONS_SVG, svgIconName), 'utf8');
 
     const { data: svgIconHtml } = optimize(svgIconHtmlSrc, {
@@ -117,18 +117,36 @@ async function genIcons(page) {
 
     const svgElement = await page.$('svg');
 
-    await page.$eval('svg', (node, _size) => {
-      node.setAttribute('width', `${_size}px`);
-      node.setAttribute('height', `${_size}px`);
-    }, ICON_SIZE);
+    for (let i = 0; i < ICON_SIZE.length; i++) {
+      const size = ICON_SIZE[i];
+      let name = baseIconName;
+      if (size === 24) {
+        name += '@1.25x';
+      } else if (size === 32) {
+        name += '@1.5x';
+      }
+      name += '.png';
 
-    await svgElement.screenshot({
-      path: path.resolve(ICONS_DIR, pngIconName),
-      type: 'png',
-      omitBackground: true,
-    });
+      await page.$eval('svg', (node, _size) => {
+        node.setAttribute('width', `${_size}px`);
+        node.setAttribute('height', `${_size}px`);
+      }, size);
 
-    console.log(`\x1b[2;37m  Icon created › ${pngIconName}\x1b[0m`);
+      // @1.25x
+      await svgElement.screenshot({
+        path: path.resolve(ICONS_DIR, name),
+        type: 'png',
+        omitBackground: true,
+      });
+
+      console.log(`\x1b[2;37m  Icon created › ${name}\x1b[0m`);
+    }
+
+
+
+
+
+
   }
 
 

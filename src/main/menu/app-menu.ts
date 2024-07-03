@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, MessageChannelMain } from 'electron';
+import { BrowserWindow, Menu, MessageChannelMain, nativeImage } from 'electron';
 import { DEVTOOLS_WIDTH, WINDOW_WIDTH } from '../constants';
 import path from 'node:path';
 import * as process from 'node:process';
@@ -22,7 +22,7 @@ export function createMenu(mainWindow: BrowserWindow) {
         { type: 'separator' },
         {
           label: 'Settings',
-          // icon: path.resolve('src/assets/icons/settings.png'),
+          // icon: nativeImage.createFromNamedImage('emblem-system-symbolic'),
           click: async () => {
             const channel = new MessageChannelMain()
             mainWindow.webContents.postMessage('port', null, [channel.port2])

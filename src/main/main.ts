@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import path from 'path';
+import fs from 'fs';
 import { createMenu } from './menu/app-menu';
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from './constants';
 import { copyText, createContextmenu } from './menu/context-menu';
@@ -38,9 +39,11 @@ function createWindow() {
 }
 
 async function createConfig() {
-  path.resolve(app.getPath('userData'), '')
+  const configPath = app.getPath('userData');
 
-  // console.log('Config path',  ));
+  fs.existsSync(path.join(configPath, 'config.json'));
+
+  console.log('Config path',  );
 }
 
 app.on('window-all-closed', () => {

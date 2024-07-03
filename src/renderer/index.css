@@ -3,7 +3,7 @@
 @import-glob "pages/**/*.css";
 
 :root {
-  color: rgba(0, 119, 226, 0.99);
+  color: rgba(209, 209, 209, 0.98);
 
   /* Constants */
   --modal-z-index: 99;
@@ -26,6 +26,8 @@
   /* Forms */
   --input-bg: 233 233 233;
   --input-outline: 52 113 159;
+  --input-slider-track: 90 90 90;
+  --input-slider-thumb: 209 209 209;
 
   /* Buttons */
   --btn-primary-color: 0 115 229;
@@ -56,6 +58,8 @@
     /* Forms */
     --inputs-bg: 63 63 63;
     --input-outline: 52 113 159;
+    --input-slider-track: 90 90 90;
+    --input-slider-thumb: 209 209 209;
 
     /* Buttons */
     --btn-primary-color: 0 105 210;
@@ -107,7 +111,7 @@ hr {
 .card {
   background-color: rgb(var(--second-bg));
   border: 1px solid rgb(var(--border-primary));
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .btn {

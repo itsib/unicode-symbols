@@ -19,6 +19,46 @@
     .card {
       width: 500px;
       height: 400px;
+
+      .card-row {
+        padding: 16px 20px;
+        border-bottom: 1px solid rgb(var(--border-primary));
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .option-name {
+          width: 140px;
+          font-weight: 400;
+          color: rgb(var(--text-secondary))
+        }
+
+        .option-control {
+          width: calc(100% - 140px);
+
+          .error {
+            display: none;
+          }
+        }
+      }
+
+      .card-row.icon-size-control {
+
+        .option-control {
+          display: flex;
+          align-items: center;
+
+          .inner-value {
+            min-width: 40px;
+            margin-right: 18px;
+            font-size: 16px;
+          }
+
+          .inner-control {
+            width: 100%;
+          }
+        }
+      }
     }
   }
 }

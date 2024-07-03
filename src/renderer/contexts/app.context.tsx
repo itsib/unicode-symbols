@@ -13,7 +13,7 @@ export interface IAppContext {
 export type AppConfigKey = keyof Omit<IAppContext, 'setConfig'>;
 
 const DEFAULT_VALUES: IAppContext = {
-  iconSize: 1 as const,
+  iconSize: 34 as const,
   activeCategory: SYMBOLS[0].id,
   range: {
     begin: 0x0,
