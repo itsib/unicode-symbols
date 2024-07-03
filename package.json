@@ -1,5 +1,5 @@
 {
-  "version": "1.0.2",
+  "version": "1.0.3",
   "name": "characters",
   "description": "Browse and search for non-standard characters",
   "author": "Sergey <itsib.su@gmail.com>",
@@ -7,8 +7,8 @@
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge --verbose start",
-    "build": "npm run build:images && electron-forge make",
-    "build:images": "node scripts/generate-images.js",
+    "build:app": "electron-forge make",
+    "build:images": "node ./img-generation",
     "package": "electron-forge package",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx ."

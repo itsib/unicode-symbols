@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import BackIcon from '../../assets/images/back.svg?react';
+import BackIcon from '../../../assets/images/back.svg?react';
 import { Link } from 'react-router-dom';
 
 export const SettingsPage: FC = () => {

@@ -1,11 +1,9 @@
-import { BrowserWindow, Menu, ipcMain, MessageChannelMain } from 'electron';
+import { BrowserWindow, Menu, MessageChannelMain } from 'electron';
 import { DEVTOOLS_WIDTH, WINDOW_WIDTH } from '../constants';
+import path from 'node:path';
+import * as process from 'node:process';
 
-export function createMenu(mainWindow: BrowserWindow, getPath: (path: string) => string) {
-  if (!(process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true')) {
-    return;
-  }
-
+export function createMenu(mainWindow: BrowserWindow) {
   const menu = Menu.buildFromTemplate([
     {
       label: 'File',
@@ -18,17 +16,17 @@ export function createMenu(mainWindow: BrowserWindow, getPath: (path: string) =>
           click: async () => {
             const channel = new MessageChannelMain()
             mainWindow.webContents.postMessage('port', null, [channel.port2])
-            channel.port1.postMessage({ action: 'redirect', path: '/create' });
+            channel.port1.postMessage({ action: 'redirect', path: 'create' });
           },
         },
         { type: 'separator' },
         {
           label: 'Settings',
-          icon: getPath('icons/settings.png'),
+          // icon: path.resolve('src/assets/icons/settings.png'),
           click: async () => {
             const channel = new MessageChannelMain()
             mainWindow.webContents.postMessage('port', null, [channel.port2])
-            channel.port1.postMessage({ action: 'redirect', path: '/settings' });
+            channel.port1.postMessage({ action: 'redirect', path: 'settings' });
           },
         },
         { type: 'separator' },
@@ -48,7 +46,7 @@ export function createMenu(mainWindow: BrowserWindow, getPath: (path: string) =>
       submenu: [
         {
           label: 'Reload',
-          icon: getPath('icons/reload.png'),
+          // icon: path.resolve('src/assets/icons/reload.png'),
           registerAccelerator: true,
           acceleratorWorksWhenHidden: true,
           accelerator: 'F5',
@@ -58,7 +56,7 @@ export function createMenu(mainWindow: BrowserWindow, getPath: (path: string) =>
         },
         {
           label: 'Hide Menu',
-          icon: getPath('icons/hide-menu.png'),
+          // icon: path.resolve('src/assets/icons/hide-menu.png'),
           registerAccelerator: true,
           acceleratorWorksWhenHidden: true,
           accelerator: 'Ctrl+M',
@@ -69,7 +67,7 @@ export function createMenu(mainWindow: BrowserWindow, getPath: (path: string) =>
         { type: 'separator' },
         {
           label: 'Dev Tools',
-          icon: getPath('icons/code.png'),
+          // icon: path.resolve('src/assets/icons/code.png'),
           registerAccelerator: true,
           acceleratorWorksWhenHidden: true,
           accelerator: 'F12',

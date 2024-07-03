@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import path from 'path';
 import { createMenu } from './menu/app-menu';
-import { ASSETS_PATH, WINDOW_HEIGHT, WINDOW_WIDTH } from './constants';
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from './constants';
 import { copyText, createContextmenu } from './menu/context-menu';
 
 
@@ -9,17 +9,15 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const getAssetPath = (...paths: string[]): string => path.join(ASSETS_PATH, ...paths);
-
 function createWindow() {
   const window = new BrowserWindow({
     show: false,
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
-    icon: getAssetPath('logos/96x96.png'),
+    icon: path.join(__dirname, '..', 'src/assets/brand/96x96.png'),
     webPreferences: {
       sandbox: true,
-      preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, './preload.js'),
+      preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
     },
   });
@@ -34,7 +32,7 @@ function createWindow() {
     window.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)).catch(console.error);
   }
 
-  createMenu(window, getAssetPath);
+  createMenu(window);
 
   window.once('ready-to-show', () => window.show());
 }
@@ -55,7 +53,7 @@ app.whenReady()
   .then(() => createConfig())
   .then(() => {
     ipcMain.on('copy-text', (_: IpcMainEvent, text: string) => copyText(text));
-    ipcMain.on('show-context-menu', (event: IpcMainEvent, meta?: any) => createContextmenu(event, meta, getAssetPath));
+    ipcMain.on('show-context-menu', (event: IpcMainEvent, meta?: any) => createContextmenu(event, meta));
 
     createWindow();
 

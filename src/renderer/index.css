@@ -1,4 +1,4 @@
-@import-glob "assets/css/**/*.css";
+@import-glob "css/**/*.css";
 @import-glob "components/**/*.css";
 @import-glob "pages/**/*.css";
 

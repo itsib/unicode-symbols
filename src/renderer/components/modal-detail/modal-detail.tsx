@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef } from 'react';
-import CloseIcon from '../../assets/images/close.svg?react';
+import CloseIcon from '../../../assets/images/close.svg?react';
 import { BtnCopy } from '../btn-copy/btn-copy';
 import Modal, { ModalProps } from '../modal/modal';
 

@@ -26,7 +26,7 @@ export default defineConfig((env) => {
     resolve: {
       preserveSymlinks: true,
       alias: {
-        '/@': join(__dirname, 'renderer')
+        '/@': join(__dirname, 'src/renderer')
       }
     },
     clearScreen: false,

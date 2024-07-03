@@ -18,6 +18,7 @@ export default defineConfig((env) => {
         external,
       },
     },
+
     plugins: [pluginHotRestart('restart')],
     define,
     resolve: {

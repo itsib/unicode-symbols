@@ -5,7 +5,7 @@ module.exports = {
   plugins: [
     require('postcss-import-ext-glob'),
     require('postcss-import')({
-      root: path.resolve(__dirname, 'renderer'),
+      root: path.resolve(__dirname, 'src/renderer'),
       skipDuplicates: true,
     }),
     require('postcss-nesting'),

@@ -1,7 +1,8 @@
-import { createBrowserRouter as createRouter } from 'react-router-dom';
+import { createHashRouter as createRouter } from 'react-router-dom';
 import { SymbolsPage } from './symbols/symbols';
 import { SettingsPage } from './settings/settings';
 import { CreatePage } from './create/create';
+import { Error404 } from './error-404/error-404';
 
 export const ROUTES = createRouter([
   {
@@ -16,4 +17,8 @@ export const ROUTES = createRouter([
     path: 'settings',
     Component: SettingsPage,
   },
+  {
+    path: '*',
+    Component: Error404,
+  }
 ]);

@@ -6,10 +6,10 @@ const { optimize, render } = require('svgo');
 const SIZES = [16, 24, 32, 48, 64, 96, 128, 256, 512, 768, 1024];
 const ICON_SIZE = 20;
 const ICON_COLOR = 'rgba(255, 255, 255, 1)';
-const LOGO_SVG = path.resolve(process.cwd(), 'assets/logo.svg');
-const ICONS_SVG = path.resolve(process.cwd(), 'assets/svg');
-const LOGOS_DIR = path.resolve(process.cwd(), 'assets/logos/');
-const ICONS_DIR = path.resolve(process.cwd(), 'assets/icons/');
+const LOGO_SVG = path.resolve(__dirname, 'logo.svg');
+const ICONS_SVG = path.resolve(__dirname, 'svg');
+const LOGOS_DIR = path.resolve(__dirname, '../src/assets/brand/');
+const ICONS_DIR = path.resolve(__dirname, '../src/assets/icons/');
 
 const VIEWPORT = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
 const TITLE = '<title>Image</title>';

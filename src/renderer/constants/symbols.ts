@@ -1,15 +1,15 @@
-import AnimalsIcon from '../assets/images/animals.svg?react';
-import ArrowsIcon from '../assets/images/arrows.svg?react';
-import SpecialCharacterIcon from '../assets/images/special-character.svg?react';
-import PictogramsIcon from '../assets/images/pictograms.svg?react';
-import FoodIcon from '../assets/images/food.svg?react';
-import LettersIcon from '../assets/images/letters.svg?react';
-import MathIcon from '../assets/images/math.svg?react';
-import NumbersIcon from '../assets/images/numbers.svg?react';
-import OtherIcon from '../assets/images/other-signs.svg?react';
-import SmilesIcon from '../assets/images/smiles.svg?react';
-import FinanceIcon from '../assets/images/finance.svg?react';
-import InterfaceIcon from '../assets/images/interface.svg?react';
+import AnimalsIcon from '../../assets/images/animals.svg?react';
+import ArrowsIcon from '../../assets/images/arrows.svg?react';
+import SpecialCharacterIcon from '../../assets/images/special-character.svg?react';
+import PictogramsIcon from '../../assets/images/pictograms.svg?react';
+import FoodIcon from '../../assets/images/food.svg?react';
+import LettersIcon from '../../assets/images/letters.svg?react';
+import MathIcon from '../../assets/images/math.svg?react';
+import NumbersIcon from '../../assets/images/numbers.svg?react';
+import OtherIcon from '../../assets/images/other-signs.svg?react';
+import SmilesIcon from '../../assets/images/smiles.svg?react';
+import FinanceIcon from '../../assets/images/finance.svg?react';
+import InterfaceIcon from '../../assets/images/interface.svg?react';
 import { CategoryOfSymbols } from '../types';
 
 export const SYMBOLS: CategoryOfSymbols[] = [

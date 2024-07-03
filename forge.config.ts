@@ -1,42 +1,55 @@
-import type { ForgeConfig } from '@electron-forge/shared-types';
+import type { ForgeConfig, ResolvedForgeConfig } from '@electron-forge/shared-types';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
-import { MakerDeb } from '@electron-forge/maker-deb';
 import { MakerRpm } from '@electron-forge/maker-rpm';
 import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
+import * as process from 'node:process';
 
 const config: ForgeConfig = {
   packagerConfig: {
     name: 'characters',
     asar: true,
-    icon: 'assets/logos/96x96',
+    icon: 'src/assets/brand/96x96',
   },
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({}),
     new MakerZIP({}, ['darwin']),
     new MakerRpm({}),
-    new MakerDeb({
-      options: {
-        name: 'Characters',
-        icon: 'assets/logos/96x96.png',
-        categories: ['Graphics', 'Utility'],
-        genericName: 'Characters',
-        description: 'Browse and search for non-standard characters',
+    {
+      // Path to a single image that will act as icon for the application
+      name: '@electron-forge/maker-deb',
+      config: {
+        options: {
+          name: 'Characters',
+          icon: 'src/assets/brand/512x512.png',
+          categories: ['Graphics', 'Utility'],
+          genericName: 'Characters',
+          description: 'Browse and search for non-standard characters',
+        }
       }
-    })
+    },
+    // new MakerDeb({
+    //   options: {
+    //     name: 'Characters',
+    //     icon: 'src/assets/brand/512x512.png',
+    //     categories: ['Graphics', 'Utility'],
+    //     genericName: 'Characters',
+    //     description: 'Browse and search for non-standard characters',
+    //   }
+    // })
   ],
   plugins: [
     new VitePlugin({
       build: [
         {
-          entry: 'main/main.ts',
+          entry: 'src/main/main.ts',
           config: 'vite.main.config.ts',
         },
         {
-          entry: 'renderer/preload.ts',
+          entry: 'src/renderer/preload.ts',
           config: 'vite.preload.config.ts',
         },
       ],
@@ -57,6 +70,11 @@ const config: ForgeConfig = {
       [FuseV1Options.OnlyLoadAppFromAsar]: true,
     }),
   ],
+  hooks: {
+    async generateAssets(config: ResolvedForgeConfig, platform: string, arch: string) {
+      console.log(process.cwd() + '\n\n\n\n\n');
+    },
+  },
 };
 
 export default config;

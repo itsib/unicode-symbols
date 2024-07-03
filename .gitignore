@@ -90,6 +90,5 @@ typings/
 
 # Electron-Forge
 out/
-assets/_svg/
-assets/icons/
-assets/logos/
+src/assets/brand/
+src/assets/icons/

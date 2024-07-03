@@ -8,7 +8,7 @@ contextBridge.exposeInMainWorld('appAPI', {
 ipcRenderer.on('port',(e) => {
   e.ports[0].onmessage = (messageEvent) => {
     if (messageEvent.data.action === 'redirect') {
-      location.href = messageEvent.data.path;
+      location.href = `${location.origin}${location.pathname}#/${messageEvent.data.path}`;
     }
   }
 })
