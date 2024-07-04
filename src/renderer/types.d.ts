@@ -1,4 +1,3 @@
-/// <reference types="vite-plugin-svgr/client" />
 /// <reference types="react" />
 
 declare global {

@@ -1,8 +1,7 @@
 import type { ConfigEnv, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
-import { pluginExposeRenderer } from './vite.base.config';
 import { join } from 'path';
-import svg from 'vite-plugin-svgr';
+import { pluginExposeRenderer } from '../../vite.base.config';
 
 // https://vitejs.dev/config
 export default defineConfig((env) => {
@@ -20,7 +19,6 @@ export default defineConfig((env) => {
       cssCodeSplit: false,
     },
     plugins: [
-      svg(),
       pluginExposeRenderer(name),
     ],
     resolve: {

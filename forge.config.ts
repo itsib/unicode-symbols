@@ -1,13 +1,14 @@
-import type { ForgeConfig, ResolvedForgeConfig } from '@electron-forge/shared-types';
+import type { ForgeConfig } from '@electron-forge/shared-types';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
-import * as process from 'node:process';
+import { getGenerateAssetsHook } from './forge';
+import path from 'node:path';
 
 const config: ForgeConfig = {
   packagerConfig: {
-    name: 'unicode-symbols',
+    name: 'Unicode Symbols',
+    executableName: 'unicode-symbols',
     asar: true,
-    icon: 'src/assets/brand/96x96',
-    extraResource: 'src/assets/'
+    icon: 'src/assets/logos/96x96',
   },
   rebuildConfig: {},
   makers: [
@@ -16,7 +17,7 @@ const config: ForgeConfig = {
       config: {
         options: {
           name: 'unicode-symbols',
-          icon: 'src/assets/brand/512x512.png',
+          icon: 'src/assets/logos/512x512.png',
           categories: ['Graphics', 'Utility'],
           genericName: 'Unicode Symbols',
           description: 'Browse and search for non-standard unicode symbols',
@@ -31,17 +32,17 @@ const config: ForgeConfig = {
         build: [
           {
             entry: 'src/main/main.ts',
-            config: 'vite.main.config.ts',
+            config: 'src/main/vite.config.ts',
           },
           {
-            entry: 'src/renderer/preload.ts',
-            config: 'vite.preload.config.ts',
+            entry: 'src/preload/preload.ts',
+            config: 'src/preload/vite.config.ts',
           },
         ],
         renderer: [
           {
             name: 'main_window',
-            config: 'vite.renderer.config.ts',
+            config: 'src/renderer/vite.config.ts',
           },
         ],
       }
@@ -60,10 +61,10 @@ const config: ForgeConfig = {
     },
   ],
   hooks: {
-    async generateAssets(config: ResolvedForgeConfig, platform: string, arch: string) {
-      // cwd = "/home/sergey/projects/characters"
-      console.log(process.cwd() + '\n\n\n\n\n');
-    },
+    generateAssets: getGenerateAssetsHook({
+      logoSvg: path.resolve(__dirname, 'src/assets/logo.svg'),
+      assets: path.resolve(__dirname, 'src/assets'),
+    }),
   },
 };
 
