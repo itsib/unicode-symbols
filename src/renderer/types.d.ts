@@ -45,7 +45,7 @@ export type TSymbol = TSymbolSingle | TSymbolRange | TSymbolSpecial;
 export interface CategoryOfSymbols {
   id: string,
   name: string,
-  Icon: ReactNode,
+  icon: ReactNode,
   color: boolean;
   chars: TSymbol[];
 }

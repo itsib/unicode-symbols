@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef } from 'react';
-import CloseIcon from '../../../assets/images/close.svg?react';
+import CloseIcon from '../../../assets/images/close.svg';
 import { BtnCopy } from '../btn-copy/btn-copy';
 import Modal, { ModalProps } from '../modal/modal';
 
@@ -55,7 +55,7 @@ const ModalContent: FC<Required<IModalDetail>> = ({ name, code, mnemonic, onDism
           )}
         </div>
         <button type="button" className="btn btn-close" onClick={onDismiss}>
-          <CloseIcon className="icon"/>
+          <img src={CloseIcon} alt="Close" className="icon"/>
         </button>
       </div>
       <div className="modal-content">

@@ -7,7 +7,7 @@ export const LeftMenu: FC = () => {
 
   return (
     <menu className="left-menu">
-      {SYMBOLS.map(({ Icon, name, id }) => (
+      {SYMBOLS.map(({ icon, name, id }) => (
         <button
           type="button"
           key={id}
@@ -15,7 +15,7 @@ export const LeftMenu: FC = () => {
           onClick={() => setActiveCategory(id)}
         >
           <div className="menu-icon">
-            <Icon />
+            <img src={icon} alt={name} className="icon" />
           </div>
           <div className="label">
             <span>{name}</span>

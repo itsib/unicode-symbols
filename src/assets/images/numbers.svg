@@ -1,124 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.1"
-   width="512"
-   height="512"
-   x="0"
-   y="0"
-   viewBox="0 0 1707 1707"
-   style="enable-background:new 0 0 512 512"
-   xml:space="preserve"
-   fill-rule="evenodd"
-   class=""
-   id="svg18"
-   sodipodi:docname="numbers.svg"
-   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"><defs
-   id="defs22"><filter
-   style="color-interpolation-filters:sRGB;"
-   inkscape:label="Blend"
-   id="filter841"
-   x="0"
-   y="0"
-   width="1"
-   height="1"><feBlend
-     in2="SourceGraphic"
-     mode="normal"
-     result="fbSourceGraphic"
-     id="feBlend839" /><feColorMatrix
-     result="fbSourceGraphicAlpha"
-     in="fbSourceGraphic"
-     values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
-     id="feColorMatrix861" /><feBlend
-     in2="fbSourceGraphic"
-     id="feBlend863"
-     mode="normal"
-     result="blend"
-     in="fbSourceGraphic" /></filter>
-    
-    
-    
-    
-    
-    
-    
-</defs><sodipodi:namedview
-   id="namedview20"
-   pagecolor="#505050"
-   bordercolor="#eeeeee"
-   borderopacity="1"
-   inkscape:pageshadow="0"
-   inkscape:pageopacity="0"
-   inkscape:pagecheckerboard="0"
-   showgrid="false"
-   inkscape:zoom="1.1656213"
-   inkscape:cx="236.78359"
-   inkscape:cy="306.70338"
-   inkscape:window-width="1850"
-   inkscape:window-height="1016"
-   inkscape:window-x="70"
-   inkscape:window-y="27"
-   inkscape:window-maximized="1"
-   inkscape:current-layer="svg18" />
-  <path
-   fill="#1b2d3b"
-   d="M 470,1484 H 260 c -11,0 -20,-9 -20,-20 v -191 c 0,-11 9,-20 20,-20 h 210 c 11,0 20,9 20,20 v 191 c 0,11 -9,20 -20,20 z m 977,0 h -210 c -11,0 -20,-9 -20,-20 v -191 c 0,-11 9,-20 20,-20 h 210 c 11,0 20,9 20,20 v 191 c 0,11 -9,20 -20,20 z"
-   opacity="1"
-   class=""
-   id="path2"
-   style="filter:url(#filter841);fill:#274156;fill-opacity:1" /><path
-   fill="#182935"
-   d="m 240,1320 v -47 c 0,-11 9,-20 20,-20 h 210 c 11,0 20,9 20,20 v 47 z m 977,0 v -47 c 0,-11 9,-20 20,-20 h 210 c 11,0 20,9 20,20 v 47 z"
-   opacity="1"
-   class=""
-   id="path4"
-   style="filter:url(#filter841);fill:#203748;fill-opacity:1" /><path
-   fill="#1b2d3b"
-   d="M 1070,394 H 636 c -11,0 -20,-9 -20,-20 v -66 c 0,-47 39,-85 86,-85 h 302 c 48,0 86,38 86,85 v 66 c 0,11 -9,20 -20,20 z"
-   opacity="1"
-   class=""
-   id="path6"
-   style="filter:url(#filter841);fill:#264054;fill-opacity:1" /><path
-   fill="#34495e"
-   d="M 1553,1293 H 154 C 69,1293 0,1224 0,1139 V 508 C 0,423 69,354 154,354 h 1399 c 85,0 154,69 154,154 v 631 c 0,85 -69,154 -154,154 z"
-   opacity="1"
-   class=""
-   id="path8"
-   style="filter:url(#filter841);fill:#486683;fill-opacity:1" /><path
-   fill="#1b2d3b"
-   d="m 1553,1220 c 44,0 80,-36 80,-81 V 508 c 0,-44 -36,-80 -80,-80 H 154 c -44,0 -81,36 -81,80 v 631 c 0,45 37,81 81,81 z"
-   opacity="1"
-   class=""
-   id="path10"
-   style="fill:#284357;fill-opacity:1;filter:url(#filter841)"
-   transform="matrix(0.96108925,0,0,0.96108925,33.190872,32.06246)" /><path
-   fill="#16232b"
-   d="m 1553,1220 c 44,0 80,-36 80,-81 V 508 c 0,-22 -9,-42 -23,-57 L 94,1194 c 15,16 36,26 60,26 z"
-   opacity="1"
-   class=""
-   id="path12"
-   style="fill:#213541;fill-opacity:1;filter:url(#filter841)"
-   transform="matrix(0.96108925,0,0,0.96108925,33.190872,32.06246)" /><path
-   id="path4832"
-   style="fill:#ff7415;fill-opacity:1;filter:url(#filter841)"
-   transform="matrix(0.9105079,0,0,0.9105079,143.0612,73.741492)"
-   d="m 1437,831 15,15 v 204 c -5,20 -17,32 -36,37 l -22,-59 V 875 Z m -36,256 h -219 c -20,-5 -32,-17 -37,-37 l 59,-22 h 175 z m -256,-52 V 846 l 15,-15 44,44 v 139 z m 234,-416 h -175 l -58,-22 c 5,-19 17,-31 37,-36 h 218 z m -175,15 v 138 l -44,44 -15,-14 V 612 Z m 190,138 V 619 l 22,-58 c 19,5 31,17 36,36 v 205 l -15,14 z" /><path
-   id="path4820"
-   style="filter:url(#filter841);fill:#ff7415;fill-opacity:1"
-   transform="matrix(0.9105079,0,0,0.9105079,76.381509,73.741492)"
-   d="m 1058,831 14,15 v 204 c -5,20 -17,32 -36,37 l -22,-59 V 875 Z m -37,256 H 802 c -19,-5 -31,-17 -36,-37 l 58,-22 H 999 Z M 766,1035 V 846 l 14,-15 44,44 v 139 z M 999,619 H 825 l -59,-22 c 5,-19 17,-31 37,-36 h 218 z m -175,15 v 138 l -44,44 -14,-14 V 612 Z m 190,138 V 619 l 22,-58 c 19,5 31,17 36,36 v 205 l -14,14 z" /><path
-   style="fill:#ff7415;fill-opacity:1;filter:url(#filter841)"
-   d="m 693,736 h -59 v -58 h 59 z"
-   transform="matrix(0.9105079,0,0,0.9105079,43.041664,73.741492)"
-   id="path4818" /><path
-   style="fill:#ff7415;fill-opacity:1;filter:url(#filter841)"
-   d="m 693,970 h -59 v -59 h 59 z"
-   transform="matrix(0.9105079,0,0,0.9105079,43.041664,73.741492)"
-   id="path4816" /><path
-   id="path14"
-   style="fill:#ff7415;fill-opacity:1;filter:url(#filter841)"
-   transform="matrix(0.9105079,0,0,0.9105079,16.369788,73.741492)"
-   d="m 503,794 29,30 -29,29 H 313 l -29,-29 29,-30 z m 44,37 14,15 v 204 c -5,20 -17,32 -36,37 l -22,-59 V 875 Z m -37,256 H 291 c -19,-5 -31,-17 -36,-37 l 58,-22 H 488 Z M 255,1035 V 846 l 14,-15 44,44 v 139 z M 488,619 H 314 l -59,-22 c 5,-19 17,-31 37,-36 h 218 z m -175,15 v 138 l -44,44 -14,-14 V 612 Z M 503,772 V 619 l 22,-58 c 19,5 31,17 36,36 v 205 l -14,14 z" /></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="512" height="512" fill-rule="evenodd" viewBox="0 0 1707 1707">
+  <defs>
+    <filter id="a" width="1" height="1" x="0" y="0" style="color-interpolation-filters:sRGB">
+      <feBlend in2="SourceGraphic" result="fbSourceGraphic"/>
+      <feColorMatrix in="fbSourceGraphic" result="fbSourceGraphicAlpha" values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"/>
+      <feBlend in="fbSourceGraphic" in2="fbSourceGraphic" result="blend"/>
+    </filter>
+  </defs>
+  <path fill="#1b2d3b" d="M470 1484H260c-11 0-20-9-20-20v-191c0-11 9-20 20-20h210c11 0 20 9 20 20v191c0 11-9 20-20 20m977 0h-210c-11 0-20-9-20-20v-191c0-11 9-20 20-20h210c11 0 20 9 20 20v191c0 11-9 20-20 20" style="filter:url(#a);fill:#274156;fill-opacity:1"/>
+  <path fill="#182935" d="M240 1320v-47c0-11 9-20 20-20h210c11 0 20 9 20 20v47zm977 0v-47c0-11 9-20 20-20h210c11 0 20 9 20 20v47z" style="filter:url(#a);fill:#203748;fill-opacity:1"/>
+  <path fill="#1b2d3b" d="M1070 394H636c-11 0-20-9-20-20v-66c0-47 39-85 86-85h302c48 0 86 38 86 85v66c0 11-9 20-20 20" style="filter:url(#a);fill:#264054;fill-opacity:1"/>
+  <path fill="#34495e" d="M1553 1293H154c-85 0-154-69-154-154V508c0-85 69-154 154-154h1399c85 0 154 69 154 154v631c0 85-69 154-154 154" style="filter:url(#a);fill:#486683;fill-opacity:1"/>
+  <path fill="#1b2d3b" d="M1553 1220c44 0 80-36 80-81V508c0-44-36-80-80-80H154c-44 0-81 36-81 80v631c0 45 37 81 81 81z" style="fill:#284357;fill-opacity:1;filter:url(#a)" transform="translate(33.19 32.062)scale(.96109)"/>
+  <path fill="#16232b" d="M1553 1220c44 0 80-36 80-81V508c0-22-9-42-23-57L94 1194c15 16 36 26 60 26z" style="fill:#213541;fill-opacity:1;filter:url(#a)" transform="translate(33.19 32.062)scale(.96109)"/>
+  <path d="m1437 831 15 15v204c-5 20-17 32-36 37l-22-59V875Zm-36 256h-219c-20-5-32-17-37-37l59-22h175zm-256-52V846l15-15 44 44v139zm234-416h-175l-58-22c5-19 17-31 37-36h218zm-175 15v138l-44 44-15-14V612Zm190 138V619l22-58q28.5 7.5 36 36v205l-15 14z" style="fill:#ff7415;fill-opacity:1;filter:url(#a)" transform="translate(143.061 73.741)scale(.9105)"/>
+  <path d="m1058 831 14 15v204c-5 20-17 32-36 37l-22-59V875Zm-37 256H802c-19-5-31-17-36-37l58-22h175Zm-255-52V846l14-15 44 44v139zm233-416H825l-59-22c5-19 17-31 37-36h218zm-175 15v138l-44 44-14-14V612Zm190 138V619l22-58q28.5 7.5 36 36v205l-14 14z" style="filter:url(#a);fill:#ff7415;fill-opacity:1" transform="translate(76.382 73.741)scale(.9105)"/>
+  <path d="M693 736h-59v-58h59zm0 234h-59v-59h59z" style="fill:#ff7415;fill-opacity:1;filter:url(#a)" transform="translate(43.042 73.741)scale(.9105)"/>
+  <path d="m503 794 29 30-29 29H313l-29-29 29-30zm44 37 14 15v204c-5 20-17 32-36 37l-22-59V875Zm-37 256H291c-19-5-31-17-36-37l58-22h175Zm-255-52V846l14-15 44 44v139zm233-416H314l-59-22c5-19 17-31 37-36h218zm-175 15v138l-44 44-14-14V612Zm190 138V619l22-58q28.5 7.5 36 36v205l-14 14z" style="fill:#ff7415;fill-opacity:1;filter:url(#a)" transform="translate(16.37 73.741)scale(.9105)"/>
+</svg>

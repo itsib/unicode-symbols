@@ -6,13 +6,12 @@
   "license": "ISC",
   "main": ".vite/build/main.js",
   "scripts": {
-    "start": "electron-forge --verbose start",
-    "build:app": "electron-forge make",
-    "build:images": "node ./img-generation",
+    "start": "electron-forge start",
+    "build": "electron-forge make",
     "package": "electron-forge package",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "in": "sudo dpkg -i out/make/deb/x64/unicode-symbols_1.0.3_amd64.deb"
+    "setup": "sudo dpkg -i out/make/deb/x64/unicode-symbols_1.0.3_amd64.deb"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",

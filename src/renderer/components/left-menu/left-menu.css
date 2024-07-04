@@ -27,7 +27,7 @@
       text-align: center;
       line-height: 0;
 
-      svg {
+      .icon {
         height: 22px;
         width: auto;
       }

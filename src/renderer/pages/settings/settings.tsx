@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import BackIcon from '../../../assets/images/back.svg?react';
+import BackIcon from '../../../assets/images/back.svg';
 import { Link } from 'react-router-dom';
 import { FormControlSlider } from '../../components/forms';
 import { useIconSize } from '../../hooks/use-icon-size';
@@ -11,7 +11,7 @@ export const SettingsPage: FC = () => {
     <div className="settings-page">
       <div className="container">
         <Link to="/" className="back-link">
-          <BackIcon />
+          <img src={BackIcon} alt="Back icon" className="icon" />
           <span>Settings</span>
         </Link>
 
