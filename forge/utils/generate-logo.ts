@@ -12,7 +12,9 @@ const HTML = `
 <body>@img@</body>
 </html>`;
 
-export async function generateLogo(logoSvgPath: string, dists: string[]) {
+export async function generateLogo(logoSvgPath: string, sizes: number[], logosPath: string) {
+  await ensureDirExists(logosPath);
+
   const logoSvg = await fs.readFile(logoSvgPath, 'utf8');
   const logoHtml = HTML.replace('@img@', logoSvg);
 
@@ -26,28 +28,15 @@ export async function generateLogo(logoSvgPath: string, dists: string[]) {
 
   const svgElement = await page.$('svg');
 
-  for (const dist of dists) {
-    const dirname = path.dirname(dist);
-    let filename = path.basename(dist);
-    filename = path.extname(filename) ? filename : `${filename}.png`;
-    const result = /^(\d+)x(\d+).png/.exec(filename);
-    if (!result) {
-      throw new Error(`Filename error - "${dist}", Should be like: "512x512.png"`);
-    }
-
-    await ensureDirExists(dirname);
-
-    const width = parseInt(result[1], 10);
-    const height = parseInt(result[2], 10);
-
+  for (const size of sizes) {
     await page.$eval('svg', (node, _width, _height) => {
       node.setAttribute('width', `${_width}px`);
       node.setAttribute('height', `${_height}px`);
-    }, width, height);
+    }, size, size);
 
 
     await svgElement.screenshot({
-      path: path.resolve(dirname, filename),
+      path: path.resolve(logosPath, `${size}x${size}.png`),
       type: 'png',
       omitBackground: true,
     });

@@ -63,7 +63,9 @@ const config: ForgeConfig = {
   hooks: {
     generateAssets: getGenerateAssetsHook({
       logoSvg: path.resolve(__dirname, 'src/assets/logo.svg'),
-      assets: path.resolve(__dirname, 'src/assets'),
+      sizes: [16, 24, 32, 48, 64, 96, 128, 256, 512, 1024],
+      logosPath: path.resolve(__dirname, 'src/assets/logos'),
+      assetsPath: path.resolve(__dirname, 'src/assets'),
     }),
   },
 };

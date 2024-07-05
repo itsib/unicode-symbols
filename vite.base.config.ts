@@ -17,7 +17,7 @@ export function getBuildConfig(env: ConfigEnv<'build'>): UserConfig {
       // Prevent multiple builds from interfering with each other.
       emptyOutDir: false,
       // 🚧 Multiple builds may conflict.
-      outDir: '.vite/build',
+      outDir: 'dist/main',
       watch: command === 'serve' ? {} : null,
       minify: command === 'build',
     },

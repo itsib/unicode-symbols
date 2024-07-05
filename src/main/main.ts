@@ -38,14 +38,6 @@ function createWindow() {
   window.once('ready-to-show', () => window.show());
 }
 
-async function createConfig() {
-  const configPath = app.getPath('userData');
-
-  fs.existsSync(path.join(configPath, 'config.json'));
-
-  console.log('Config path',  );
-}
-
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -53,7 +45,6 @@ app.on('window-all-closed', () => {
 });
 
 app.whenReady()
-  .then(() => createConfig())
   .then(() => {
     ipcMain.on('copy-text', (_: IpcMainEvent, text: string) => copyText(text));
     ipcMain.on('show-context-menu', (event: IpcMainEvent, meta?: any) => createContextmenu(event, meta));
