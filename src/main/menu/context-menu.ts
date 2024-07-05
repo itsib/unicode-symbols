@@ -31,6 +31,5 @@ export function createContextmenu(event: IpcMainEvent, meta?: any) {
     menu = createCharacterContextmenu(event, meta);
   }
 
-
   menu?.popup({ window: BrowserWindow.fromWebContents(event.sender)});
 }

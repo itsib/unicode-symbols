@@ -11,7 +11,7 @@ export const SymbolCell: FC<GridChildComponentProps<ISymbolCell>> = ({ style, ro
   const code = getSymbolCode(rowIndex, columnIndex);
 
   return code == null ? null : (
-    <div style={style} className="symbol-cell" onClick={() => onClick(code)}>
+    <div style={style} className="symbol-cell" onClick={() => onClick(code)} onContextMenu={() => window.appAPI.showContextMenu(code)}>
       <div className="inner-container">
         <div className="symbol">
           <span dangerouslySetInnerHTML={{ __html: `&#${code};` }}/>

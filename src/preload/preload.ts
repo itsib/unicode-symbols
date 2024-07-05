@@ -11,4 +11,5 @@ ipcRenderer.on('port',(e) => {
       location.href = `${location.origin}${location.pathname}#/${messageEvent.data.path}`;
     }
   }
-})
+});
+
