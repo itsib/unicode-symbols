@@ -1,10 +1,9 @@
 import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import path from 'path';
-import fs from 'fs';
-import { createMenu } from './menu/app-menu';
+import { createMenu } from './utils/app-menu';
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from './constants';
-import { copyText, createContextmenu } from './menu/context-menu';
-
+import { copyText, createContextmenu } from './utils/context-menu';
+import { readSymbolNames } from './utils/read-symbol-names';
 
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -18,6 +17,7 @@ function createWindow() {
     icon: path.join(__dirname, '..', 'src/assets/brand/96x96.png'),
     webPreferences: {
       sandbox: true,
+      devTools: true,
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
     },
@@ -35,7 +35,9 @@ function createWindow() {
 
   createMenu(window);
 
-  window.once('ready-to-show', () => window.show());
+  window.once('ready-to-show', () => {
+    window.show();
+  });
 }
 
 app.on('window-all-closed', () => {
@@ -47,7 +49,10 @@ app.on('window-all-closed', () => {
 app.whenReady()
   .then(() => {
     ipcMain.on('copy-text', (_: IpcMainEvent, text: string) => copyText(text));
+
     ipcMain.on('show-context-menu', (event: IpcMainEvent, meta?: any) => createContextmenu(event, meta));
+
+    ipcMain.on('read-file', (event: IpcMainEvent, filepath: string) => readSymbolNames(event, filepath));
 
     createWindow();
 

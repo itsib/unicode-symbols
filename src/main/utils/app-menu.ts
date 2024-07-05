@@ -1,7 +1,5 @@
-import { BrowserWindow, Menu, MessageChannelMain, nativeImage } from 'electron';
+import { BrowserWindow, Menu, MessageChannelMain } from 'electron';
 import { DEVTOOLS_WIDTH, WINDOW_WIDTH } from '../constants';
-import path from 'node:path';
-import * as process from 'node:process';
 
 export function createMenu(mainWindow: BrowserWindow) {
   const menu = Menu.buildFromTemplate([
@@ -14,19 +12,14 @@ export function createMenu(mainWindow: BrowserWindow) {
           acceleratorWorksWhenHidden: true,
           accelerator: 'Ctrl+N',
           click: async () => {
-            const channel = new MessageChannelMain()
-            mainWindow.webContents.postMessage('port', null, [channel.port2])
-            channel.port1.postMessage({ action: 'redirect', path: 'create' });
+            mainWindow.webContents.send('redirect', { path: 'create' });
           },
         },
         { type: 'separator' },
         {
           label: 'Settings',
-          // icon: nativeImage.createFromNamedImage('emblem-system-symbolic'),
           click: async () => {
-            const channel = new MessageChannelMain()
-            mainWindow.webContents.postMessage('port', null, [channel.port2])
-            channel.port1.postMessage({ action: 'redirect', path: 'settings' });
+            mainWindow.webContents.send('redirect', { path: 'settings' });
           },
         },
         { type: 'separator' },
@@ -36,7 +29,7 @@ export function createMenu(mainWindow: BrowserWindow) {
           acceleratorWorksWhenHidden: true,
           accelerator: 'Alt+F4',
           click: async () => {
-            mainWindow.destroy();
+            mainWindow.close();
           },
         },
       ],

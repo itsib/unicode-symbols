@@ -1,5 +1,6 @@
 @import-glob "css/**/*.css";
 @import-glob "components/**/*.css";
+@import-glob "pages/layout.css";
 @import-glob "pages/**/*.css";
 
 :root {
@@ -81,7 +82,7 @@ body {
   height: 100vh;
   padding: 0;
   margin: 0;
-  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  font-family: "UbuntuSans", Helvetica, Arial, sans-serif;
   font-optical-sizing: none;
   font-weight: 400;
   font-style: normal;

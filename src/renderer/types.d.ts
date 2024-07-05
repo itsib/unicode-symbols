@@ -2,12 +2,15 @@
 
 declare global {
   export interface AppApi {
+    on<TData = void>(eventName: string, callback: (data: TData) => void): () => void;
     copyText(text: string): void;
     showContextMenu(meta?: any): void;
+    getSymbolName(id: number): Promise<string>;
   }
 
   interface Window {
     appAPI: AppApi;
+    setLoading: (isLoading: boolean) => void;
   }
 }
 

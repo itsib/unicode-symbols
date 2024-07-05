@@ -2,6 +2,7 @@ import { FC, useEffect, useRef } from 'react';
 import CloseIcon from '../../../assets/images/close.svg';
 import { BtnCopy } from '../btn-copy/btn-copy';
 import Modal, { ModalProps } from '../modal/modal';
+import { useSymbolName } from '../../hooks/use-symbol-name';
 
 export interface IModalCreateSymbol extends ModalProps {
   code?: number;
@@ -24,6 +25,8 @@ export const ModalCreateSymbol: FC<IModalCreateSymbol> = ({ isOpen, onDismiss, c
 };
 
 const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, onDismiss }) => {
+  const name = useSymbolName(code);
+
   const html = `&#${code.toString(10)};`;
   const css = `\\${code.toString(16)}`;
 
@@ -31,9 +34,11 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, 
     <div className="modal modal-create-symbol">
       <div className="modal-header">
         <div className="title">
-          <span className="text-secondary">Unicode Symbol</span>
-          &nbsp;
-          <span>{`U+${code.toString(16).toUpperCase()}`}</span>
+          <>
+            <span className="text-secondary">Unicode Symbol</span>
+            &nbsp;
+            <span>{`U+${code.toString(16).toUpperCase()}`}</span>
+          </>
         </div>
         <button type="button" className="btn btn-close" onClick={onDismiss}>
           <img src={CloseIcon} alt="Close" className="icon"/>
@@ -41,6 +46,10 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, 
       </div>
 
       <div className="modal-content">
+        <div className="name">
+          <span>{name}</span>
+        </div>
+
         <BtnCopy className="symbol" text={String.fromCodePoint(code)}>
           <span dangerouslySetInnerHTML={{ __html: html }}/>
         </BtnCopy>

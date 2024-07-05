@@ -7,6 +7,13 @@
     align-items: center;
     justify-content: center;
 
+    .name {
+      margin-bottom: 16px;
+      color: rgb(var(--text-primary));
+      font-weight: 600;
+      font-size: 18px;
+    }
+
     .symbol {
       width: 76px;
       height: 76px;
