@@ -1,7 +1,10 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { IndexedDb } from './indexed-db/indexed-db';
 
-const dataBase = IndexedDb.get();
+const INDEXED_DB_CONFIG = {
+  name: 'UnicodeSymbols',
+  version: 2,
+}
 
 contextBridge.exposeInMainWorld('appAPI', {
   /**
@@ -27,20 +30,22 @@ contextBridge.exposeInMainWorld('appAPI', {
       ipcRenderer.off(eventName, listener);
     };
   },
-
-  getSymbolName: async (id: number): Promise<string> => {
-    return dataBase.getSymbolName(id);
-  }
+  /**
+   * IndexedDB configuration
+   */
+  INDEXED_DB_CONFIG,
 });
 
 (async function init() {
+  const dataBase = IndexedDb.get(INDEXED_DB_CONFIG.name, INDEXED_DB_CONFIG.version);
   if (await dataBase.checkInit()) {
+    await dataBase.close();
     return;
   }
 
   ipcRenderer.emit('main-loading', null, { isLoading: true });
 
-  ipcRenderer.once('port', (event, data) => {
+  ipcRenderer.once('port', event => {
     const port = event.ports[0] as MessagePort;
     let disabled = false;
 
@@ -51,27 +56,34 @@ contextBridge.exposeInMainWorld('appAPI', {
 
     port.onmessage = (messageEvent) => {
       const type = messageEvent.data.type;
+      const context = messageEvent.data.context;
       const data = messageEvent.data.data;
 
       switch (type) {
         case 'error':
           disabled = true;
+          dataBase.close();
           ipcRenderer.emit('main-loading', null, { isLoading: false });
           console.error(data);
           break;
         case 'close':
           disabled = true;
+          dataBase.close();
           ipcRenderer.emit('main-loading', null, { isLoading: false });
           break;
         case 'data':
           if (!disabled) {
             ipcRenderer.emit('main-loading', null, { isLoading: true });
-            dataBase.insertNames(...data).then(() => ipcRenderer.send('read-file-next'));
+
+            dataBase.parseAndSave(context, data).then(() => ipcRenderer.send('read-next-line'));
           }
           break;
       }
     };
+
+
+    ipcRenderer.send('db-ready');
   });
 
-  ipcRenderer.send('read-file', 'data/symbol-names.csv');
+  ipcRenderer.send('db-init');
 })();

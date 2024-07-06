@@ -67,7 +67,7 @@ export const Layout: FC = () => {
     <div className="layout-page">
       <div className="loading-backdrop" ref={backdropRef}>
         <LottiePlayer className="animation" object={initializationAnimation} loop={true}/>
-        <div className="message">Data preparation</div>
+        <div className="message">Creating a Database</div>
       </div>
       <div className="main-wrap" ref={mainRef}>
         <Outlet />

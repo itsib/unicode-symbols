@@ -1,7 +1,9 @@
 import { builtinModules } from 'node:module';
 import type { AddressInfo } from 'node:net';
-import type { ConfigEnv, Plugin, UserConfig } from 'vite';
+import type { ConfigEnv, Plugin, ResolvedConfig, UserConfig } from 'vite';
 import pkg from './package.json';
+import fs from 'node:fs';
+import path from 'node:path';
 
 export const builtins = ['electron', ...builtinModules.map((m) => [m, `node:${m}`]).flat()];
 
@@ -14,10 +16,11 @@ export function getBuildConfig(env: ConfigEnv<'build'>): UserConfig {
     root,
     mode,
     build: {
+      // target: 'esnext',
       // Prevent multiple builds from interfering with each other.
       emptyOutDir: false,
       // 🚧 Multiple builds may conflict.
-      outDir: 'dist/main',
+      outDir: '.vite/build',
       watch: command === 'serve' ? {} : null,
       minify: command === 'build',
     },
@@ -91,5 +94,67 @@ export function pluginHotRestart(command: 'reload' | 'restart'): Plugin {
         process.stdin.emit('data', 'rs');
       }
     },
+  };
+}
+
+export function pluginAttachToAssets(files: string[]): Plugin {
+  let config: ResolvedConfig;
+  let output = false
+
+  async function exists(file: string): Promise<boolean> {
+    return new Promise(resolve => {
+      fs.access(file, fs.constants.R_OK, err => {
+        if (err) {
+          return resolve(false);
+        }
+        return resolve(true);
+      });
+    });
+  }
+
+  async function copy(src: string, dist: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      fs.cp(src, dist, { force: true, recursive: false }, (err) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve();
+      });
+    })
+  }
+
+  return {
+    name: '@electron-forge/plugin-vite:copy',
+    apply: 'build',
+    configResolved(_config) {
+      config = _config
+    },
+    buildEnd() {
+      output = false
+    },
+    async writeBundle() {
+      if (output) {
+        return;
+      }
+      output = true
+
+      const assetsPath = path.resolve(config.root, config.build.outDir, 'assets');
+
+      await Promise.all(files.map(async (filePath: string) => {
+        if (!(await exists(filePath))) {
+          filePath = path.resolve(config.root, filePath);
+        }
+        if (!(await exists(filePath))) {
+          throw new Error(`File ${filePath} not exists`);
+        }
+
+        const filename = path.basename(filePath);
+
+        const source = path.resolve(config.root, filePath);
+        const destination = path.resolve(assetsPath, filename);
+
+        return copy(source, destination);
+      }));
+    }
   };
 }

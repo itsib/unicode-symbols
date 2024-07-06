@@ -1,17 +1,17 @@
 {
-  "version": "1.0.3",
+  "version": "1.0.4",
   "name": "unicode-symbols",
   "description": "Browse and search for non-standard unicode symbols",
   "author": "Sergey <itsib.su@gmail.com>",
   "license": "ISC",
-  "main": "dist/main/main.js",
+  "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
-    "build": "electron-forge make",
+    "build": "electron-forge --verbose make",
     "package": "electron-forge package",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "setup": "sudo dpkg -i out/make/deb/x64/unicode-symbols_1.0.3_amd64.deb"
+    "setup": "sudo dpkg -i out/make/deb/x64/unicode-symbols_1.0.4_amd64.deb"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",

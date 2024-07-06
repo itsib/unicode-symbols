@@ -1,7 +1,9 @@
 /// <reference types="react" />
+/// <reference types="./types/index.ts" />
 
 declare global {
   export interface AppApi {
+    INDEXED_DB_CONFIG: { name: string; version: number },
     on<TData = void>(eventName: string, callback: (data: TData) => void): () => void;
     copyText(text: string): void;
     showContextMenu(meta?: any): void;
@@ -10,8 +12,24 @@ declare global {
 
   interface Window {
     appAPI: AppApi;
-    setLoading: (isLoading: boolean) => void;
   }
+}
+
+declare module '*.svg' {
+  export const ReactComponent: FC<SVGProps<SVGSVGElement>>;
+
+  const content: string;
+  export default content;
+}
+
+declare module '*.png' {
+  const content: string;
+  export default content;
+}
+
+declare module '*.jpg' {
+  const content: string;
+  export default content;
 }
 
 export interface Size {

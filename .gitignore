@@ -85,6 +85,7 @@ typings/
 # Webpack
 .webpack/
 
+.vite/
 dist/
 out/
 src/assets/logos/

@@ -1,5 +1,6 @@
 import type { ForgeConfig } from '@electron-forge/shared-types';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
+import { MakerDebConfig } from '@electron-forge/maker-deb';
 import { getGenerateAssetsHook } from './forge';
 import path from 'node:path';
 
@@ -14,13 +15,18 @@ const config: ForgeConfig = {
   makers: [
     {
       name: '@electron-forge/maker-deb',
-      config: {
+      config: <MakerDebConfig> {
         options: {
           name: 'unicode-symbols',
           icon: 'src/assets/logos/512x512.png',
+          productName: 'Unicode Symbols',
+          genericName: 'Characters',
+          maintainer: 'https://github.com/itsib',
           categories: ['Graphics', 'Utility'],
-          genericName: 'Unicode Symbols',
-          description: 'Browse and search for non-standard unicode symbols',
+          description: 'Utility application to browse and search unusual characters.',
+          productDescription: 'Unicode Symbols is a simple utility application to find and insert unusual characters. ' +
+            'It allows you to quickly find the symbol you are looking for by searching for keywords.\n\n' +
+            'You can also browse characters by categories, such as Punctuation, Pictures, etc.'
         }
       }
     },
@@ -57,6 +63,7 @@ const config: ForgeConfig = {
         [FuseV1Options.EnableNodeCliInspectArguments]: false,
         [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
         [FuseV1Options.OnlyLoadAppFromAsar]: true,
+        [FuseV1Options.GrantFileProtocolExtraPrivileges]: true,
       }
     },
   ],

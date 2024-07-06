@@ -1,8 +1,8 @@
 import { useCallback, useContext } from 'react';
-import { AppContext } from '../contexts/app.context';
+import { ApplicationContext } from '../context/application/application.context';
 
 export function useIconCategory(): [string, (category: string) => void] {
-  const { activeCategory, setConfig } = useContext(AppContext);
+  const { activeCategory, setConfig } = useContext(ApplicationContext);
 
   const updateActiveCategory = useCallback((category: string) => setConfig('activeCategory', category), []);
 

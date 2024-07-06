@@ -1,95 +1,120 @@
-import Electron, { IpcMainEvent, MessageChannelMain, ipcMain } from 'electron';
-import path from 'path';
+import Electron, { ipcMain, IpcMainEvent, MessageChannelMain } from 'electron';
 import fs from 'node:fs';
+import events from 'node:events';
 import * as readline from 'node:readline';
+import { data } from 'autoprefixer';
+import path from 'node:path';
 
-async function fsAccess(path: string): Promise<void> {
+const LINES_IN_CHUNK = 10;
+
+type SymbolMeta = { i: number; n: string; g: number };
+
+async function canRead(path: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    fs.access(path, fs.constants.R_OK, (error) => {
-      if (error) {
-        return reject(error);
-      }
-      return resolve();
-    })
+    fs.access(path, fs.constants.R_OK, error => (error ? reject(error) : resolve()))
   })
 }
 
-function lineToNameObj(line: string): { id: number; name: string } | null {
+function decodeSymbol(line: string): SymbolMeta | null {
   line = line.trim();
   if (!line || line.startsWith('#')) {
     return null;
   }
   const [code, nameRaw] = line.split(';')
   const id = parseInt(code.trim(), 16);
-  const name = nameRaw.split(/\s+/).map((word: string, index: number) => {
-    if (word.length === 1) {
-      return word;
-    }
-    if (index === 1) {
-      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-    }
-    return word.toLowerCase();
-  }).join(' ')
+  const name = nameRaw
+    .split(/\s+/)
+    .map((word: string, index: number) => {
+      if (word.length === 1) {
+        return word;
+      }
+      if (index === 1) {
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      }
+      return word.toLowerCase();
+    })
+    .join(' ')
+    .trim();
 
-  return { id, name };
+  return { i: id, n: name, g: 0 };
 }
 
-async function handleLine(symbolNames: { id: number; name: string }[], port: Electron.MessagePortMain): Promise<void> {
-  return new Promise((resolve, reject) => {
-
-    ipcMain.once('read-file-next', () => resolve());
+async function handleLine(symbolNames: SymbolMeta[], port: Electron.MessagePortMain): Promise<void> {
+  return new Promise(resolve => {
+    ipcMain.once('read-names-next', () => resolve());
 
     port.postMessage({ type: 'data', data: symbolNames });
   });
 }
 
-export async function readSymbolNames(event: IpcMainEvent, file: string): Promise<void> {
-  console.log('\x1b[0;92m◼\x1b[0m Updating IndexedDB from file \x1b[0;33m%s\x1b[0m', file)
+async function sendLineByLine(filepath: string, context: string, port: Electron.MessagePortMain): Promise<void> {
+  console.log('\x1b[0;37m›\x1b[0m Starting to send the file \x1b[0;33m%s\x1b[0m', path.basename(filepath));
 
-  const filePath = path.join(__dirname, '../..', 'src/assets', file);
+  await canRead(filepath);
 
+  const rl = readline.createInterface({
+    input: fs.createReadStream(filepath, { encoding: 'utf8' }),
+    historySize: 10,
+    terminal: false,
+    crlfDelay: Infinity,
+  });
+
+  let count = 0;
+  const lines: string[] = [];
+
+  const sendLines = async () => new Promise<void>(resolve => {
+    if (lines.length === 0) {
+      return resolve();
+    }
+
+    ipcMain.once('read-next-line', () => {
+      count += lines.length;
+      lines.length = 0;
+      resolve();
+    });
+
+    port.postMessage({ type: 'data', context,  data: lines });
+  });
+
+  const handleLine = async (line: string) => {
+    line = line.trim();
+    if (!line || line.startsWith('#')) {
+      return;
+    }
+    lines.push(line);
+    if (lines.length >= LINES_IN_CHUNK) {
+      await sendLines();
+    }
+  };
+
+  for await (const line of rl) {
+    await handleLine(line);
+  }
+  await sendLines();
+
+  port.postMessage({ type: 'end', context });
+
+  rl.close();
+
+  console.log('\x1b[0;92m✔\x1b[0m File has been sent succefully. Total lines in %s: \x1b[0;33m%d\x1b[0m', context, count);
+}
+
+export async function readSymbolNames(event: IpcMainEvent, filesDir: string): Promise<void> {
   const { port1, port2 } = new MessageChannelMain();
 
   event.sender.postMessage('port', null, [port2]);
 
+  await events.once(ipcMain, 'db-ready');
+
   try {
-    await fsAccess(filePath);
+    await sendLineByLine(path.join(filesDir, 'blocks.csv'), 'blocks', port1);
 
-    const rl = readline.createInterface({
-      input: fs.createReadStream(filePath),
-      crlfDelay: Infinity,
-    });
-
-    const buffer: { id: number; name: string }[] = [];
-    let count = 0;
-
-    const handleBatch = async () => {
-      await handleLine(buffer, port1);
-
-      count += buffer.length;
-      buffer.length = 0;
-    };
-
-    for await (const line of rl) {
-      const symbolName = lineToNameObj(line);
-      if (!symbolName) {
-        continue;
-      }
-      buffer.push(symbolName);
-
-      if (buffer.length >= 10) {
-        await handleBatch();
-      }
-    }
-    if (buffer.length) {
-      await handleBatch();
-    }
+    await sendLineByLine(path.join(filesDir, 'symbol-names.csv'), 'symbols', port1);
 
     port1.postMessage({ type: 'close' });
     port1.close();
-    rl.close();
 
-    console.log('\x1b[0;92m✔\x1b[0m Sending data to IndexedDB is completed. Total records: %d', count)
+
   } catch (error) {
     port1.postMessage({ type: 'error', data: error.message });
     port1.close();

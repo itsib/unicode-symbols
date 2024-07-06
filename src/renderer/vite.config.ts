@@ -1,7 +1,7 @@
 import type { ConfigEnv, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
-import { join } from 'path';
-import { pluginExposeRenderer } from '../../vite.base.config';
+import { join, resolve } from 'path';
+import { pluginAttachToAssets, pluginExposeRenderer } from '../../vite.base.config';
 
 // https://vitejs.dev/config
 export default defineConfig((env) => {
@@ -9,22 +9,30 @@ export default defineConfig((env) => {
   const { root, mode, forgeConfigSelf } = forgeEnv;
   const name = forgeConfigSelf.name ?? '';
 
+  console.log(__dirname)
+
   return {
     root,
     mode,
     base: './',
     build: {
-      outDir: `dist/renderer/${name}`,
+      outDir: `.vite/renderer/${name}`,
       assetsInlineLimit: 0,
       cssCodeSplit: false,
     },
     plugins: [
       pluginExposeRenderer(name),
+      pluginAttachToAssets([
+        'src/assets/data/symbol-names.csv',
+        'src/assets/data/blocks.csv',
+      ]),
     ],
     resolve: {
       preserveSymlinks: true,
       alias: {
-        '/@': join(__dirname, 'src/renderer')
+        '/@': join(__dirname, ''),
+        '@app-types': join(__dirname, 'types/index.ts'),
+        '@app-context': join(__dirname, 'context/index.ts'),
       }
     },
     clearScreen: false,

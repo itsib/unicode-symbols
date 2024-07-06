@@ -9,12 +9,16 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+const RESOURCES_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, 'app.asar', '.vite/renderer', MAIN_WINDOW_VITE_NAME, 'assets')
+  : path.join(__dirname, '../../src/assets');
+
 function createWindow() {
   const window = new BrowserWindow({
     show: false,
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
-    icon: path.join(__dirname, '..', 'src/assets/brand/96x96.png'),
+    icon: path.join(RESOURCES_PATH, '/brand/96x96.png'),
     webPreferences: {
       sandbox: true,
       devTools: true,
@@ -52,7 +56,16 @@ app.whenReady()
 
     ipcMain.on('show-context-menu', (event: IpcMainEvent, meta?: any) => createContextmenu(event, meta));
 
-    ipcMain.on('read-file', (event: IpcMainEvent, filepath: string) => readSymbolNames(event, filepath));
+    ipcMain.on('db-init', (event: IpcMainEvent) => {
+      let filesDir: string;
+      if (app.isPackaged) {
+        filesDir = path.join(process.resourcesPath, 'app.asar/.vite/renderer', MAIN_WINDOW_VITE_NAME, 'assets');
+      } else {
+        filesDir = path.join(__dirname, '../../src/assets/data');
+      }
+
+      return readSymbolNames(event, filesDir);
+    });
 
     createWindow();
 
