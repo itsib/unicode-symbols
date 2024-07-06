@@ -81,8 +81,7 @@ contextBridge.exposeInMainWorld('appAPI', {
       }
     };
 
-
-    ipcRenderer.send('db-ready');
+    ipcRenderer.send('db-ready-transmit');
   });
 
   ipcRenderer.send('db-init');

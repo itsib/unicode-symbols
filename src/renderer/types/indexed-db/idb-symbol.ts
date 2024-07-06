@@ -14,7 +14,7 @@ export interface IdbSymbol {
    */
   n: string;
   /**
-   * Group id includes symbol
+   * Block id includes symbol
    */
-  g: number;
+  b: number;
 }

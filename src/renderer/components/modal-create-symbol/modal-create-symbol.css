@@ -7,11 +7,22 @@
     align-items: center;
     justify-content: center;
 
-    .name {
+    .info {
       margin-bottom: 16px;
-      color: rgb(var(--text-primary));
-      font-weight: 600;
-      font-size: 18px;
+      text-align: center;
+
+      .name {
+        color: rgb(var(--text-primary));
+        font-weight: 600;
+        font-size: 18px;
+      }
+
+      .block-name {
+        margin-top: 8px;
+        color: rgb(var(--text-secondary));
+        font-weight: 400;
+        font-size: 14px;
+      }
     }
 
     .symbol {

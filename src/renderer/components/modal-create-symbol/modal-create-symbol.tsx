@@ -3,6 +3,7 @@ import { BtnCopy } from '../btn-copy/btn-copy';
 import Modal, { ModalProps } from '../modal/modal';
 import { useSymbolMeta } from '../../hooks/use-symbol-meta';
 import CloseIcon from '../../../assets/images/close.svg';
+import { useBlockOfSymbol } from '../../hooks/use-block-of-symbol';
 
 export interface IModalCreateSymbol extends ModalProps {
   code?: number;
@@ -26,6 +27,7 @@ export const ModalCreateSymbol: FC<IModalCreateSymbol> = ({ isOpen, onDismiss, c
 
 const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, onDismiss }) => {
   const symbolMeta = useSymbolMeta(code);
+  const block = useBlockOfSymbol(code);
 
   const html = `&#${code.toString(10)};`;
   const css = `\\${code.toString(16)}`;
@@ -46,9 +48,18 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, 
       </div>
 
       <div className="modal-content">
-        <div className="name">
-          <span>{symbolMeta?.name}</span>
+        <div className="info">
+          <div className="name">
+            <span>{symbolMeta?.name}</span>
+          </div>
+
+          {block ? (
+            <div className="block-name">
+              <span>{block?.name}</span>
+            </div>
+          ) : null}
         </div>
+
 
         <BtnCopy className="symbol" text={String.fromCodePoint(code)}>
           <span dangerouslySetInnerHTML={{ __html: html }}/>

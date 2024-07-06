@@ -29,9 +29,9 @@ export interface IdbSymbol {
    */
   n: string;
   /**
-   * Group id includes symbol
+   * Block id includes symbol
    */
-  g: number;
+  b: number;
 }
 
 export enum IdbStoreName {
@@ -59,10 +59,13 @@ export class IndexedDb {
   }
 
   async parseAndSave(context: string, lines: string[]): Promise<void> {
+    // Parse blocks
     if (context === 'blocks') {
       const blocks = lines.map(line => this._parseBlock(line));
       await this.insertBlocks(blocks);
-    } else if (context === 'symbols') {
+    }
+    // Parse symbols
+    else if (context === 'symbols') {
       const symbols = lines.map(line => this._parseSymbol(line));
       await this.insertSymbols(symbols);
     }
@@ -150,16 +153,16 @@ export class IndexedDb {
 
     this._clear(db);
 
-    // Create indexes for symbols store
-    const symbolsStore = db.createObjectStore(IdbStoreName.Symbols, { keyPath: 'i' });
-    symbolsStore.createIndex('id', ['i'], { unique: true });
-    symbolsStore.createIndex('name', ['n'], { unique: false });
-    symbolsStore.createIndex('group', ['g'], { unique: false });
-
     // Create indexes for blocks store
     const blocksStore = db.createObjectStore(IdbStoreName.Blocks, { keyPath: 'i' });
-    blocksStore.createIndex('id', ['i'], { unique: true });
-    blocksStore.createIndex('range', ['b', 'e'], { unique: true });
+    blocksStore.createIndex('id', 'i', { unique: true });
+    blocksStore.createIndex('begin', 'b', { unique: true });
+
+    // Create indexes for symbols store
+    const symbolsStore = db.createObjectStore(IdbStoreName.Symbols, { keyPath: 'i' });
+    symbolsStore.createIndex('id', 'i', { unique: true });
+    symbolsStore.createIndex('name', 'n', { unique: false });
+    symbolsStore.createIndex('block', 'b', { unique: false });
   }
 
   /**
@@ -230,8 +233,8 @@ export class IndexedDb {
       .join(' ')
       .trim();
 
-    const group = this._ranges.findIndex(end => id > end) + 2;
+    const block = this._ranges.findIndex(end => id > end) + 2;
 
-    return { i: id, n: name, g: group };
+    return { i: id, n: name, b: block };
   }
 }

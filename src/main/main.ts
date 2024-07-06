@@ -3,7 +3,7 @@ import path from 'path';
 import { createMenu } from './utils/app-menu';
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from './constants';
 import { copyText, createContextmenu } from './utils/context-menu';
-import { readSymbolNames } from './utils/read-symbol-names';
+import { dbInitialisation } from './utils/db-initialisation';
 
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -64,7 +64,7 @@ app.whenReady()
         filesDir = path.join(__dirname, '../../src/assets/data');
       }
 
-      return readSymbolNames(event, filesDir);
+      return dbInitialisation(event, filesDir);
     });
 
     createWindow();

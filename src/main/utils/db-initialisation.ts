@@ -99,12 +99,12 @@ async function sendLineByLine(filepath: string, context: string, port: Electron.
   console.log('\x1b[0;92m✔\x1b[0m File has been sent succefully. Total lines in %s: \x1b[0;33m%d\x1b[0m', context, count);
 }
 
-export async function readSymbolNames(event: IpcMainEvent, filesDir: string): Promise<void> {
+export async function dbInitialisation(event: IpcMainEvent, filesDir: string): Promise<void> {
   const { port1, port2 } = new MessageChannelMain();
 
   event.sender.postMessage('port', null, [port2]);
 
-  await events.once(ipcMain, 'db-ready');
+  await events.once(ipcMain, 'db-ready-transmit');
 
   try {
     await sendLineByLine(path.join(filesDir, 'blocks.csv'), 'blocks', port1);

@@ -1,17 +1,13 @@
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { IndexedDbContext } from './indexed-db.context';
-import { IdbSymbol, SymbolMeta } from '@app-types';
+import { IdbBlock, IdbSymbol, SymbolBlock, SymbolMeta } from '@app-types';
 import { IDBExtractError } from '../../utils/indexed-db';
 
 enum Store {
-  Symbols = 'symbols'
+  Symbols = 'symbols',
+  Blocks = 'blocks',
 }
 
-/**
- * Source size 8.7MB
- * @param children
- * @constructor
- */
 export const IndexedDbProvider: FC<PropsWithChildren> = ({ children }) => {
   const [database, setDatabase] = useState<IDBDatabase | null>(null);
 
@@ -24,9 +20,7 @@ export const IndexedDbProvider: FC<PropsWithChildren> = ({ children }) => {
     return new Promise(async (resolve, reject) => {
       const transaction = database!.transaction([Store.Symbols], 'readonly');
       const store = transaction.objectStore(Store.Symbols);
-
-      const index = store.index('id');
-      const request = index.get([id]);
+      const request = store.index('id').get(id);
 
       request.onsuccess = () => {
         const idbSymbol = request.result as IdbSymbol | null;
@@ -34,14 +28,49 @@ export const IndexedDbProvider: FC<PropsWithChildren> = ({ children }) => {
           return resolve({
             code: id,
             name: undefined,
-            group: undefined,
+            block: undefined,
           });
         }
         resolve({
           code: idbSymbol.i,
           name: idbSymbol.n,
-          group: idbSymbol.g === 0 ? undefined : idbSymbol.g,
+          block: idbSymbol.b === 0 ? undefined : idbSymbol.b,
         })
+      };
+
+      transaction.onerror = error => reject(IDBExtractError(error));
+    });
+  }, [database]);
+
+  // Find block of symbol range
+  const getSymbolsBlock = useCallback(async (id: number): Promise<SymbolBlock> => {
+    if (!database) {
+      return null;
+    }
+
+    return new Promise(async (resolve, reject) => {
+      const transaction = database!.transaction([Store.Blocks], 'readonly');
+      const store = transaction.objectStore(Store.Blocks);
+
+      const bound = IDBKeyRange.upperBound(id, false);
+
+      let idbBlock: IdbBlock | null = null;
+      const request = store.index('begin').openCursor(bound, 'prev');
+
+      request.onsuccess = (event) => {
+        const cursor = (event.target as any).result;
+        if (cursor) {
+          idbBlock = cursor.value as IdbBlock;
+          if (idbBlock && idbBlock.e > id) {
+            resolve({
+              id: idbBlock.i,
+              name: idbBlock.n,
+              begin: idbBlock.b,
+              end: idbBlock.e,
+            });
+          }
+        }
+        resolve(null);
       };
 
       transaction.onerror = error => reject(IDBExtractError(error));
@@ -60,7 +89,7 @@ export const IndexedDbProvider: FC<PropsWithChildren> = ({ children }) => {
   }, []);
 
   return (
-    <IndexedDbContext.Provider value={{ getSymbolById }}>
+    <IndexedDbContext.Provider value={{ getSymbolById, getSymbolsBlock }}>
       {children}
     </IndexedDbContext.Provider>
   )
