@@ -4,3 +4,5 @@ export * from './indexed-db/store-name';
 
 export * from './symbols/symbol-block';
 export * from './symbols/symbol-meta';
+
+export * from './common/storage-usage';

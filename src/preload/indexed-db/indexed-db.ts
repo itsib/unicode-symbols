@@ -45,7 +45,8 @@ export class IndexedDb {
 
   private readonly _version: number;
 
-  private readonly _ranges: number[] = [];
+  private _rangesCount: number = 0;
+  private _ranges: number[] = [];
 
   private _db: Promise<IDBDatabase>;
 
@@ -210,6 +211,7 @@ export class IndexedDb {
       e: parseInt(end.trim(), 16),
     }
 
+    this._rangesCount += 1;
     this._ranges.push(block.e)
 
     return block;
@@ -233,7 +235,15 @@ export class IndexedDb {
       .join(' ')
       .trim();
 
-    const block = this._ranges.findIndex(end => id > end) + 2;
+    let block: number;
+    const end = this._ranges[0]
+    if (end != null && id > end) {
+      this._ranges.shift();
+    }
+
+    block = (this._rangesCount - this._ranges.length) + 1;
+
+    // block = this._ranges.findIndex(end => id > end) + 2;
 
     return { i: id, n: name, b: block };
   }

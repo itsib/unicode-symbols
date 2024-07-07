@@ -29,8 +29,8 @@
 
         .option-name {
           width: 140px;
-          font-weight: 400;
-          color: rgb(var(--text-secondary))
+          font-weight: bold;
+          font-size: 16px;
         }
 
         .option-control {
@@ -56,6 +56,41 @@
 
           .inner-control {
             width: 100%;
+          }
+        }
+      }
+
+      .card-row.storage-usage {
+        padding: 6px 20px;
+
+        .option-control {
+          display: flex;
+          align-items: center;
+          justify-content: end;
+
+          .detail-info {
+            width: 140px;
+            font-size: 14px;
+            text-align: start;
+            color: rgb(var(--text-secondary));
+
+            & > div {
+              padding: 2px 0;
+
+              .amount {
+                font-size: 16px;
+                color: rgb(var(--text-primary));
+              }
+            }
+          }
+
+          .pie-chard {
+            --pie-chart-fill-active: rgb(var(--accent));
+            --pie-chart-fill-bg: rgb(var(--input-bg));
+
+            & > * {
+              display: block;
+            }
           }
         }
       }

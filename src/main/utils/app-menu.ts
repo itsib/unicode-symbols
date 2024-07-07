@@ -48,13 +48,21 @@ export function createMenu(mainWindow: BrowserWindow) {
           },
         },
         {
-          label: 'Hide Menu',
+          label: 'Hide Menu    ',
           // icon: path.resolve('src/assets/icons/hide-menu.png'),
           registerAccelerator: true,
           acceleratorWorksWhenHidden: true,
           accelerator: 'Ctrl+M',
           click: async () => {
             mainWindow.setMenuBarVisibility(!mainWindow.menuBarVisible);
+          },
+        },
+        { type: 'separator' },
+        {
+          label: 'Delete DB',
+          click: async () => {
+            mainWindow.webContents.send('drop-idb');
+            mainWindow.webContents.reload();
           },
         },
         { type: 'separator' },

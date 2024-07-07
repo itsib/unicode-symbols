@@ -88,6 +88,13 @@ export const IndexedDbProvider: FC<PropsWithChildren> = ({ children }) => {
     request.onsuccess = () => setDatabase(request.result);
   }, []);
 
+  // Delete database
+  useEffect(() => {
+    return window.appAPI.on<{ isLoading: boolean }>('drop-idb', () => {
+      indexedDB.deleteDatabase(window.appAPI.INDEXED_DB_CONFIG.name);
+    });
+  }, [database]);
+
   return (
     <IndexedDbContext.Provider value={{ getSymbolById, getSymbolsBlock }}>
       {children}

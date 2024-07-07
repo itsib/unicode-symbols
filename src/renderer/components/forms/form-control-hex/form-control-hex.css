@@ -11,7 +11,7 @@
     padding: 8px 10px;
     font-size: 14px;
     line-height: 16px;
-    background-color: rgb(var(--inputs-bg));
+    background-color: rgb(var(--input-bg));
     border-radius: 6px;
     box-shadow: 0 0 0 0 rgb(var(--input-outline) / 0);
     display: flex;

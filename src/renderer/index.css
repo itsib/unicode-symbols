@@ -4,7 +4,7 @@
 @import-glob "pages/**/*.css";
 
 :root {
-  color: rgba(209, 209, 209, 0.98);
+  /*color: rgba(209, 209, 209, 0.98);*/
 
   /* Constants */
   --modal-z-index: 99;
@@ -57,7 +57,7 @@
     --divider: 71 71 71;
 
     /* Forms */
-    --inputs-bg: 63 63 63;
+    --input-bg: 63 63 63;
     --input-outline: 52 113 159;
     --input-slider-track: 90 90 90;
     --input-slider-thumb: 209 209 209;
