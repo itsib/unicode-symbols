@@ -1,30 +1,27 @@
 :root {
-  --max: 100;
-  --min: 0;
-  --value: 0;
+  --form-control-slider-max: 100;
+  --form-control-slider-min: 0;
+  --form-control-slider-value: 0;
 }
 
-.form-control-slider {
-  --form-field-slider-thumb-size: 24px;
-  --form-field-slider-thumb-scale-hover: 1.2;
-  --form-field-slider-track-width: 4px;
-  --form-field-slider-track-half-width: calc(var(--form-field-slider-track-width) / 2);
+.form-control.form-control-slider {
+  --form-control-slider-thumb-size: 24px;
+  --form-control-slider-track-width: 4px;
   /* Slider colors */
-  --form-field-slider-thumb-color: rgb(var(--input-slider-thumb));
-  --form-field-slider-track-color: rgb(var(--input-slider-track));
-  --form-field-slider-track-color-active: rgb(var(--accent));
-  --form-field-slider-disabled: color-mix(in srgb, rgb(var(--black)) 70%, rgb(var(--white)) 30%);
-  /* Internal */
-  --range: calc(var(--max) - var(--min));
-  --ratio: calc((var(--value) - var(--min)) / var(--range));
-  --sx: calc(.5 * var(--form-field-slider-thumb-size) + var(--ratio) * (100% - var(--form-field-slider-thumb-size)));
-  --track-gradient: linear-gradient(var(--form-field-slider-track-color-active), var(--form-field-slider-track-color-active)) 0/var(--sx) 100% no-repeat, var(--form-field-slider-track-color);
+  --form-control-slider-thumb-color: rgb(var(--form-control-thumb-color));
+  --form-control-slider-disabled: color-mix(in srgb, rgb(var(--black)) 70%, rgb(var(--white)) 30%);
 
-  .control {
-    padding: calc(var(--form-field-slider-thumb-size) / 2) 0;
+  /* Internal */
+  --form-control-slider-range: calc(var(--form-control-slider-max) - var(--form-control-slider-min));
+  --form-control-slider-ratio: calc((var(--form-control-slider-value) - var(--form-control-slider-min)) / var(--form-control-slider-range));
+  --form-control-slider-sx: calc(.5 * var(--form-control-slider-thumb-size) + var(--form-control-slider-ratio) * (100% - var(--form-control-slider-thumb-size)));
+  --form-control-slider-track-gradient: linear-gradient(rgb(var(--form-control-active)), rgb(var(--form-control-active))) 0/var(--form-control-slider-sx) 100% no-repeat, rgb(var(--form-control-bg));
+
+  .slider-wrap {
+    padding: calc(var(--form-control-slider-thumb-size) / 2) 0;
 
     .slider {
-      height: var(--form-field-slider-track-width);
+      height: var(--form-control-slider-track-width);
       width: 100%; /* Specific width is required for Firefox. */
       padding: 0;
       margin: 0;
@@ -42,91 +39,84 @@
       }
 
       &::-webkit-slider-thumb {
-        top: var(--form-field-slider-track-half-width);
+        top: calc(var(--form-control-slider-track-width) / 2);
         -webkit-appearance: none;
-        height: var(--form-field-slider-thumb-size);
-        width: var(--form-field-slider-thumb-size);
-        background-color: var(--form-field-slider-thumb-color);
+        height: var(--form-control-slider-thumb-size);
+        width: var(--form-control-slider-thumb-size);
+        background-color: var(--form-control-slider-thumb-color);
         border-radius: 100%;
         border: none;
         transform: translateY(-50%);
-        color: var(--form-field-slider-thumb-color);
+        color: var(--form-control-slider-thumb-color);
         transition: all .15s ease-out;
         position: relative;
 
         &:hover,
         &:focus {
-          --form-field-slider-thumb-color: color-mix(in srgb, rgb(var(--input-slider-thumb)) 60%, rgb(var(--theme-negative)) 40%);
+          --form-control-slider-thumb-color: color-mix(in srgb, rgb(var(--form-control-thumb-color)) 60%, rgb(var(--theme-negative)) 40%);
         }
       }
 
       &::-moz-range-thumb {
-        height: var(--form-field-slider-thumb-size);
-        width: var(--form-field-slider-thumb-size);
-        background-color: var(--form-field-slider-thumb-color);
+        height: var(--form-control-slider-thumb-size);
+        width: var(--form-control-slider-thumb-size);
+        background-color: var(--form-control-slider-thumb-color);
         border-radius: 100%;
         border: none;
-        color: var(--form-field-slider-thumb-color);
+        color: var(--form-control-slider-thumb-color);
         transition: all .15s ease-out;
 
         &:hover,
         &:focus {
-          --form-field-slider-thumb-color: color-mix(in srgb, rgb(var(--input-slider-thumb)) 60%, rgb(var(--theme-negative)) 40%);
+          --form-control-slider-thumb-color: color-mix(in srgb, rgb(var(--form-control-thumb-color)) 60%, rgb(var(--theme-negative)) 40%);
         }
       }
 
       &::-ms-thumb {
-        height: var(--form-field-slider-thumb-size);
-        width: var(--form-field-slider-thumb-size);
-        background-color: var(--form-field-slider-thumb-color);
+        height: var(--form-control-slider-thumb-size);
+        width: var(--form-control-slider-thumb-size);
+        background-color: var(--form-control-slider-thumb-color);
         border-radius: 100%;
-        color: var(--form-field-slider-thumb-color);
+        color: var(--form-control-slider-thumb-color);
         transition: all .15s ease-out;
 
         &:hover,
         &:focus {
-          --form-field-slider-thumb-color: color-mix(in srgb, rgb(var(--input-slider-thumb)) 60%, rgb(var(--theme-negative)) 40%);
+          --form-control-slider-thumb-color: color-mix(in srgb, rgb(var(--form-control-thumb-color)) 60%, rgb(var(--theme-negative)) 40%);
         }
       }
 
       &::-webkit-slider-runnable-track {
-        height: var(--form-field-slider-track-width);
-        background: var(--form-field-slider-track-color);
-        background: var(--track-gradient);
-        border-radius: var(--form-field-slider-track-width);
+        height: var(--form-control-slider-track-width);
+        background: var(--form-control-bg);
+        background: var(--form-control-slider-track-gradient);
+        border-radius: var(--form-control-slider-track-width);
       }
 
       &::-moz-range-track {
-        height: var(--form-field-slider-track-width);
-        background: var(--form-field-slider-track-color);
-        background: var(--track-gradient);
-        border-radius: var(--form-field-slider-track-width);
+        height: var(--form-control-slider-track-width);
+        background: var(--form-control-bg);
+        background: var(--form-control-slider-track-gradient);
+        border-radius: var(--form-control-slider-track-width);
       }
 
       &::-ms-track {
         width: 100%;
         border-color: transparent;
         color: transparent;
-        height: var(--form-field-slider-track-width);
-        background: var(--form-field-slider-track-color);
-        background: var(--track-gradient);
-        border-radius: var(--form-field-slider-track-width);
+        height: var(--form-control-slider-track-width);
+        background: var(--form-control-bg);
+        background: var(--form-control-slider-track-gradient);
+        border-radius: var(--form-control-slider-track-width);
       }
 
       &::-ms-fill-lower {
-        background: var(--form-field-slider-thumb-color);
+        background: var(--form-control-slider-thumb-color);
       }
 
       &::-ms-fill-upper {
-        background: var(--form-field-slider-track-color);
+        background: var(--form-control-bg);
       }
     }
-  }
-
-  .error {
-    height: 16px;
-    margin-top: 4px;
-    color: rgb(var(--error));
-    font-size: 12px;
   }
 }

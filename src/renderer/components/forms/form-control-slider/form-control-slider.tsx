@@ -1,23 +1,21 @@
-import React, { FC, useEffect, useRef } from 'react';
-import { IFormControlBase } from '../types';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { debounce } from '../../../utils/debounce';
+import { FormControlBaseProps } from '@app-types';
 
-export interface IFormControlSlider extends IFormControlBase<number> {
+export interface IFormControlSlider extends FormControlBaseProps<number> {
   min?: number;
   max?: number;
   step?: number;
-  debounce?: number;
 }
 
 export const FormControlSlider: FC<IFormControlSlider> = props => {
-  const { id, name, label, onChange, value, validate, min = 0, max = 100, step = 1, debounce: debounceMs = 500 } = props;
+  const { id, name, label, onChange, value, validate, min = 0, max = 100, step = 1, debounce: debounceMs = 500, disabled } = props;
+  const [error, setError] = useState<string | null>(null);
   const mainElementRef = useRef<HTMLDivElement | null>(null);
   const sliderElementRef = useRef<HTMLInputElement>();
   const previousValidValue = useRef(value as number);
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
-
-  const error = 0;
 
   // Handle slider change
   useEffect(() => {
@@ -33,11 +31,18 @@ export const FormControlSlider: FC<IFormControlSlider> = props => {
 
     const inputCallback = (event: Event) => {
       const value = (event.target as HTMLInputElement).value ?? '0';
-      mainElementRef.current?.style.setProperty('--value', value);
-      update(Number(value));
+      mainElementRef.current?.style.setProperty('--form-control-slider-value', value);
+
+      const normalized = Number(value);
+      setError(validate?.(normalized) || null);
+      update(normalized);
     };
+
     const mouseupCallback = (event: Event) => {
-      update(Number((event.target as HTMLInputElement).value ?? '0'));
+      const normalized = Number((event.target as HTMLInputElement).value ?? '0');
+
+      setError(validate?.(normalized) || null);
+      update(normalized);
     };
 
     element.addEventListener('input', inputCallback);
@@ -56,14 +61,14 @@ export const FormControlSlider: FC<IFormControlSlider> = props => {
     }
     const strValue = value?.toString() ?? '';
     element.value = strValue;
-    mainElementRef.current?.style.setProperty('--value', strValue);
+    mainElementRef.current?.style.setProperty('--form-control-slider-value', strValue);
   }, [value]);
 
   return (
-    <div className="form-control-slider" ref={mainElementRef} style={{ '--min': min, '--max': max } as React.CSSProperties}>
+    <div className="form-control form-control-slider" ref={mainElementRef} style={{ '--form-control-slider-min': min, '--form-control-slider-max': max } as React.CSSProperties}>
       {label ? <label htmlFor={id}>{label}</label> : null}
 
-      <div className={`control ${error ? 'is-error' : ''}`}>
+      <div className={`slider-wrap ${error ? 'is-error' : ''} ${disabled ? 'is-disabled' : ''}`}>
         <input
           id={id}
           type="range"

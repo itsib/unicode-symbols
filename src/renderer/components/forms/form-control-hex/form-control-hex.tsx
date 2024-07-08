@@ -1,8 +1,9 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { debounce } from '../../../utils/debounce';
-import { IFormControlBase } from '../types';
+import { FormControlBaseProps } from '@app-types';
 
-export const FormControlHex: FC<IFormControlBase<number>> = ({ id, name, label, onChange, value, validate }) => {
+export const FormControlHex: FC<FormControlBaseProps<number>> = (props) => {
+  const { id, name, label, onChange, value, validate, debounce: debounceMs = 500, disabled } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +21,7 @@ export const FormControlHex: FC<IFormControlBase<number>> = ({ id, name, label, 
       return;
     }
 
-    const update = debounce<number | undefined>(value => onChange?.(value), 1000);
+    const update = debounce<number | undefined>(value => onChange?.(value), debounceMs);
 
     function onInput(event: InputEvent) {
       const input = event.target as HTMLInputElement;
@@ -45,13 +46,13 @@ export const FormControlHex: FC<IFormControlBase<number>> = ({ id, name, label, 
       input.removeEventListener('beforeinput', onBeforeInput);
       input.removeEventListener('input', onInput);
     };
-  }, [validate]);
+  }, [validate, debounceMs]);
 
   return (
-    <div className="form-control-hex" onClick={() => inputRef.current?.setSelectionRange(0, 100)}>
+    <div className="form-control form-control-hex" onClick={() => inputRef.current?.setSelectionRange(0, 100)}>
       {label ? <label htmlFor={id}>{label}</label> : null}
 
-      <div className={`control ${error ? 'is-error' : ''}`}>
+      <div className={`control ${error ? 'is-error' : ''} ${disabled ? 'is-disabled' : ''}`}>
         <div className="prefix">0x</div>
         <input id={id} name={name} spellCheck="false" type="text" ref={inputRef} />
       </div>

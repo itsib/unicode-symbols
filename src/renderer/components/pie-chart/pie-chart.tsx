@@ -7,7 +7,7 @@ export interface IPieChart extends Omit<SVGProps<SVGSVGElement>, 'width' | 'heig
 
 export const PieChart: FC<IPieChart> = ({ size = 58, percent = 0, ...props }) => {
   const { radius, strokeDashoffset, strokeDasharray } = useMemo(() => {
-    const angle = percent * (360 / 100);
+    const angle = Math.max(percent * (360 / 100), 2);
     const radius = 20;
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = (1 / 4) * circumference;

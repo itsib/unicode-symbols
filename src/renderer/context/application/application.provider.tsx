@@ -1,53 +1,52 @@
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
-import {
-  AppConfigKey,
-  APPLICATION_CONTEXT_DEFAULT,
-  ApplicationContext,
-  IApplicationContext,
-} from './application.context';
-import { TSymbolRange } from '../../types';
+import { AppConfig, AppConfigKey, APPLICATION_CONTEXT_DEFAULT, ApplicationContext } from './application.context';
+import { useIdbInstance } from '../../hooks/indexed-db/use-idb-instance';
+import { IndexedDbStore } from '../indexed-db/indexed-db.context';
 
 export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [iconSize, setIconSize] = useState<IApplicationContext['iconSize']>(APPLICATION_CONTEXT_DEFAULT.iconSize);
-  const [activeCategory, setActiveCategory] = useState<string>(APPLICATION_CONTEXT_DEFAULT.activeCategory);
-  const [range, setRange] = useState<Pick<TSymbolRange, 'begin' | 'end'>>(APPLICATION_CONTEXT_DEFAULT.range);
+  const database = useIdbInstance();
+  const [configValue, setConfigValue] = useState<{ [ Key in AppConfigKey ]: AppConfig<Key> }>(APPLICATION_CONTEXT_DEFAULT.config);
 
-  const setStateByKey = useCallback(function <K extends AppConfigKey, T extends IApplicationContext[K]>(key: K, value: T) {
-    switch (key) {
-      case 'iconSize':
-        setIconSize(value as any);
-        break;
-      case 'activeCategory':
-        setActiveCategory(value as any);
-        break;
-      case 'range':
-        setRange(value as any);
-        break;
+  const setConfig = useCallback(function <K extends AppConfigKey, T extends AppConfig<K>>(key: K, value: T) {
+    if (!database) {
+      throw new Error('IndexedDB unavailable')
     }
-  }, [])
+    const transaction = database.transaction(IndexedDbStore.Config, 'readwrite');
+    const store = transaction.objectStore(IndexedDbStore.Config);
 
-  const setConfig = useCallback(function <K extends AppConfigKey, T extends IApplicationContext[K]>(key: K, value: T) {
-    localStorage.setItem(key, JSON.stringify(value));
-    setStateByKey(key, value);
-  }, []);
+    const request = store.put(value, key);
 
-  // Restore states from local storage
+    request.onsuccess = () => {
+      setConfigValue(config => ({ ...config, [key]: value }));
+    }
+
+    transaction.onerror = error => console.error(error);
+  }, [database]);
+
+  // Restore app configuration
   useEffect(() => {
-    const keys = Object.keys(APPLICATION_CONTEXT_DEFAULT) as AppConfigKey[];
-    for (const key of keys) {
-      const value = localStorage.getItem(key);
-      if (value != null) {
-        try {
-          setStateByKey(key, JSON.parse(value));
-        } catch (e) {
-          console.warn(e);
-        }
-      }
+    if (!database) {
+      return;
     }
-  }, []);
+    const transaction = database.transaction([IndexedDbStore.Config], 'readonly');
+    const request = transaction.objectStore(IndexedDbStore.Config).openCursor();
+
+    const _config: any = {};
+    request.onsuccess = event => {
+      const cursor = (event.target as IDBRequest).result;
+      if (cursor) {
+        _config[cursor.key] = cursor.value;
+        cursor.continue();
+      } else {
+        setConfigValue(_config);
+      }
+    };
+
+    transaction.onerror = error => console.error(error);
+  }, [database]);
 
   return (
-    <ApplicationContext.Provider value={{ iconSize, activeCategory, range, setConfig }}>
+    <ApplicationContext.Provider value={{ config: configValue, setConfig }}>
       {children}
     </ApplicationContext.Provider>
   );

@@ -1,20 +1,20 @@
 import React, { CSSProperties, FC, useEffect, useMemo, useRef, useState } from 'react';
 import { LeftMenu } from '../../components/left-menu/left-menu';
-import { useIconCategory } from '../../hooks/use-icon-category';
+import { useAppConfig } from '../../hooks/use-app-config';
 import { SYMBOLS } from '../../constants/symbols';
 import { useSize } from '../../hooks/use-size';
 import { FixedSizeGrid as Grid, FixedSizeGridProps } from 'react-window';
 import { SCROLL_THUMB_WIDTH, SYMBOL_ITEM_ASPECT_RATIO } from '../../constants/common';
 import { sortSymbols } from '../../utils/sort-symbols';
-import { getSymbolCallback } from '../../utils/get-symbol-callback';
 import { ModalCreateSymbol } from '../../components/modal-create-symbol/modal-create-symbol';
 import { ISymbolCell, SymbolCell } from '../../components/symbol-cell/symbol-cell';
-import { useIconSize } from '../../hooks/use-icon-size';
 import { getMinSymbolWidth } from '../../utils/get-min-symbol-width';
+import { AppConfigKey } from '@app-context';
+import { TSymbol } from '../../types';
 
 export const SymbolsPage: FC = () => {
-  const [activeCategory] = useIconCategory();
-  const [iconSize] = useIconSize();
+  const [activeCategory] = useAppConfig(AppConfigKey.ActiveCategory);
+  const [iconSize] = useAppConfig(AppConfigKey.IconSize);
   const size = useSize('symbols-page-grid-container');
 
   const [gridProps, setGridProps] = useState<Omit<FixedSizeGridProps, 'children'> | null>(null);
@@ -27,9 +27,30 @@ export const SymbolsPage: FC = () => {
     return sortSymbols(category);
   }, [activeCategory]);
 
-  const itemDataRef = useRef<ISymbolCell>({
+  const itemDataRef = useRef<ISymbolCell<{ columnCount: number; symbols: (TSymbol & { idxFrom: number; idxTo: number })[] }>>({
+    columnCount: 0,
+    symbols: symbols,
     onClick: (code: number) => setActive({ code }),
-    getSymbolCode: () => null,
+    getSymbolCode: (_rowIndex: number, _columnIndex: number, _data): null | number => {
+      const index = (_data.columnCount * _rowIndex) + _columnIndex;
+
+      const found = _data.symbols.find(_item => {
+        if (_item.type === 'range') {
+          return _item.idxFrom <= index && _item.idxTo >= index;
+        } else {
+          return _item.idxTo === index
+        }
+      });
+      if (!found) {
+        return null;
+      }
+
+      if (found.type === 'range') {
+        return found.begin + (index - found.idxFrom);
+      } else {
+        return found.code;
+      }
+    },
   });
 
   useEffect(() => {
@@ -44,7 +65,8 @@ export const SymbolsPage: FC = () => {
 
     const rowCount = Math.ceil((symbols[symbols.length - 1].idxTo) / columnCount);
 
-    itemDataRef.current.getSymbolCode = getSymbolCallback(columnCount, symbols);
+    itemDataRef.current.columnCount = columnCount;
+    itemDataRef.current.symbols = symbols;
 
     setGridProps({
       columnCount,

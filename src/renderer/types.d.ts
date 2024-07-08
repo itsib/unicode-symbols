@@ -64,7 +64,7 @@ export interface TSymbolRange extends TSymbolBase {
 export type TSymbol = TSymbolSingle | TSymbolRange | TSymbolSpecial;
 
 export interface CategoryOfSymbols {
-  id: string,
+  id: number,
   name: string,
   icon: ReactNode,
   color: boolean;

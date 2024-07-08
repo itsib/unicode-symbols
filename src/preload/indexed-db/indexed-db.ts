@@ -37,6 +37,7 @@ export interface IdbSymbol {
 export enum IdbStoreName {
   Symbols = 'symbols',
   Blocks = 'blocks',
+  Config = 'config',
 }
 
 export class IndexedDb {
@@ -164,6 +165,15 @@ export class IndexedDb {
     symbolsStore.createIndex('id', 'i', { unique: true });
     symbolsStore.createIndex('name', 'n', { unique: false });
     symbolsStore.createIndex('block', 'b', { unique: false });
+
+    // Create app settings store
+    if(!db.objectStoreNames.contains(IdbStoreName.Config)) {
+      const configStore = db.createObjectStore(IdbStoreName.Config, { autoIncrement: true });
+
+      configStore.put(34, 0);
+      configStore.put(1, 1);
+      configStore.put({ begin: 0x0, end: 0xFFFF }, 2);
+    }
   }
 
   /**

@@ -7,21 +7,26 @@ import { ModalCreateSymbol } from '../../components/modal-create-symbol/modal-cr
 import { useSize } from '../../hooks/use-size';
 import { SCROLL_THUMB_WIDTH, SYMBOL_ITEM_ASPECT_RATIO } from '../../constants/common';
 import { ISymbolCell, SymbolCell } from '../../components/symbol-cell/symbol-cell';
-import { useIconSize } from '../../hooks/use-icon-size';
 import { getMinSymbolWidth } from '../../utils/get-min-symbol-width';
+import { useAppConfig } from '../../hooks/use-app-config';
+import { AppConfigKey } from '@app-context';
 
 export const CreatePage: FC = () => {
   const navigate = useNavigate();
 
   const size = useSize('create-page-grid-container');
-  const [iconSize] = useIconSize();
+  const [iconSize] = useAppConfig(AppConfigKey.IconSize);
   const [gridProps, setGridProps] = useState<Omit<FixedSizeGridProps, 'children'> | null>(null);
   const [range, setRange] = useState<Pick<TSymbolRange, 'begin' | 'end'> | null>(null);
   const [active, setActive] = useState<{ code: number } | null>(null);
 
-  const itemDataRef = useRef<ISymbolCell>({
+  const itemDataRef = useRef<ISymbolCell<{ columnCount: number, begin: number }>>({
+    columnCount: 0,
+    begin: range?.begin ?? 0,
     onClick: (code: number) => setActive({ code }),
-    getSymbolCode: () => null,
+    getSymbolCode: (_rowIndex: number, _columnIndex: number, _data) => {
+      return _data.begin + (_data.columnCount * _rowIndex) + _columnIndex;
+    },
   });
 
   // Compute items count
@@ -38,9 +43,8 @@ export const CreatePage: FC = () => {
 
     const rowCount = Math.ceil((range.end - range.begin) / columnCount);
 
-    itemDataRef.current.getSymbolCode = ((_columnCount: number, _begin: number) => (_rowIndex: number, _columnIndex: number) => {
-      return _begin + (_columnCount * _rowIndex) + _columnIndex;
-    })(columnCount, range.begin);
+    itemDataRef.current.columnCount = columnCount;
+    itemDataRef.current.begin = range.begin;
 
     setGridProps({
       columnCount,

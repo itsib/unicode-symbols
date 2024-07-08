@@ -1,14 +1,16 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { GridChildComponentProps } from 'react-window';
 
-export interface ISymbolCell {
+export type ExtendData = Record<string, any>;
+
+export type ISymbolCell<T extends ExtendData> = T & {
   onClick: (code: number) => void;
-  getSymbolCode: (rowIndex: number, columnIndex: number) => number | null;
+  getSymbolCode: (rowIndex: number, columnIndex: number, data: ISymbolCell<T>) => number | null;
 }
 
-export const SymbolCell: FC<GridChildComponentProps<ISymbolCell>> = ({ style, rowIndex, columnIndex, data }) => {
+export function SymbolCell<T extends ExtendData = ExtendData>({ style, rowIndex, columnIndex, data }: GridChildComponentProps<ISymbolCell<T>>) {
   const { onClick, getSymbolCode } = data;
-  const code = getSymbolCode(rowIndex, columnIndex);
+  const code = getSymbolCode(rowIndex, columnIndex, data);
 
   return code == null ? null : (
     <div style={style} className="symbol-cell" onClick={() => onClick(code)} onContextMenu={() => window.appAPI.showContextMenu(code)}>
@@ -23,4 +25,4 @@ export const SymbolCell: FC<GridChildComponentProps<ISymbolCell>> = ({ style, ro
       </div>
     </div>
   )
-};
+}

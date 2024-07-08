@@ -1,0 +1,42 @@
+.form-control-select {
+
+  .control {
+    position: relative;
+    cursor: pointer;
+
+    input {
+      cursor: inherit;
+    }
+
+    .select-dropdown {
+      left: -6px;
+      right: -6px;
+      max-height: 460px;
+      margin: 0;
+      padding: 8px 6px;
+      overflow-y: auto;
+      background-color: rgb(var(--form-control-dropdown-bg));
+      box-shadow: var(--form-control-dropdown-shadow);
+      border-radius: calc(var(--form-control-border-radius) + 2px);
+      position: absolute;
+
+      .option {
+        list-style: none;
+
+        .btn-option {
+          width: 100%;
+          height: 38px;
+          padding: 0 12px;
+          border-radius: var(--form-control-border-radius);
+          font-weight: normal;
+          font-family: inherit;
+          text-align: start;
+
+          &:hover {
+            background-color: rgb(var(--form-control-dropdown-hover));
+          }
+        }
+      }
+    }
+  }
+}

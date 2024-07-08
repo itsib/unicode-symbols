@@ -2,12 +2,13 @@ import React, { FC, useEffect, useState } from 'react';
 import BackIcon from '../../../assets/images/back.svg';
 import { Link } from 'react-router-dom';
 import { FormControlSlider } from '../../components/forms';
-import { useIconSize } from '../../hooks/use-icon-size';
 import { StorageUsage } from '@app-types';
 import { PieChart } from '../../components/pie-chart/pie-chart';
+import { useAppConfig } from '../../hooks/use-app-config';
+import { AppConfigKey } from '@app-context';
 
 export const SettingsPage: FC = () => {
-  const [iconSize, setIconSize] = useIconSize();
+  const [iconSize, setIconSize] = useAppConfig(AppConfigKey.IconSize);
   const [storage, setStorage] = useState<StorageUsage>();
 
   useEffect(() => {
@@ -83,7 +84,7 @@ export const SettingsPage: FC = () => {
                 </div>
 
                 <div className="pie-chard">
-                  <PieChart percent={storage.percent} size={58} />
+                  <PieChart percent={storage.percent} size={50} />
                 </div>
               </div>
             ) : null}

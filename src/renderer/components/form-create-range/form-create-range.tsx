@@ -1,6 +1,8 @@
 import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
-import { FormControlHex } from '../forms/form-control-hex/form-control-hex';
+import { FormControlHex } from '../forms';
 import { TSymbolRange } from '../../types';
+import { useAppConfig } from '../../hooks/use-app-config';
+import { AppConfigKey } from '@app-context';
 
 export interface IFormCreateRange {
   onChange?: (range: Pick<TSymbolRange, 'begin' | 'end'>) => void;
@@ -10,6 +12,7 @@ export interface IFormCreateRange {
 export const FormCreateRange: FC<IFormCreateRange> = ({ onChange, onGoBack }) => {
   const [begin, setBegin] = useState<number>(0);
   const [end, setEnd] = useState<number>(65535);
+  const [range, setRange] = useAppConfig(AppConfigKey.LastRange);
 
   const validateBegin = useCallback((value: number | undefined) => {
     if (value == null) {
@@ -38,19 +41,14 @@ export const FormCreateRange: FC<IFormCreateRange> = ({ onChange, onGoBack }) =>
       return;
     }
 
-    const range = { begin, end };
-    localStorage.setItem('symbols-range', JSON.stringify(range));
-    onChange?.(range);
+    setRange({ begin, end })
   }
 
   useEffect(() => {
-    const rangeSrc = localStorage.getItem('symbols-range');
-    const range = rangeSrc ? JSON.parse(rangeSrc) : { begin: 0, end: 65535 };
-
     setBegin(range.begin);
     setEnd(range.end);
     onChange?.(range);
-  }, []);
+  }, [range]);
 
   return (
     <div className="form-create-range">

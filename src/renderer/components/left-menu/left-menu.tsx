@@ -1,9 +1,10 @@
 import { FC } from 'react';
 import { SYMBOLS } from '../../constants/symbols';
-import { useIconCategory } from '../../hooks/use-icon-category';
+import { useAppConfig } from '../../hooks/use-app-config';
+import { AppConfigKey } from '@app-context';
 
 export const LeftMenu: FC = () => {
-  const [activeCategory, setActiveCategory] = useIconCategory();
+  const [activeCategory, setActiveCategory] = useAppConfig(AppConfigKey.ActiveCategory);
 
   return (
     <menu className="left-menu">

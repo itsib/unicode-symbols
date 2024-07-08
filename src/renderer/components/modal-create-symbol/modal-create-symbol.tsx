@@ -1,9 +1,8 @@
 import { FC, useEffect, useRef } from 'react';
 import { BtnCopy } from '../btn-copy/btn-copy';
 import Modal, { ModalProps } from '../modal/modal';
-import { useSymbolMeta } from '../../hooks/use-symbol-meta';
+import { useIdbGetSymbol } from '../../hooks/indexed-db/use-idb-get-symbol';
 import CloseIcon from '../../../assets/images/close.svg';
-import { useBlockOfSymbol } from '../../hooks/use-block-of-symbol';
 
 export interface IModalCreateSymbol extends ModalProps {
   code?: number;
@@ -26,8 +25,7 @@ export const ModalCreateSymbol: FC<IModalCreateSymbol> = ({ isOpen, onDismiss, c
 };
 
 const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, onDismiss }) => {
-  const symbolMeta = useSymbolMeta(code);
-  const block = useBlockOfSymbol(code);
+  const symbol = useIdbGetSymbol(code);
 
   const html = `&#${code.toString(10)};`;
   const css = `\\${code.toString(16)}`;
@@ -50,12 +48,12 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, 
       <div className="modal-content">
         <div className="info">
           <div className="name">
-            <span>{symbolMeta?.name}</span>
+            <span>{symbol?.name}</span>
           </div>
 
-          {block ? (
+          {symbol?.block ? (
             <div className="block-name">
-              <span>{block?.name}</span>
+              <span>{symbol.block}</span>
             </div>
           ) : null}
         </div>

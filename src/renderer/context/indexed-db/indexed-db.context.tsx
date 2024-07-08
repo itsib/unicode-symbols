@@ -1,14 +1,17 @@
 import { createContext } from 'react';
-import { IdbSymbol, SymbolBlock, SymbolMeta } from '@app-types';
+
+export enum IndexedDbStore {
+  Symbols = 'symbols',
+  Blocks = 'blocks',
+  Config = 'config',
+}
 
 export interface IIndexedDbContext {
-  getSymbolById: (id: number) => Promise<SymbolMeta>;
-  getSymbolsBlock: (id: number) => Promise<SymbolBlock>;
+  database: IDBDatabase | null;
 }
 
 export const INDEXED_DB_CONTEXT_DEFAULT: IIndexedDbContext = {
-  getSymbolById() { throw new Error('Not implemented'); },
-  getSymbolsBlock() { throw new Error('Not implemented'); },
+  database: null,
 };
 
 export const IndexedDbContext = createContext(INDEXED_DB_CONTEXT_DEFAULT);

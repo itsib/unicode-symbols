@@ -1,0 +1,104 @@
+:root {
+  /* Sizes */
+  --form-control-text-md: 14px;
+  --form-control-text-sm: 12px;
+  --form-control-gap: 4px;
+  --form-control-border-radius: 6px;
+  --form-control-padding: 8px 10px;
+  /* Common Fields */
+  --form-control-main: 0 0 0;
+  --form-control-gray: 65 65 65;
+  --form-control-error: 255 0 0;
+  --form-control-bg: 233 233 233;
+  --form-control-active: 0 115 229;
+  --form-control-focus: 52 113 159;
+  --form-control-thumb-color: 209 209 209;
+  --form-control-dropdown-bg: 250 250 250;
+  --form-control-dropdown-shadow: 0 0 12px rgba(10, 10, 10, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+
+  :root {
+    --form-control-main: 255 255 255;
+    --form-control-gray: 209 209 209;
+    --form-control-error: 255 0 0;
+    --form-control-bg: 63 63 63;
+    --form-control-active: 0 115 229;
+    --form-control-focus: 52 113 159;
+    --form-control-thumb-color: 209 209 209;
+    --form-control-dropdown-bg: 52 52 52;
+    --form-control-dropdown-hover: 68 68 68;
+  }
+}
+
+.form-control {
+
+  label {
+    margin-bottom: var(--form-control-gap);
+    color: rgb(var(--form-control-gray));
+    font-size: var(--form-control-text-sm);
+    display: block;
+  }
+
+  .control {
+    --form-control-box-shadow: 0 0 0 0 rgb(var(--form-control-focus) / 0);
+
+    padding: var(--form-control-padding);
+    color: rgb(var(--form-control-main));
+    font-size: var(--form-control-text-md);
+    line-height: calc(var(--form-control-text-md) + 2px);
+    background-color: rgb(var(--form-control-bg));
+    border-radius: var(--form-control-border-radius);
+    box-shadow: var(--form-control-box-shadow);
+    display: flex;
+    align-items: center;
+    transition: all .2s ease-in-out;
+
+    input {
+      width: 100%;
+      font-family: inherit;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      font-size: inherit;
+      line-height: inherit;
+      color: inherit;;
+    }
+
+    &:focus-within {
+      --form-control-box-shadow: 0 0 0 2px rgb(var(--form-control-focus) / 0.8);
+    }
+
+    &.is-error {
+      --form-control-box-shadow: 0 0 0 2px rgb(var(--form-control-error) / 0.8);
+    }
+
+    &.is-disabled {
+      --form-control-box-shadow: 0 0 0 0 rgb(var(--form-control-focus) / 0);
+
+      input {
+        pointer-events: none;
+      }
+    }
+  }
+
+  .error {
+    height: calc(var(--form-control-text-sm) + 4px);
+    margin-top: var(--form-control-gap);
+    color: rgb(var(--form-control-error));
+    font-size: var(--form-control-text-sm);
+    line-height: calc(var(--form-control-text-sm) + 2px);
+  }
+}
+
+/* clears the ‘X’ from Internet Explorer */
+input[type=search]::-ms-clear { display: none; width : 0; height: 0; }
+input[type=search]::-ms-reveal { display: none; width : 0; height: 0; }
+/* clears the ‘X’ from Chrome */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}

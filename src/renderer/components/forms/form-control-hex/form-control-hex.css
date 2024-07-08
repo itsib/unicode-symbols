@@ -1,22 +1,6 @@
-.form-control-hex {
-
-  label {
-    margin-bottom: 4px;
-    color: rgb(var(--text-secondary));
-    font-size: 12px;
-    display: block;
-  }
+.form-control.form-control-hex {
 
   .control {
-    padding: 8px 10px;
-    font-size: 14px;
-    line-height: 16px;
-    background-color: rgb(var(--input-bg));
-    border-radius: 6px;
-    box-shadow: 0 0 0 0 rgb(var(--input-outline) / 0);
-    display: flex;
-    align-items: center;
-    transition: all .2s ease-in-out;
 
     .prefix {
       top: 1px;
@@ -26,28 +10,7 @@
     }
 
     input {
-      background-color: transparent;
-      border: none;
-      outline: none;
-      font-size: inherit;
-      line-height: inherit;
       text-transform: uppercase;
-      color: rgb(var(--text-primary));
     }
-
-    &:focus-within {
-      box-shadow: 0 0 0 2px rgb(var(--input-outline) / 0.8);
-    }
-
-    &.is-error {
-      box-shadow: 0 0 0 2px rgb(var(--error) / 0.8);
-    }
-  }
-
-  .error {
-    height: 16px;
-    margin-top: 4px;
-    color: rgb(var(--error));
-    font-size: 12px;
   }
 }

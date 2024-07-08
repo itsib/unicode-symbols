@@ -14,7 +14,7 @@ import { CategoryOfSymbols } from '../types';
 
 export const SYMBOLS: CategoryOfSymbols[] = [
   {
-    id: 'smiles-people',
+    id: 1,
     name: 'Smiles & People',
     color: true,
     icon: SmilesIcon,
@@ -35,7 +35,7 @@ export const SYMBOLS: CategoryOfSymbols[] = [
     ],
   },
   {
-    id: 'animals-nature',
+    id: 2,
     name: 'Animals & Nature',
     icon: AnimalsIcon,
     color: true,
@@ -46,7 +46,7 @@ export const SYMBOLS: CategoryOfSymbols[] = [
     ],
   },
   {
-    id: 'food-drink',
+    id: 3,
     name: 'Food & Drink',
     icon: FoodIcon,
     color: true,
@@ -57,7 +57,7 @@ export const SYMBOLS: CategoryOfSymbols[] = [
     ],
   },
   {
-    id: 'interface',
+    id: 4,
     name: 'Interface',
     icon: InterfaceIcon,
     color: true,
@@ -84,7 +84,7 @@ export const SYMBOLS: CategoryOfSymbols[] = [
     ],
   },
   {
-    id: 'letters',
+    id: 5,
     name: 'The Letters',
     icon: LettersIcon,
     color: false,
@@ -94,7 +94,7 @@ export const SYMBOLS: CategoryOfSymbols[] = [
     ]
   },
   {
-    id: 'numbers',
+    id: 6,
     name: 'Numbers',
     icon: NumbersIcon,
     color: false,
@@ -105,7 +105,7 @@ export const SYMBOLS: CategoryOfSymbols[] = [
     ]
   },
   {
-    id: 'finance',
+    id: 7,
     name: 'Finance',
     icon: FinanceIcon,
     color: true,
@@ -118,7 +118,7 @@ export const SYMBOLS: CategoryOfSymbols[] = [
     ],
   },
   {
-    id: 'math-operators',
+    id: 8,
     name: 'Math Operators',
     icon: MathIcon,
     color: false,
@@ -127,7 +127,7 @@ export const SYMBOLS: CategoryOfSymbols[] = [
     ],
   },
   {
-    id: 'arrows',
+    id: 9,
     name: 'Arrows',
     icon: ArrowsIcon,
     color: false,
@@ -141,7 +141,7 @@ export const SYMBOLS: CategoryOfSymbols[] = [
     ],
   },
   {
-    id: 'symbols-pictograms',
+    id: 10,
     name: 'Symbols & Pictograms',
     icon: PictogramsIcon,
     color: true,
@@ -165,7 +165,7 @@ export const SYMBOLS: CategoryOfSymbols[] = [
     ],
   },
   {
-    id: 'other-signs',
+    id: 11,
     name: 'Other Signs',
     icon: OtherIcon,
     color: false,
@@ -180,7 +180,7 @@ export const SYMBOLS: CategoryOfSymbols[] = [
     ],
   },
   {
-    id: 'special-character',
+    id: 12,
     name: 'Special Characters',
     icon: SpecialCharacterIcon,
     color: false,

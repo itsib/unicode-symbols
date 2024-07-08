@@ -15,11 +15,27 @@ export function createMenu(mainWindow: BrowserWindow) {
             mainWindow.webContents.send('redirect', { path: 'create' });
           },
         },
-        { type: 'separator' },
         {
           label: 'Settings',
           click: async () => {
             mainWindow.webContents.send('redirect', { path: 'settings' });
+          },
+        },
+        {
+          label: 'Search',
+          registerAccelerator: true,
+          acceleratorWorksWhenHidden: true,
+          accelerator: 'Ctrl+F',
+          click: async () => {
+            mainWindow.webContents.send('redirect', { path: 'search' });
+          },
+        },
+        { type: 'separator' },
+        {
+          label: 'Delete DB',
+          click: async () => {
+            mainWindow.webContents.send('drop-idb');
+            mainWindow.webContents.reload();
           },
         },
         { type: 'separator' },
@@ -35,7 +51,7 @@ export function createMenu(mainWindow: BrowserWindow) {
       ],
     },
     {
-      label: 'Develop',
+      label: 'View',
       submenu: [
         {
           label: 'Reload',
@@ -55,14 +71,6 @@ export function createMenu(mainWindow: BrowserWindow) {
           accelerator: 'Ctrl+M',
           click: async () => {
             mainWindow.setMenuBarVisibility(!mainWindow.menuBarVisible);
-          },
-        },
-        { type: 'separator' },
-        {
-          label: 'Delete DB',
-          click: async () => {
-            mainWindow.webContents.send('drop-idb');
-            mainWindow.webContents.reload();
           },
         },
         { type: 'separator' },
