@@ -3,6 +3,7 @@ import { BtnCopy } from '../btn-copy/btn-copy';
 import Modal, { ModalProps } from '../modal/modal';
 import { useIdbGetSymbol } from '../../hooks/indexed-db/use-idb-get-symbol';
 import CloseIcon from '../../../assets/images/close.svg';
+import { ImgClose } from '../images/img-close';
 
 export interface IModalCreateSymbol extends ModalProps {
   code?: number;
@@ -41,7 +42,7 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, 
           </>
         </div>
         <button type="button" className="btn btn-close" onClick={onDismiss}>
-          <img src={CloseIcon} alt="Close" className="icon"/>
+          <ImgClose className="icon" />
         </button>
       </div>
 

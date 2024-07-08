@@ -43,10 +43,10 @@
     border-bottom: 1px solid rgb(var(--modal-border-color));
 
     .btn {
-      top: 10px;
+      top: 8px;
       right: 10px;
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border: none;
       position: absolute;
       border-radius: 100%;
@@ -54,12 +54,11 @@
 
       &.btn-close {
         padding: 4px;
-        font-size: 10px;
         color: rgb(var(--text-primary));
         transition: color .2s ease-out;
 
         .icon {
-          height: 16px;
+          height: 18px;
           width: auto;
           aspect-ratio: 1;
         }

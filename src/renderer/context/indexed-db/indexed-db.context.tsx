@@ -5,6 +5,7 @@ export enum IndexedDbStore {
   Symbols = 'symbols',
   Blocks = 'blocks',
   Config = 'config',
+  Menu = 'menu',
 }
 
 export interface IIndexedDbContext {

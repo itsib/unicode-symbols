@@ -10,7 +10,7 @@ interface SendOptions {
   port: Electron.MessagePortMain;
 }
 
-const LINES_IN_CHUNK = 10;
+const LINES_IN_CHUNK = 30;
 
 async function canRead(path: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -85,6 +85,8 @@ export async function dbInitialisation(event: IpcMainEvent, filesDir: string): P
     await sendLineByLine(path.join(filesDir, 'blocks.csv'), { context: 'blocks', port: port1 });
 
     await sendLineByLine(path.join(filesDir, 'symbol-names.csv'), { context: 'symbols', port: port1 });
+
+    await sendLineByLine(path.join(filesDir, 'emoji.csv'), { context: 'emoji', port: port1, skipComments: false });
 
     port1.postMessage({ type: 'close' });
     port1.close();

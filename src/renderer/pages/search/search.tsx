@@ -8,30 +8,9 @@ import { ModalCreateSymbol } from '../../components/modal-create-symbol/modal-cr
 import { FormControlInput, FormControlSelect } from '../../components/forms';
 import SearchIcon from '../../../assets/images/search-book.svg';
 import { useIdbSearchSymbol } from '../../hooks/indexed-db/use-idb-search-symbol';
-import { FormControlOption } from '../../types/form/form-control-option';
 import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
-import { useLog } from '../../hooks/use-log';
 import { useIdbBlockSelectorOptions } from '../../hooks/indexed-db/use-idb-block-selector-options';
-
-const OPTIONS: FormControlOption<number>[] = [
-  {
-    label: 'Combining Diacritical Marks',
-    value: 1,
-  },
-  {
-    label: 'Greek and Coptic',
-    value: 2,
-  },
-  {
-    label: 'Cyrillic',
-    value: 3,
-  },
-  {
-    label: 'Cyrillic Supplement',
-    value: 4,
-  },
-];
 
 export const SearchPage: FC = () => {
   const size = useSize('search-page-grid-container');

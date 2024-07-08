@@ -32,7 +32,7 @@ export async function normalizeSvg(assets: string): Promise<void> {
         {
           name: "removeAttrs",
           params: {
-            attrs: ['data-original'],
+            attrs: ['data-original', 'data-name'],
             elemSeparator: ":",
             preserveCurrentColor: false
           }
