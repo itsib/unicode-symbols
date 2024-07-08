@@ -3,7 +3,7 @@ import { AppConfig, AppConfigKey, ApplicationContext } from '@app-context';
 
 export function useAppConfig<Key extends AppConfigKey, Value extends AppConfig<Key>>(key: Key): [Value, (value: Value) => void] {
   const { config, setConfig } = useContext(ApplicationContext);
-  const configValue = config[key] as Value;
+  const configValue = config[key] as any;
 
   const setConfigCallback = useCallback((value: Value) => setConfig(key, value), [setConfig]);
 

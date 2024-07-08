@@ -13,7 +13,7 @@ export function SymbolCell<T extends ExtendData = ExtendData>({ style, rowIndex,
   const code = getSymbolCode(rowIndex, columnIndex, data);
 
   return code == null ? null : (
-    <div style={style} className="symbol-cell" onClick={() => onClick(code)} onContextMenu={() => window.appAPI.showContextMenu(code)}>
+    <div style={style} className="symbol-cell" data-code={code} onClick={() => onClick(code)}>
       <div className="inner-container">
         <div className="symbol">
           <span dangerouslySetInnerHTML={{ __html: `&#${code};` }}/>

@@ -11,6 +11,7 @@ import { useIdbSearchSymbol } from '../../hooks/indexed-db/use-idb-search-symbol
 import { FormControlOption } from '../../types/form/form-control-option';
 import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
+import { useLog } from '../../hooks/use-log';
 
 const OPTIONS: FormControlOption<number>[] = [
   {
