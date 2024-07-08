@@ -2,12 +2,15 @@ import Electron, { ipcMain, IpcMainEvent, MessageChannelMain } from 'electron';
 import fs from 'node:fs';
 import events from 'node:events';
 import * as readline from 'node:readline';
-import { data } from 'autoprefixer';
 import path from 'node:path';
 
-const LINES_IN_CHUNK = 10;
+interface SendOptions {
+  context: string;
+  skipComments?: boolean;
+  port: Electron.MessagePortMain;
+}
 
-type SymbolMeta = { i: number; n: string; g: number };
+const LINES_IN_CHUNK = 10;
 
 async function canRead(path: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -15,39 +18,9 @@ async function canRead(path: string): Promise<void> {
   })
 }
 
-function decodeSymbol(line: string): SymbolMeta | null {
-  line = line.trim();
-  if (!line || line.startsWith('#')) {
-    return null;
-  }
-  const [code, nameRaw] = line.split(';')
-  const id = parseInt(code.trim(), 16);
-  const name = nameRaw
-    .split(/\s+/)
-    .map((word: string, index: number) => {
-      if (word.length === 1) {
-        return word;
-      }
-      if (index === 1) {
-        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-      }
-      return word.toLowerCase();
-    })
-    .join(' ')
-    .trim();
+async function sendLineByLine(filepath: string, opts: SendOptions): Promise<void> {
+  const { context, port, skipComments = true } = opts
 
-  return { i: id, n: name, g: 0 };
-}
-
-async function handleLine(symbolNames: SymbolMeta[], port: Electron.MessagePortMain): Promise<void> {
-  return new Promise(resolve => {
-    ipcMain.once('read-names-next', () => resolve());
-
-    port.postMessage({ type: 'data', data: symbolNames });
-  });
-}
-
-async function sendLineByLine(filepath: string, context: string, port: Electron.MessagePortMain): Promise<void> {
   console.log('\x1b[0;37m›\x1b[0m Starting to send the file \x1b[0;33m%s\x1b[0m', path.basename(filepath));
 
   await canRead(filepath);
@@ -78,7 +51,7 @@ async function sendLineByLine(filepath: string, context: string, port: Electron.
 
   const handleLine = async (line: string) => {
     line = line.trim();
-    if (!line || line.startsWith('#')) {
+    if (!line || (skipComments && line.startsWith('#'))) {
       return;
     }
     lines.push(line);
@@ -107,14 +80,14 @@ export async function dbInitialisation(event: IpcMainEvent, filesDir: string): P
   await events.once(ipcMain, 'db-ready-transmit');
 
   try {
-    await sendLineByLine(path.join(filesDir, 'blocks.csv'), 'blocks', port1);
+    await sendLineByLine(path.join(filesDir, 'planes.csv'), { context: 'planes', port: port1 });
 
-    await sendLineByLine(path.join(filesDir, 'symbol-names.csv'), 'symbols', port1);
+    await sendLineByLine(path.join(filesDir, 'blocks.csv'), { context: 'blocks', port: port1 });
+
+    await sendLineByLine(path.join(filesDir, 'symbol-names.csv'), { context: 'symbols', port: port1 });
 
     port1.postMessage({ type: 'close' });
     port1.close();
-
-
   } catch (error) {
     port1.postMessage({ type: 'error', data: error.message });
     port1.close();

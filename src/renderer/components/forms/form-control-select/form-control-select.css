@@ -6,6 +6,14 @@
 
     input {
       cursor: inherit;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .icon {
+      min-width: 16px;
+      margin-left: 4px;
+      aspect-ratio: 1/1;
     }
   }
 }

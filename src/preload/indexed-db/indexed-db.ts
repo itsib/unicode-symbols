@@ -1,8 +1,35 @@
+export interface IdbPlane {
+  /**
+   * Plane ID
+   */
+  i: number;
+  /**
+   * Plane Name
+   */
+  n: string;
+  /**
+   * Plane name abbr.
+   */
+  a: string;
+  /**
+   * Symbol key for begin range
+   */
+  b: number;
+  /**
+   * Symbol key for end range
+   */
+  e: number;
+}
+
 export interface IdbBlock {
   /**
    * Block ID
    */
-  i: number,
+  i: number;
+  /**
+   * Plane id
+   */
+  p: number;
   /**
    * Block Name
    */
@@ -29,16 +56,27 @@ export interface IdbSymbol {
    */
   n: string;
   /**
+   * Plane id
+   */
+  p: number;
+  /**
    * Block id includes symbol
    */
   b: number;
+  /**
+   * Keywords for search by name
+   */
+  k: string[];
 }
 
 export enum IdbStoreName {
   Symbols = 'symbols',
   Blocks = 'blocks',
+  Planes = 'planes',
   Config = 'config',
 }
+
+const IGNORE_KEYWORDS = ['SIGN', 'ONE', 'WITH', 'LETTER', 'MARK'];
 
 export class IndexedDb {
 
@@ -61,8 +99,13 @@ export class IndexedDb {
   }
 
   async parseAndSave(context: string, lines: string[]): Promise<void> {
+    // Parse planes
+    if (context === 'planes') {
+      const planes = lines.map(line => this._parsePlane(line));
+      await this.insertPlanes(planes);
+    }
     // Parse blocks
-    if (context === 'blocks') {
+    else if (context === 'blocks') {
       const blocks = lines.map(line => this._parseBlock(line));
       await this.insertBlocks(blocks);
     }
@@ -73,18 +116,19 @@ export class IndexedDb {
     }
   }
 
-  async insertSymbols(symbols: IdbSymbol[]): Promise<any> {
+  async insertPlanes(planes: IdbPlane[]): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const db = await this._database();
-      const transaction = db!.transaction([IdbStoreName.Symbols], 'readwrite');
-      const store = transaction.objectStore(IdbStoreName.Symbols);
+      const transaction = db!.transaction([IdbStoreName.Planes], 'readwrite');
+      const store = transaction.objectStore(IdbStoreName.Planes);
 
-      for (const symbol of symbols) {
-        store.put(symbol);
+      for (const plane of planes) {
+        store.put(plane);
       }
 
       transaction.oncomplete = event => resolve((event.target as any)?.result);
       transaction.onerror = error => reject(this._extract(error));
+      transaction.commit();
     });
   }
 
@@ -103,6 +147,21 @@ export class IndexedDb {
     });
   }
 
+  async insertSymbols(symbols: IdbSymbol[]): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const db = await this._database();
+      const transaction = db!.transaction([IdbStoreName.Symbols], 'readwrite');
+      const store = transaction.objectStore(IdbStoreName.Symbols);
+
+      for (const symbol of symbols) {
+        store.put(symbol);
+      }
+
+      transaction.oncomplete = event => resolve((event.target as any)?.result);
+      transaction.onerror = error => reject(this._extract(error));
+    });
+  }
+
   async checkInit(): Promise<boolean> {
     const symbolsCount = await this._getCount(IdbStoreName.Symbols);
     const blocksCount = await this._getCount(IdbStoreName.Blocks);
@@ -110,7 +169,7 @@ export class IndexedDb {
     return symbolsCount > 0 && blocksCount > 0;
   }
 
-  async close() {
+  async close(): Promise<void> {
     const db = await this._database();
     db.close();
     this._db = null;
@@ -155,16 +214,23 @@ export class IndexedDb {
 
     this._clear(db);
 
+    // Create indexes for planes store
+    const planesStore = db.createObjectStore(IdbStoreName.Planes, { keyPath: 'i' });
+    planesStore.createIndex('id', 'i', { unique: true });
+
     // Create indexes for blocks store
     const blocksStore = db.createObjectStore(IdbStoreName.Blocks, { keyPath: 'i' });
     blocksStore.createIndex('id', 'i', { unique: true });
+    blocksStore.createIndex('plane', 'p', { unique: false });
     blocksStore.createIndex('begin', 'b', { unique: true });
+    blocksStore.createIndex('end', 'e', { unique: true });
 
     // Create indexes for symbols store
     const symbolsStore = db.createObjectStore(IdbStoreName.Symbols, { keyPath: 'i' });
     symbolsStore.createIndex('id', 'i', { unique: true });
-    symbolsStore.createIndex('name', 'n', { unique: false });
     symbolsStore.createIndex('block', 'b', { unique: false });
+    symbolsStore.createIndex('plane', 'p', { unique: false });
+    symbolsStore.createIndex('search', 'k', { unique: false, multiEntry: true });
 
     // Create app settings store
     if(!db.objectStoreNames.contains(IdbStoreName.Config)) {
@@ -173,6 +239,7 @@ export class IndexedDb {
       configStore.put(34, 0);
       configStore.put(1, 1);
       configStore.put({ begin: 0x0, end: 0xFFFF }, 2);
+      configStore.put(false, 3);
     }
   }
 
@@ -209,15 +276,34 @@ export class IndexedDb {
     return (error?.target as any)?.error;
   }
 
+  private _parsePlane(line: string): IdbPlane {
+    line = line.trim();
+    const [range, name, abbr] = line.split(';');
+    const [beginStr, end] = range.split('..');
+    const begin = parseInt(beginStr.trim(), 16);
+    const id = Math.floor(begin / 0x10000) + 1;
+
+    return {
+      i: id,
+      n: name ? name.trim() : '',
+      a: abbr ? abbr.trim() : '',
+      b: begin,
+      e: parseInt(end.trim(), 16),
+    };
+  }
+
   private _parseBlock(line: string): IdbBlock {
     line = line.trim();
     const [range, name] = line.split(';');
-    const [begin, end] = range.split('..');
+    const [beginStr, end] = range.split('..');
+    const begin = parseInt(beginStr.trim(), 16);
+    const plane = Math.floor(begin / 0x10000) + 1;
 
     const block: IdbBlock = {
       i: this._ranges.length + 1,
+      p: plane,
       n: name.trim(),
-      b: parseInt(begin.trim(), 16),
+      b: begin,
       e: parseInt(end.trim(), 16),
     }
 
@@ -229,21 +315,12 @@ export class IndexedDb {
 
   private _parseSymbol(line: string): IdbSymbol {
     line = line.trim();
-    const [code, nameRaw] = line.split(';')
+    const [code, nameRaw] = line.split(';');
+    const name = nameRaw.trim();
     const id = parseInt(code.trim(), 16);
-    const name = nameRaw
-      .split(/\s+/)
-      .map((word: string, index: number) => {
-        if (word.length === 1) {
-          return word;
-        }
-        if (index === 1) {
-          return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-        }
-        return word.toLowerCase();
-      })
-      .join(' ')
-      .trim();
+    const plane = Math.floor(id / 0x10000) + 1;
+    const keywords = name.split(/[\s-_]+/)
+      .filter((word: string) => word.length > 2 && !IGNORE_KEYWORDS.includes(word.toUpperCase()));
 
     let block: number;
     const end = this._ranges[0]
@@ -253,8 +330,6 @@ export class IndexedDb {
 
     block = (this._rangesCount - this._ranges.length) + 1;
 
-    // block = this._ranges.findIndex(end => id > end) + 2;
-
-    return { i: id, n: name, b: block };
+    return { i: id, n: name, p: plane, b: block, k: keywords };
   }
 }

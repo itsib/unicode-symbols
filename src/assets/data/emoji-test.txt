@@ -18,21 +18,16 @@
 1F929                                                  ; fully-qualified     # 🤩 E5.0 star-struck
 1F618                                                  ; fully-qualified     # 😘 E0.6 face blowing a kiss
 1F617                                                  ; fully-qualified     # 😗 E1.0 kissing face
-263A FE0F                                              ; fully-qualified     # ☺️ E0.6 smiling face
 263A                                                   ; unqualified         # ☺ E0.6 smiling face
 1F61A                                                  ; fully-qualified     # 😚 E0.6 kissing face with closed eyes
 1F619                                                  ; fully-qualified     # 😙 E1.0 kissing face with smiling eyes
 1F972                                                  ; fully-qualified     # 🥲 E13.0 smiling face with tear
-
-# subgroup: face-tongue
 1F60B                                                  ; fully-qualified     # 😋 E0.6 face savoring food
 1F61B                                                  ; fully-qualified     # 😛 E1.0 face with tongue
 1F61C                                                  ; fully-qualified     # 😜 E0.6 winking face with tongue
 1F92A                                                  ; fully-qualified     # 🤪 E5.0 zany face
 1F61D                                                  ; fully-qualified     # 😝 E0.6 squinting face with tongue
 1F911                                                  ; fully-qualified     # 🤑 E1.0 money-mouth face
-
-# subgroup: face-hand
 1F917                                                  ; fully-qualified     # 🤗 E1.0 smiling face with open hands
 1F92D                                                  ; fully-qualified     # 🤭 E5.0 face with hand over mouth
 1FAE2                                                  ; fully-qualified     # 🫢 E14.0 face with open eyes and hand over mouth
@@ -46,29 +41,18 @@
 1F611                                                  ; fully-qualified     # 😑 E1.0 expressionless face
 1F636                                                  ; fully-qualified     # 😶 E1.0 face without mouth
 1FAE5                                                  ; fully-qualified     # 🫥 E14.0 dotted line face
-1F636 200D 1F32B FE0F                                  ; fully-qualified     # 😶‍🌫️ E13.1 face in clouds
-1F636 200D 1F32B                                       ; minimally-qualified # 😶‍🌫 E13.1 face in clouds
 1F60F                                                  ; fully-qualified     # 😏 E0.6 smirking face
 1F612                                                  ; fully-qualified     # 😒 E0.6 unamused face
 1F644                                                  ; fully-qualified     # 🙄 E1.0 face with rolling eyes
 1F62C                                                  ; fully-qualified     # 😬 E1.0 grimacing face
-1F62E 200D 1F4A8                                       ; fully-qualified     # 😮‍💨 E13.1 face exhaling
 1F925                                                  ; fully-qualified     # 🤥 E3.0 lying face
 1FAE8                                                  ; fully-qualified     # 🫨 E15.0 shaking face
-1F642 200D 2194 FE0F                                   ; fully-qualified     # 🙂‍↔️ E15.1 head shaking horizontally
-1F642 200D 2194                                        ; minimally-qualified # 🙂‍↔ E15.1 head shaking horizontally
-1F642 200D 2195 FE0F                                   ; fully-qualified     # 🙂‍↕️ E15.1 head shaking vertically
-1F642 200D 2195                                        ; minimally-qualified # 🙂‍↕ E15.1 head shaking vertically
-
-# subgroup: face-sleepy
 1F60C                                                  ; fully-qualified     # 😌 E0.6 relieved face
 1F614                                                  ; fully-qualified     # 😔 E0.6 pensive face
 1F62A                                                  ; fully-qualified     # 😪 E0.6 sleepy face
 1F924                                                  ; fully-qualified     # 🤤 E3.0 drooling face
 1F634                                                  ; fully-qualified     # 😴 E1.0 sleeping face
 1FAE9                                                  ; fully-qualified     # 🫩 E16.0 face with bags under eyes
-
-# subgroup: face-unwell
 1F637                                                  ; fully-qualified     # 😷 E0.6 face with medical mask
 1F912                                                  ; fully-qualified     # 🤒 E1.0 face with thermometer
 1F915                                                  ; fully-qualified     # 🤕 E1.0 face with head-bandage
@@ -80,23 +64,16 @@
 1F974                                                  ; fully-qualified     # 🥴 E11.0 woozy face
 1F635                                                  ; fully-qualified     # 😵 E0.6 face with crossed-out eyes
 1F92F                                                  ; fully-qualified     # 🤯 E5.0 exploding head
-
-# subgroup: face-hat
 1F920                                                  ; fully-qualified     # 🤠 E3.0 cowboy hat face
 1F973                                                  ; fully-qualified     # 🥳 E11.0 partying face
 1F978                                                  ; fully-qualified     # 🥸 E13.0 disguised face
-
-# subgroup: face-glasses
 1F60E                                                  ; fully-qualified     # 😎 E1.0 smiling face with sunglasses
 1F913                                                  ; fully-qualified     # 🤓 E1.0 nerd face
 1F9D0                                                  ; fully-qualified     # 🧐 E5.0 face with monocle
-
-# subgroup: face-concerned
 1F615                                                  ; fully-qualified     # 😕 E1.0 confused face
 1FAE4                                                  ; fully-qualified     # 🫤 E14.0 face with diagonal mouth
 1F61F                                                  ; fully-qualified     # 😟 E1.0 worried face
 1F641                                                  ; fully-qualified     # 🙁 E1.0 slightly frowning face
-2639 FE0F                                              ; fully-qualified     # ☹️ E0.7 frowning face
 2639                                                   ; unqualified         # ☹ E0.7 frowning face
 1F62E                                                  ; fully-qualified     # 😮 E1.0 face with open mouth
 1F62F                                                  ; fully-qualified     # 😯 E1.0 hushed face
@@ -119,8 +96,6 @@
 1F629                                                  ; fully-qualified     # 😩 E0.6 weary face
 1F62B                                                  ; fully-qualified     # 😫 E0.6 tired face
 1F971                                                  ; fully-qualified     # 🥱 E12.0 yawning face
-
-# subgroup: face-negative
 1F624                                                  ; fully-qualified     # 😤 E0.6 face with steam from nose
 1F621                                                  ; fully-qualified     # 😡 E0.6 enraged face
 1F620                                                  ; fully-qualified     # 😠 E0.6 angry face
@@ -128,10 +103,7 @@
 1F608                                                  ; fully-qualified     # 😈 E1.0 smiling face with horns
 1F47F                                                  ; fully-qualified     # 👿 E0.6 angry face with horns
 1F480                                                  ; fully-qualified     # 💀 E0.6 skull
-2620 FE0F                                              ; fully-qualified     # ☠️ E1.0 skull and crossbones
 2620                                                   ; unqualified         # ☠ E1.0 skull and crossbones
-
-# subgroup: face-costume
 1F4A9                                                  ; fully-qualified     # 💩 E0.6 pile of poo
 1F921                                                  ; fully-qualified     # 🤡 E3.0 clown face
 1F479                                                  ; fully-qualified     # 👹 E0.6 ogre
@@ -140,8 +112,6 @@
 1F47D                                                  ; fully-qualified     # 👽 E0.6 alien
 1F47E                                                  ; fully-qualified     # 👾 E0.6 alien monster
 1F916                                                  ; fully-qualified     # 🤖 E1.0 robot
-
-# subgroup: cat-face
 1F63A                                                  ; fully-qualified     # 😺 E0.6 grinning cat
 1F638                                                  ; fully-qualified     # 😸 E0.6 grinning cat with smiling eyes
 1F639                                                  ; fully-qualified     # 😹 E0.6 cat with tears of joy
@@ -151,13 +121,9 @@
 1F640                                                  ; fully-qualified     # 🙀 E0.6 weary cat
 1F63F                                                  ; fully-qualified     # 😿 E0.6 crying cat
 1F63E                                                  ; fully-qualified     # 😾 E0.6 pouting cat
-
-# subgroup: monkey-face
 1F648                                                  ; fully-qualified     # 🙈 E0.6 see-no-evil monkey
 1F649                                                  ; fully-qualified     # 🙉 E0.6 hear-no-evil monkey
 1F64A                                                  ; fully-qualified     # 🙊 E0.6 speak-no-evil monkey
-
-# subgroup: heart
 1F48C                                                  ; fully-qualified     # 💌 E0.6 love letter
 1F498                                                  ; fully-qualified     # 💘 E0.6 heart with arrow
 1F49D                                                  ; fully-qualified     # 💝 E0.6 heart with ribbon
@@ -167,14 +133,8 @@
 1F49E                                                  ; fully-qualified     # 💞 E0.6 revolving hearts
 1F495                                                  ; fully-qualified     # 💕 E0.6 two hearts
 1F49F                                                  ; fully-qualified     # 💟 E0.6 heart decoration
-2763 FE0F                                              ; fully-qualified     # ❣️ E1.0 heart exclamation
 2763                                                   ; unqualified         # ❣ E1.0 heart exclamation
 1F494                                                  ; fully-qualified     # 💔 E0.6 broken heart
-2764 FE0F 200D 1F525                                   ; fully-qualified     # ❤️‍🔥 E13.1 heart on fire
-2764 200D 1F525                                        ; unqualified         # ❤‍🔥 E13.1 heart on fire
-2764 FE0F 200D 1FA79                                   ; fully-qualified     # ❤️‍🩹 E13.1 mending heart
-2764 200D 1FA79                                        ; unqualified         # ❤‍🩹 E13.1 mending heart
-2764 FE0F                                              ; fully-qualified     # ❤️ E0.6 red heart
 2764                                                   ; unqualified         # ❤ E0.6 red heart
 1FA77                                                  ; fully-qualified     # 🩷 E15.0 pink heart
 1F9E1                                                  ; fully-qualified     # 🧡 E5.0 orange heart
@@ -187,8 +147,6 @@
 1F5A4                                                  ; fully-qualified     # 🖤 E3.0 black heart
 1FA76                                                  ; fully-qualified     # 🩶 E15.0 grey heart
 1F90D                                                  ; fully-qualified     # 🤍 E12.0 white heart
-
-# subgroup: emotion
 1F48B                                                  ; fully-qualified     # 💋 E0.6 kiss mark
 1F4AF                                                  ; fully-qualified     # 💯 E0.6 hundred points
 1F4A2                                                  ; fully-qualified     # 💢 E0.6 anger symbol
@@ -196,164 +154,35 @@
 1F4AB                                                  ; fully-qualified     # 💫 E0.6 dizzy
 1F4A6                                                  ; fully-qualified     # 💦 E0.6 sweat droplets
 1F4A8                                                  ; fully-qualified     # 💨 E0.6 dashing away
-1F573 FE0F                                             ; fully-qualified     # 🕳️ E0.7 hole
 1F573                                                  ; unqualified         # 🕳 E0.7 hole
 1F4AC                                                  ; fully-qualified     # 💬 E0.6 speech balloon
-1F441 FE0F 200D 1F5E8 FE0F                             ; fully-qualified     # 👁️‍🗨️ E2.0 eye in speech bubble
-1F441 200D 1F5E8 FE0F                                  ; unqualified         # 👁‍🗨️ E2.0 eye in speech bubble
-1F441 FE0F 200D 1F5E8                                  ; minimally-qualified # 👁️‍🗨 E2.0 eye in speech bubble
-1F441 200D 1F5E8                                       ; unqualified         # 👁‍🗨 E2.0 eye in speech bubble
-1F5E8 FE0F                                             ; fully-qualified     # 🗨️ E2.0 left speech bubble
 1F5E8                                                  ; unqualified         # 🗨 E2.0 left speech bubble
-1F5EF FE0F                                             ; fully-qualified     # 🗯️ E0.7 right anger bubble
 1F5EF                                                  ; unqualified         # 🗯 E0.7 right anger bubble
 1F4AD                                                  ; fully-qualified     # 💭 E1.0 thought balloon
 1F4A4                                                  ; fully-qualified     # 💤 E0.6 ZZZ
-
-# Smileys & Emotion subtotal:		185
-# Smileys & Emotion subtotal:		185	w/o modifiers
-
 # group: People & Body
-
-# subgroup: hand-fingers-open
 1F44B                                                  ; fully-qualified     # 👋 E0.6 waving hand
-1F44B 1F3FB                                            ; fully-qualified     # 👋🏻 E1.0 waving hand: light skin tone
-1F44B 1F3FC                                            ; fully-qualified     # 👋🏼 E1.0 waving hand: medium-light skin tone
-1F44B 1F3FD                                            ; fully-qualified     # 👋🏽 E1.0 waving hand: medium skin tone
-1F44B 1F3FE                                            ; fully-qualified     # 👋🏾 E1.0 waving hand: medium-dark skin tone
-1F44B 1F3FF                                            ; fully-qualified     # 👋🏿 E1.0 waving hand: dark skin tone
 1F91A                                                  ; fully-qualified     # 🤚 E3.0 raised back of hand
-1F91A 1F3FB                                            ; fully-qualified     # 🤚🏻 E3.0 raised back of hand: light skin tone
-1F91A 1F3FC                                            ; fully-qualified     # 🤚🏼 E3.0 raised back of hand: medium-light skin tone
-1F91A 1F3FD                                            ; fully-qualified     # 🤚🏽 E3.0 raised back of hand: medium skin tone
-1F91A 1F3FE                                            ; fully-qualified     # 🤚🏾 E3.0 raised back of hand: medium-dark skin tone
-1F91A 1F3FF                                            ; fully-qualified     # 🤚🏿 E3.0 raised back of hand: dark skin tone
-1F590 FE0F                                             ; fully-qualified     # 🖐️ E0.7 hand with fingers splayed
 1F590                                                  ; unqualified         # 🖐 E0.7 hand with fingers splayed
-1F590 1F3FB                                            ; fully-qualified     # 🖐🏻 E1.0 hand with fingers splayed: light skin tone
-1F590 1F3FC                                            ; fully-qualified     # 🖐🏼 E1.0 hand with fingers splayed: medium-light skin tone
-1F590 1F3FD                                            ; fully-qualified     # 🖐🏽 E1.0 hand with fingers splayed: medium skin tone
-1F590 1F3FE                                            ; fully-qualified     # 🖐🏾 E1.0 hand with fingers splayed: medium-dark skin tone
-1F590 1F3FF                                            ; fully-qualified     # 🖐🏿 E1.0 hand with fingers splayed: dark skin tone
 270B                                                   ; fully-qualified     # ✋ E0.6 raised hand
-270B 1F3FB                                             ; fully-qualified     # ✋🏻 E1.0 raised hand: light skin tone
-270B 1F3FC                                             ; fully-qualified     # ✋🏼 E1.0 raised hand: medium-light skin tone
-270B 1F3FD                                             ; fully-qualified     # ✋🏽 E1.0 raised hand: medium skin tone
-270B 1F3FE                                             ; fully-qualified     # ✋🏾 E1.0 raised hand: medium-dark skin tone
-270B 1F3FF                                             ; fully-qualified     # ✋🏿 E1.0 raised hand: dark skin tone
 1F596                                                  ; fully-qualified     # 🖖 E1.0 vulcan salute
-1F596 1F3FB                                            ; fully-qualified     # 🖖🏻 E1.0 vulcan salute: light skin tone
-1F596 1F3FC                                            ; fully-qualified     # 🖖🏼 E1.0 vulcan salute: medium-light skin tone
-1F596 1F3FD                                            ; fully-qualified     # 🖖🏽 E1.0 vulcan salute: medium skin tone
-1F596 1F3FE                                            ; fully-qualified     # 🖖🏾 E1.0 vulcan salute: medium-dark skin tone
-1F596 1F3FF                                            ; fully-qualified     # 🖖🏿 E1.0 vulcan salute: dark skin tone
 1FAF1                                                  ; fully-qualified     # 🫱 E14.0 rightwards hand
-1FAF1 1F3FB                                            ; fully-qualified     # 🫱🏻 E14.0 rightwards hand: light skin tone
-1FAF1 1F3FC                                            ; fully-qualified     # 🫱🏼 E14.0 rightwards hand: medium-light skin tone
-1FAF1 1F3FD                                            ; fully-qualified     # 🫱🏽 E14.0 rightwards hand: medium skin tone
-1FAF1 1F3FE                                            ; fully-qualified     # 🫱🏾 E14.0 rightwards hand: medium-dark skin tone
-1FAF1 1F3FF                                            ; fully-qualified     # 🫱🏿 E14.0 rightwards hand: dark skin tone
 1FAF2                                                  ; fully-qualified     # 🫲 E14.0 leftwards hand
-1FAF2 1F3FB                                            ; fully-qualified     # 🫲🏻 E14.0 leftwards hand: light skin tone
-1FAF2 1F3FC                                            ; fully-qualified     # 🫲🏼 E14.0 leftwards hand: medium-light skin tone
-1FAF2 1F3FD                                            ; fully-qualified     # 🫲🏽 E14.0 leftwards hand: medium skin tone
-1FAF2 1F3FE                                            ; fully-qualified     # 🫲🏾 E14.0 leftwards hand: medium-dark skin tone
-1FAF2 1F3FF                                            ; fully-qualified     # 🫲🏿 E14.0 leftwards hand: dark skin tone
 1FAF3                                                  ; fully-qualified     # 🫳 E14.0 palm down hand
-1FAF3 1F3FB                                            ; fully-qualified     # 🫳🏻 E14.0 palm down hand: light skin tone
-1FAF3 1F3FC                                            ; fully-qualified     # 🫳🏼 E14.0 palm down hand: medium-light skin tone
-1FAF3 1F3FD                                            ; fully-qualified     # 🫳🏽 E14.0 palm down hand: medium skin tone
-1FAF3 1F3FE                                            ; fully-qualified     # 🫳🏾 E14.0 palm down hand: medium-dark skin tone
-1FAF3 1F3FF                                            ; fully-qualified     # 🫳🏿 E14.0 palm down hand: dark skin tone
 1FAF4                                                  ; fully-qualified     # 🫴 E14.0 palm up hand
-1FAF4 1F3FB                                            ; fully-qualified     # 🫴🏻 E14.0 palm up hand: light skin tone
-1FAF4 1F3FC                                            ; fully-qualified     # 🫴🏼 E14.0 palm up hand: medium-light skin tone
-1FAF4 1F3FD                                            ; fully-qualified     # 🫴🏽 E14.0 palm up hand: medium skin tone
-1FAF4 1F3FE                                            ; fully-qualified     # 🫴🏾 E14.0 palm up hand: medium-dark skin tone
-1FAF4 1F3FF                                            ; fully-qualified     # 🫴🏿 E14.0 palm up hand: dark skin tone
 1FAF7                                                  ; fully-qualified     # 🫷 E15.0 leftwards pushing hand
-1FAF7 1F3FB                                            ; fully-qualified     # 🫷🏻 E15.0 leftwards pushing hand: light skin tone
-1FAF7 1F3FC                                            ; fully-qualified     # 🫷🏼 E15.0 leftwards pushing hand: medium-light skin tone
-1FAF7 1F3FD                                            ; fully-qualified     # 🫷🏽 E15.0 leftwards pushing hand: medium skin tone
-1FAF7 1F3FE                                            ; fully-qualified     # 🫷🏾 E15.0 leftwards pushing hand: medium-dark skin tone
-1FAF7 1F3FF                                            ; fully-qualified     # 🫷🏿 E15.0 leftwards pushing hand: dark skin tone
 1FAF8                                                  ; fully-qualified     # 🫸 E15.0 rightwards pushing hand
-1FAF8 1F3FB                                            ; fully-qualified     # 🫸🏻 E15.0 rightwards pushing hand: light skin tone
-1FAF8 1F3FC                                            ; fully-qualified     # 🫸🏼 E15.0 rightwards pushing hand: medium-light skin tone
-1FAF8 1F3FD                                            ; fully-qualified     # 🫸🏽 E15.0 rightwards pushing hand: medium skin tone
-1FAF8 1F3FE                                            ; fully-qualified     # 🫸🏾 E15.0 rightwards pushing hand: medium-dark skin tone
-1FAF8 1F3FF                                            ; fully-qualified     # 🫸🏿 E15.0 rightwards pushing hand: dark skin tone
-
-# subgroup: hand-fingers-partial
 1F44C                                                  ; fully-qualified     # 👌 E0.6 OK hand
-1F44C 1F3FB                                            ; fully-qualified     # 👌🏻 E1.0 OK hand: light skin tone
-1F44C 1F3FC                                            ; fully-qualified     # 👌🏼 E1.0 OK hand: medium-light skin tone
-1F44C 1F3FD                                            ; fully-qualified     # 👌🏽 E1.0 OK hand: medium skin tone
-1F44C 1F3FE                                            ; fully-qualified     # 👌🏾 E1.0 OK hand: medium-dark skin tone
-1F44C 1F3FF                                            ; fully-qualified     # 👌🏿 E1.0 OK hand: dark skin tone
 1F90C                                                  ; fully-qualified     # 🤌 E13.0 pinched fingers
-1F90C 1F3FB                                            ; fully-qualified     # 🤌🏻 E13.0 pinched fingers: light skin tone
-1F90C 1F3FC                                            ; fully-qualified     # 🤌🏼 E13.0 pinched fingers: medium-light skin tone
-1F90C 1F3FD                                            ; fully-qualified     # 🤌🏽 E13.0 pinched fingers: medium skin tone
-1F90C 1F3FE                                            ; fully-qualified     # 🤌🏾 E13.0 pinched fingers: medium-dark skin tone
-1F90C 1F3FF                                            ; fully-qualified     # 🤌🏿 E13.0 pinched fingers: dark skin tone
 1F90F                                                  ; fully-qualified     # 🤏 E12.0 pinching hand
-1F90F 1F3FB                                            ; fully-qualified     # 🤏🏻 E12.0 pinching hand: light skin tone
-1F90F 1F3FC                                            ; fully-qualified     # 🤏🏼 E12.0 pinching hand: medium-light skin tone
-1F90F 1F3FD                                            ; fully-qualified     # 🤏🏽 E12.0 pinching hand: medium skin tone
-1F90F 1F3FE                                            ; fully-qualified     # 🤏🏾 E12.0 pinching hand: medium-dark skin tone
-1F90F 1F3FF                                            ; fully-qualified     # 🤏🏿 E12.0 pinching hand: dark skin tone
-270C FE0F                                              ; fully-qualified     # ✌️ E0.6 victory hand
 270C                                                   ; unqualified         # ✌ E0.6 victory hand
-270C 1F3FB                                             ; fully-qualified     # ✌🏻 E1.0 victory hand: light skin tone
-270C 1F3FC                                             ; fully-qualified     # ✌🏼 E1.0 victory hand: medium-light skin tone
-270C 1F3FD                                             ; fully-qualified     # ✌🏽 E1.0 victory hand: medium skin tone
-270C 1F3FE                                             ; fully-qualified     # ✌🏾 E1.0 victory hand: medium-dark skin tone
-270C 1F3FF                                             ; fully-qualified     # ✌🏿 E1.0 victory hand: dark skin tone
 1F91E                                                  ; fully-qualified     # 🤞 E3.0 crossed fingers
-1F91E 1F3FB                                            ; fully-qualified     # 🤞🏻 E3.0 crossed fingers: light skin tone
-1F91E 1F3FC                                            ; fully-qualified     # 🤞🏼 E3.0 crossed fingers: medium-light skin tone
-1F91E 1F3FD                                            ; fully-qualified     # 🤞🏽 E3.0 crossed fingers: medium skin tone
-1F91E 1F3FE                                            ; fully-qualified     # 🤞🏾 E3.0 crossed fingers: medium-dark skin tone
-1F91E 1F3FF                                            ; fully-qualified     # 🤞🏿 E3.0 crossed fingers: dark skin tone
 1FAF0                                                  ; fully-qualified     # 🫰 E14.0 hand with index finger and thumb crossed
-1FAF0 1F3FB                                            ; fully-qualified     # 🫰🏻 E14.0 hand with index finger and thumb crossed: light skin tone
-1FAF0 1F3FC                                            ; fully-qualified     # 🫰🏼 E14.0 hand with index finger and thumb crossed: medium-light skin tone
-1FAF0 1F3FD                                            ; fully-qualified     # 🫰🏽 E14.0 hand with index finger and thumb crossed: medium skin tone
-1FAF0 1F3FE                                            ; fully-qualified     # 🫰🏾 E14.0 hand with index finger and thumb crossed: medium-dark skin tone
-1FAF0 1F3FF                                            ; fully-qualified     # 🫰🏿 E14.0 hand with index finger and thumb crossed: dark skin tone
 1F91F                                                  ; fully-qualified     # 🤟 E5.0 love-you gesture
-1F91F 1F3FB                                            ; fully-qualified     # 🤟🏻 E5.0 love-you gesture: light skin tone
-1F91F 1F3FC                                            ; fully-qualified     # 🤟🏼 E5.0 love-you gesture: medium-light skin tone
-1F91F 1F3FD                                            ; fully-qualified     # 🤟🏽 E5.0 love-you gesture: medium skin tone
-1F91F 1F3FE                                            ; fully-qualified     # 🤟🏾 E5.0 love-you gesture: medium-dark skin tone
-1F91F 1F3FF                                            ; fully-qualified     # 🤟🏿 E5.0 love-you gesture: dark skin tone
 1F918                                                  ; fully-qualified     # 🤘 E1.0 sign of the horns
-1F918 1F3FB                                            ; fully-qualified     # 🤘🏻 E1.0 sign of the horns: light skin tone
-1F918 1F3FC                                            ; fully-qualified     # 🤘🏼 E1.0 sign of the horns: medium-light skin tone
-1F918 1F3FD                                            ; fully-qualified     # 🤘🏽 E1.0 sign of the horns: medium skin tone
-1F918 1F3FE                                            ; fully-qualified     # 🤘🏾 E1.0 sign of the horns: medium-dark skin tone
-1F918 1F3FF                                            ; fully-qualified     # 🤘🏿 E1.0 sign of the horns: dark skin tone
 1F919                                                  ; fully-qualified     # 🤙 E3.0 call me hand
-1F919 1F3FB                                            ; fully-qualified     # 🤙🏻 E3.0 call me hand: light skin tone
-1F919 1F3FC                                            ; fully-qualified     # 🤙🏼 E3.0 call me hand: medium-light skin tone
-1F919 1F3FD                                            ; fully-qualified     # 🤙🏽 E3.0 call me hand: medium skin tone
-1F919 1F3FE                                            ; fully-qualified     # 🤙🏾 E3.0 call me hand: medium-dark skin tone
-1F919 1F3FF                                            ; fully-qualified     # 🤙🏿 E3.0 call me hand: dark skin tone
-
-# subgroup: hand-single-finger
 1F448                                                  ; fully-qualified     # 👈 E0.6 backhand index pointing left
-1F448 1F3FB                                            ; fully-qualified     # 👈🏻 E1.0 backhand index pointing left: light skin tone
-1F448 1F3FC                                            ; fully-qualified     # 👈🏼 E1.0 backhand index pointing left: medium-light skin tone
-1F448 1F3FD                                            ; fully-qualified     # 👈🏽 E1.0 backhand index pointing left: medium skin tone
-1F448 1F3FE                                            ; fully-qualified     # 👈🏾 E1.0 backhand index pointing left: medium-dark skin tone
-1F448 1F3FF                                            ; fully-qualified     # 👈🏿 E1.0 backhand index pointing left: dark skin tone
 1F449                                                  ; fully-qualified     # 👉 E0.6 backhand index pointing right
-1F449 1F3FB                                            ; fully-qualified     # 👉🏻 E1.0 backhand index pointing right: light skin tone
-1F449 1F3FC                                            ; fully-qualified     # 👉🏼 E1.0 backhand index pointing right: medium-light skin tone
-1F449 1F3FD                                            ; fully-qualified     # 👉🏽 E1.0 backhand index pointing right: medium skin tone
-1F449 1F3FE                                            ; fully-qualified     # 👉🏾 E1.0 backhand index pointing right: medium-dark skin tone
-1F449 1F3FF                                            ; fully-qualified     # 👉🏿 E1.0 backhand index pointing right: dark skin tone
 1F446                                                  ; fully-qualified     # 👆 E0.6 backhand index pointing up
 1F446 1F3FB                                            ; fully-qualified     # 👆🏻 E1.0 backhand index pointing up: light skin tone
 1F446 1F3FC                                            ; fully-qualified     # 👆🏼 E1.0 backhand index pointing up: medium-light skin tone

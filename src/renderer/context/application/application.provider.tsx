@@ -25,9 +25,10 @@ export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
 
   // Restore app configuration
   useEffect(() => {
-    if (!database) {
+    if (!database || !database.objectStoreNames.contains(IndexedDbStore.Config)) {
       return;
     }
+
     const transaction = database.transaction([IndexedDbStore.Config], 'readonly');
     const request = transaction.objectStore(IndexedDbStore.Config).openCursor();
 

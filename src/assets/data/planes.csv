@@ -1,0 +1,17 @@
+0000..FFFF;Basic Multilingual Plane;BMF
+10000..1FFFF;Supplementary Multilingual Plane;SMP
+20000..2FFFF;Supplementary Ideographic Plane;SIP
+30000..3FFFF;Tertiary Ideographic Plane;TIP
+40000..4FFFF;Unassigned
+50000..5FFFF;Unassigned
+60000..6FFFF;Unassigned
+70000..7FFFF;Unassigned
+80000..8FFFF;Unassigned
+90000..9FFFF;Unassigned
+A0000..AFFFF;Unassigned
+B0000..BFFFF;Unassigned
+C0000..CFFFF;Unassigned
+D0000..DFFFF;Unassigned
+E0000..EFFFF;Supplementary Special-purpose Plane;SSP
+F0000..FFFFF;Supplementary Private Use Area planes;PUA
+100000..10FFFF;Supplementary Private Use Area planes;PUA

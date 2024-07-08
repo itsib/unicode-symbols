@@ -12,6 +12,7 @@ import { FormControlOption } from '../../types/form/form-control-option';
 import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
 import { useLog } from '../../hooks/use-log';
+import { useIdbBlockSelectorOptions } from '../../hooks/indexed-db/use-idb-block-selector-options';
 
 const OPTIONS: FormControlOption<number>[] = [
   {
@@ -35,9 +36,12 @@ const OPTIONS: FormControlOption<number>[] = [
 export const SearchPage: FC = () => {
   const size = useSize('search-page-grid-container');
   const [iconSize] = useAppConfig(AppConfigKey.IconSize);
+
   const [search, setSearch] = useState('');
   const [block, setBlock] = useState<number | null>(1);
+
   const foundCodes = useIdbSearchSymbol(search);
+  const options = useIdbBlockSelectorOptions();
 
   const [gridProps, setGridProps] = useState<Omit<FixedSizeGridProps, 'children'> | null>(null);
   const [active, setActive] = useState<{ code: number } | null>(null);
@@ -81,7 +85,8 @@ export const SearchPage: FC = () => {
       width: size.width,
       itemKey: ({ columnIndex, data, rowIndex }) => {
         const index = (data.columnCount * rowIndex) + columnIndex;
-        return data.foundCodes[index];
+        const code = data.foundCodes[index];
+        return code ? code : `${columnIndex}-${rowIndex}`;
       },
     });
   }, [size, foundCodes, iconSize]);
@@ -99,7 +104,7 @@ export const SearchPage: FC = () => {
               id="search-input"
               name="search"
               type="search"
-              label="Search..."
+              label="Search by name or code"
               value={search}
               onChange={setSearch}
             />
@@ -109,10 +114,10 @@ export const SearchPage: FC = () => {
             <FormControlSelect<number>
               id="block-selector"
               name="block"
-              label="Symbols range block"
+              label="Choose the section of unicode"
               value={block}
               onChange={setBlock}
-              options={OPTIONS}
+              options={options}
             />
           </div>
 
@@ -120,8 +125,11 @@ export const SearchPage: FC = () => {
       </div>
 
       <div className="page-content">
-        <div id="search-page-grid-container" className="container"
-             style={{ '--symbol-cell-size': `${iconSize}px` } as CSSProperties}>
+        <div
+          id="search-page-grid-container"
+          className="container"
+          style={{ '--symbol-cell-size': `${iconSize}px` } as CSSProperties}
+        >
           {size && gridProps ? (
             <Grid itemData={itemDataRef.current} {...gridProps}>{SymbolCell}</Grid>
           ) : null}

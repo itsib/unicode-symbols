@@ -47,7 +47,7 @@ export function FormControlSelect<T extends number | string>(props: IFormControl
       <div className={`control ${error ? 'is-error' : ''}`} ref={ref} onClick={onClick}>
         <input id={id} name={name} readOnly/>
 
-        <svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
+        <svg className="icon" height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
           <path d="M14,5l-6,6l-6,-6" stroke="currentColor" fill="transparent" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </div>
