@@ -1,7 +1,7 @@
 import React, { CSSProperties, FC, useEffect, useRef, useState } from 'react';
 import { useSize } from '../../hooks/use-size';
 import { FixedSizeGrid as Grid, FixedSizeGridProps } from 'react-window';
-import { ISymbolCell, SymbolCell } from '../../components/symbol-cell/symbol-cell';
+import { ISymbolCell, SymbolGridCell } from '../../components/symbol-grid-cell/symbol-grid-cell';
 import { getMinSymbolWidth } from '../../utils/get-min-symbol-width';
 import { SCROLL_THUMB_WIDTH, SYMBOL_ITEM_ASPECT_RATIO } from '../../constants/common';
 import { ModalCreateSymbol } from '../../components/modal-create-symbol/modal-create-symbol';
@@ -110,7 +110,7 @@ export const SearchPage: FC = () => {
           style={{ '--symbol-cell-size': `${iconSize}px` } as CSSProperties}
         >
           {size && gridProps ? (
-            <Grid itemData={itemDataRef.current} {...gridProps}>{SymbolCell}</Grid>
+            <Grid itemData={itemDataRef.current} {...gridProps}>{SymbolGridCell}</Grid>
           ) : null}
         </div>
 

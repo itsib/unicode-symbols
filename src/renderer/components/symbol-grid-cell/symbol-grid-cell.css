@@ -2,7 +2,7 @@
   --symbol-cell-size: 36px;
 }
 
-.symbol-cell {
+.symbol-grid-cell {
   display: flex;
   align-items: center;
   justify-content: center;

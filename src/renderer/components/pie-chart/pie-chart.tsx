@@ -40,6 +40,7 @@ export const PieChart: FC<IPieChart> = ({ size = 58, percent = 0, ...props }) =>
         strokeWidth="8"
         style={{ 'stroke': 'var(--pie-chart-fill-active)' }}
       />
+      <text fill="rgb(var(--text-primary))" y="25px" x="25px" alignmentBaseline="middle" textAnchor="middle" fontSize="10px">{+percent.toFixed(2)}%</text>
     </svg>
   );
 };

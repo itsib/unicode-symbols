@@ -87,7 +87,7 @@
 
           .pie-chard {
             --pie-chart-fill-active: rgb(var(--accent));
-            --pie-chart-fill-bg: rgb(var(--input-bg));
+            --pie-chart-fill-bg: rgb(var(--form-control-bg));
 
             & > * {
               display: block;

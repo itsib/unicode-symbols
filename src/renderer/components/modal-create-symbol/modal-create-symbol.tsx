@@ -2,7 +2,6 @@ import { FC, useEffect, useRef } from 'react';
 import { BtnCopy } from '../btn-copy/btn-copy';
 import Modal, { ModalProps } from '../modal/modal';
 import { useIdbGetSymbol } from '../../hooks/indexed-db/use-idb-get-symbol';
-import CloseIcon from '../../../assets/images/close.svg';
 import { ImgClose } from '../images/img-close';
 
 export interface IModalCreateSymbol extends ModalProps {

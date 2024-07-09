@@ -5,7 +5,7 @@ import { useSize } from '../../hooks/use-size';
 import { FixedSizeGrid as Grid, FixedSizeGridProps } from 'react-window';
 import { SCROLL_THUMB_WIDTH, SYMBOL_ITEM_ASPECT_RATIO } from '../../constants/common';
 import { ModalCreateSymbol } from '../../components/modal-create-symbol/modal-create-symbol';
-import { ISymbolCell, SymbolCell } from '../../components/symbol-cell/symbol-cell';
+import { ISymbolCell, SymbolGridCell } from '../../components/symbol-grid-cell/symbol-grid-cell';
 import { getMinSymbolWidth } from '../../utils/get-min-symbol-width';
 import { AppConfigKey } from '@app-context';
 import { useGetSymbolsByMenu } from '../../hooks/indexed-db/use-get-symbols-by-menu';
@@ -34,7 +34,6 @@ export const SymbolsPage: FC = () => {
       return data.codes[index];
     },
   });
-
 
   useEffect(() => {
     if (!isReady || !size || !size.height || !size.width) {
@@ -76,7 +75,7 @@ export const SymbolsPage: FC = () => {
       <div className="page-content">
         <div id="symbols-page-grid-container" className="container" style={{ '--symbol-cell-size': `${iconSize}px` } as CSSProperties}>
           {size && gridProps ? (
-            <Grid itemData={itemDataRef.current} {...gridProps}>{SymbolCell}</Grid>
+            <Grid itemData={itemDataRef.current} {...gridProps}>{SymbolGridCell}</Grid>
           ) : null}
         </div>
       </div>

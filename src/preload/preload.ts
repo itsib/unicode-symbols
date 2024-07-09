@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { IndexedDb } from './indexed-db/indexed-db';
 
 const INDEXED_DB_NAME = 'UnicodeSymbols';
-const INDEXED_DB_VERSION = 2;
+const INDEXED_DB_VERSION = 3;
 
 contextBridge.exposeInMainWorld('appAPI', {
   /**

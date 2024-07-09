@@ -84,7 +84,7 @@ export async function dbInitialisation(event: IpcMainEvent, filesDir: string): P
 
     await sendLineByLine(path.join(filesDir, 'blocks.csv'), { context: 'blocks', port: port1 });
 
-    await sendLineByLine(path.join(filesDir, 'symbol-names.csv'), { context: 'symbols', port: port1 });
+    await sendLineByLine(path.join(filesDir, 'names.csv'), { context: 'symbols', port: port1 });
 
     await sendLineByLine(path.join(filesDir, 'emoji.csv'), { context: 'emoji', port: port1, skipComments: false });
 

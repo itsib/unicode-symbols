@@ -23,7 +23,7 @@ export default defineConfig((env) => {
     plugins: [
       pluginExposeRenderer(name),
       pluginAttachToAssets([
-        'src/assets/data/symbol-names.csv',
+        'src/assets/data/names.csv',
         'src/assets/data/blocks.csv',
         'src/assets/data/planes.csv',
         'src/assets/data/emoji.csv',

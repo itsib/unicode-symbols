@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { ModalCreateSymbol } from '../../components/modal-create-symbol/modal-create-symbol';
 import { useSize } from '../../hooks/use-size';
 import { SCROLL_THUMB_WIDTH, SYMBOL_ITEM_ASPECT_RATIO } from '../../constants/common';
-import { ISymbolCell, SymbolCell } from '../../components/symbol-cell/symbol-cell';
+import { ISymbolCell, SymbolGridCell } from '../../components/symbol-grid-cell/symbol-grid-cell';
 import { getMinSymbolWidth } from '../../utils/get-min-symbol-width';
 import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
@@ -65,7 +65,7 @@ export const CreatePage: FC = () => {
       <div className="page-content">
         <div id="create-page-grid-container" className="container" style={{ '--symbol-cell-size': `${iconSize}px` } as CSSProperties}>
           {size && gridProps ? (
-            <Grid itemData={itemDataRef.current} {...gridProps}>{SymbolCell}</Grid>
+            <Grid itemData={itemDataRef.current} {...gridProps}>{SymbolGridCell}</Grid>
           ) : null}
         </div>
       </div>

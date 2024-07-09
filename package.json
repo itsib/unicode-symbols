@@ -1,5 +1,5 @@
 {
-  "version": "1.0.5",
+  "version": "1.0.6",
   "name": "unicode-symbols",
   "description": "Browse and search for non-standard unicode symbols",
   "author": "Sergey <itsib.su@gmail.com>",
@@ -11,7 +11,7 @@
     "package": "electron-forge package",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "setup": "sudo dpkg -i out/make/deb/x64/unicode-symbols_1.0.4_amd64.deb"
+    "setup": "./install.sh"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
