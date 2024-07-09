@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
-import BackIcon from '../../../assets/images/back.svg';
 import { Link } from 'react-router-dom';
 import { FormControlSlider } from '../../components/forms';
 import { StorageUsage } from '@app-types';
 import { PieChart } from '../../components/pie-chart/pie-chart';
 import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
+import { ImgBack } from '../../components/images/img-back';
+import { ImgResource } from '../../components/images/img-resource';
 
 export const SettingsPage: FC = () => {
   const [iconSize, setIconSize] = useAppConfig(AppConfigKey.IconSize);
@@ -37,7 +38,7 @@ export const SettingsPage: FC = () => {
     <div className="settings-page">
       <div className="container">
         <Link to="/" className="back-link">
-          <img src={BackIcon} alt="Back icon" className="icon" />
+          <ImgBack className="icon" />
           <span>Settings</span>
         </Link>
 

@@ -1,10 +1,8 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { IndexedDb } from './indexed-db/indexed-db';
 
-const INDEXED_DB_CONFIG = {
-  name: 'UnicodeSymbols',
-  version: 2,
-}
+const INDEXED_DB_NAME = 'UnicodeSymbols';
+const INDEXED_DB_VERSION = 2;
 
 contextBridge.exposeInMainWorld('appAPI', {
   /**
@@ -31,27 +29,32 @@ contextBridge.exposeInMainWorld('appAPI', {
     };
   },
   /**
-   * IndexedDB configuration
+   * IndexedDB store name
    */
-  INDEXED_DB_CONFIG,
+  INDEXED_DB_NAME,
+  /**
+   * IndexedDB model version
+   */
+  INDEXED_DB_VERSION,
 });
 
 (async function init() {
-  const dataBase = IndexedDb.get(INDEXED_DB_CONFIG.name, INDEXED_DB_CONFIG.version);
+  const dataBase = IndexedDb.get(INDEXED_DB_NAME, INDEXED_DB_VERSION);
   if (await dataBase.checkInit()) {
     await dataBase.close();
     return;
   }
 
-  ipcRenderer.emit('main-loading', null, { isLoading: true });
+  ipcRenderer.emit('db-state', null, { state: 'init-start' });
 
   ipcRenderer.once('port', event => {
     const port = event.ports[0] as MessagePort;
     let disabled = false;
+    let lastContext: string = null;
 
     port.onmessageerror = (error) => {
       console.log(error);
-      ipcRenderer.emit('main-loading', null, { isLoading: false });
+      ipcRenderer.emit('db-state', null, { state: 'init-error', data: error });
     }
 
     port.onmessage = (messageEvent) => {
@@ -63,17 +66,20 @@ contextBridge.exposeInMainWorld('appAPI', {
         case 'error':
           disabled = true;
           dataBase.close();
-          ipcRenderer.emit('main-loading', null, { isLoading: false });
+          ipcRenderer.emit('db-state', null, { state: 'init-error', data });
           console.error(data);
           break;
         case 'close':
           disabled = true;
           dataBase.close();
-          ipcRenderer.emit('main-loading', null, { isLoading: false });
+          ipcRenderer.emit('db-state', null, { state: 'init-complete' });
           break;
         case 'data':
           if (!disabled) {
-            ipcRenderer.emit('main-loading', null, { isLoading: true });
+            if (!lastContext || context !== lastContext) {
+              ipcRenderer.emit('db-state', null, { state: 'init-process', data: context });
+              lastContext = context;
+            }
 
             dataBase.parseAndSave(context, data).then(() => ipcRenderer.send('read-next-line'));
           }

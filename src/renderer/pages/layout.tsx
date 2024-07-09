@@ -2,6 +2,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { LottiePlayer } from '../components/lottie-player/lottie-player';
 import initializationAnimation from '../../assets/animations/initialization.json'
+import { useIdbReady } from '../hooks/indexed-db/use-idb-ready';
 
 const DURATION = 400;
 
@@ -9,13 +10,8 @@ export const Layout: FC = () => {
   const navigate = useNavigate();
   const backdropRef = useRef<HTMLDivElement>();
   const mainRef = useRef<HTMLDivElement>();
-  const [loading, setLoading] = useState(false);
+  const loading = !useIdbReady();
   const loadingRef = useRef(loading);
-
-  // Listen loading flag change
-  useEffect(() => {
-    return window.appAPI.on<{ isLoading: boolean }>('main-loading', ({ isLoading }) => setLoading(isLoading));
-  }, []);
 
   // Manage display animation
   useEffect(() => {

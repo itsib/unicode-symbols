@@ -25,6 +25,9 @@ export default defineConfig((env) => {
       pluginAttachToAssets([
         'src/assets/data/symbol-names.csv',
         'src/assets/data/blocks.csv',
+        'src/assets/data/planes.csv',
+        'src/assets/data/emoji.csv',
+        'src/assets/images',
       ]),
     ],
     resolve: {

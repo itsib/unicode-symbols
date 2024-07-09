@@ -2,13 +2,15 @@ import { useIdbInstance } from './use-idb-instance';
 import { useEffect, useState } from 'react';
 import { IndexedDbStore } from '@app-context';
 import { IdbMenuItem, LeftMenuItem } from '@app-types';
+import { useIdbReady } from './use-idb-ready';
 
 export function useIdbLeftMenu(): LeftMenuItem[] {
   const database = useIdbInstance();
+  const isReady = useIdbReady();
   const [menuItems, setMenuItems] = useState<LeftMenuItem[]>([]);
 
   useEffect(() => {
-    if (!database) {
+    if (!database || !isReady) {
       return setMenuItems([]);
     }
 
@@ -50,7 +52,7 @@ export function useIdbLeftMenu(): LeftMenuItem[] {
         transaction.abort();
       }
     };
-  }, [database]);
+  }, [database, isReady]);
 
   return menuItems;
 }

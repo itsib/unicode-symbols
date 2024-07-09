@@ -186,6 +186,17 @@ hr {
   }
 }
 
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  background-color: rgb(var(--black) / 100%);
+}
+
+@keyframes pulse {
+  50% {
+    opacity: .5;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -209,3 +220,4 @@ hr {
 ::-webkit-scrollbar-corner {
   display: none;
 }
+

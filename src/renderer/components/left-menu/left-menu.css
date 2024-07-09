@@ -15,9 +15,11 @@
   }
 
   .btn-menu-item {
-    height: 44px;
+    height: 48px;
     width: 100%;
     color: rgb(var(--text-primary));
+    font-family: inherit;
+    font-weight: 600;
     display: flex;
     align-items: center;
     transition: all .2s ease-in-out;
@@ -28,7 +30,7 @@
       line-height: 0;
 
       .icon {
-        height: 22px;
+        height: 26px;
         width: auto;
       }
     }
@@ -48,6 +50,20 @@
       &:hover {
         background-color: color-mix(in srgb, rgb(var(--accent)) 95%, rgb(var(--text-primary)) 5%);
       }
+    }
+  }
+
+  .preloader {
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .item {
+      width: auto;
+      height: 36px;
+      border-radius: 6px;
+      background-color: rgb(var(--black) / 0.3);
     }
   }
 }

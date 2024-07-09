@@ -3,7 +3,8 @@
 
 declare global {
   export interface AppApi {
-    INDEXED_DB_CONFIG: { name: string; version: number },
+    INDEXED_DB_NAME: string,
+    INDEXED_DB_VERSION: number,
     on<TData = void>(eventName: string, callback: (data: TData) => void): () => void;
     copyText(text: string): void;
     showContextMenu(meta?: any): void;
@@ -66,7 +67,7 @@ export type TSymbol = TSymbolSingle | TSymbolRange | TSymbolSpecial;
 export interface CategoryOfSymbols {
   id: number,
   name: string,
-  icon: ReactNode,
+  icon?: ReactNode,
   color: boolean;
   chars: TSymbol[];
 }

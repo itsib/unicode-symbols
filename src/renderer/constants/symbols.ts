@@ -1,15 +1,3 @@
-import AnimalsIcon from '../../assets/images/animals.svg';
-import ArrowsIcon from '../../assets/images/arrows.svg';
-import SpecialCharacterIcon from '../../assets/images/special-character.svg';
-import PictogramsIcon from '../../assets/images/pictograms.svg';
-import FoodIcon from '../../assets/images/food.svg';
-import LettersIcon from '../../assets/images/letters.svg';
-import MathIcon from '../../assets/images/math.svg';
-import NumbersIcon from '../../assets/images/numbers.svg';
-import OtherIcon from '../../assets/images/other-signs.svg';
-import SmilesIcon from '../../assets/images/smiles.svg';
-import FinanceIcon from '../../assets/images/finance.svg';
-import InterfaceIcon from '../../assets/images/interface.svg';
 import { CategoryOfSymbols } from '../types';
 
 export const SYMBOLS: CategoryOfSymbols[] = [
@@ -17,7 +5,6 @@ export const SYMBOLS: CategoryOfSymbols[] = [
     id: 1,
     name: 'Smiles & People',
     color: true,
-    icon: SmilesIcon,
     chars: [
       { type: 'range', begin: 0x1f600, end: 0x1f64f, name: '' },
       { type: 'range', begin: 0x1F440, end: 0x1F450, name: '' },
@@ -37,7 +24,6 @@ export const SYMBOLS: CategoryOfSymbols[] = [
   {
     id: 2,
     name: 'Animals & Nature',
-    icon: AnimalsIcon,
     color: true,
     chars: [
       { type: 'range', begin: 0x1F331, end: 0x1F344, name: '' },
@@ -48,7 +34,6 @@ export const SYMBOLS: CategoryOfSymbols[] = [
   {
     id: 3,
     name: 'Food & Drink',
-    icon: FoodIcon,
     color: true,
     chars: [
       { type: 'range', begin: 0x1F32D, end: 0x1F330, name: '' },
@@ -59,7 +44,6 @@ export const SYMBOLS: CategoryOfSymbols[] = [
   {
     id: 4,
     name: 'Interface',
-    icon: InterfaceIcon,
     color: true,
     chars: [
       { type: 'range', begin: 0x1F4BD, end: 0x1F4CB, name: '' },
@@ -86,7 +70,6 @@ export const SYMBOLS: CategoryOfSymbols[] = [
   {
     id: 5,
     name: 'The Letters',
-    icon: LettersIcon,
     color: false,
     chars: [
       { type: 'range', begin: 8448, end: 8527, name: '' },
@@ -96,7 +79,6 @@ export const SYMBOLS: CategoryOfSymbols[] = [
   {
     id: 6,
     name: 'Numbers',
-    icon: NumbersIcon,
     color: false,
     chars: [
       { type: 'range', begin: 8528, end: 8543, name: '' },
@@ -107,7 +89,6 @@ export const SYMBOLS: CategoryOfSymbols[] = [
   {
     id: 7,
     name: 'Finance',
-    icon: FinanceIcon,
     color: true,
     chars: [
       { type: 'range', begin: 0x1F4B0, end: 0x1F4B9, name: '' },
@@ -120,7 +101,6 @@ export const SYMBOLS: CategoryOfSymbols[] = [
   {
     id: 8,
     name: 'Math Operators',
-    icon: MathIcon,
     color: false,
     chars: [
       { type: 'range', begin: 8864, end: 8959, name: '' },
@@ -129,7 +109,6 @@ export const SYMBOLS: CategoryOfSymbols[] = [
   {
     id: 9,
     name: 'Arrows',
-    icon: ArrowsIcon,
     color: false,
     chars: [
       { type: 'range', begin: 8592, end: 8703, name: '' },
@@ -143,7 +122,6 @@ export const SYMBOLS: CategoryOfSymbols[] = [
   {
     id: 10,
     name: 'Symbols & Pictograms',
-    icon: PictogramsIcon,
     color: true,
     chars: [
       { type: 'range', begin: 0x1F300, end: 0x1F32C, name: '' },
@@ -167,7 +145,6 @@ export const SYMBOLS: CategoryOfSymbols[] = [
   {
     id: 11,
     name: 'Other Signs',
-    icon: OtherIcon,
     color: false,
     chars: [
       { type: 'range', begin: 0x2000, end: 0x4000, name: '' },
@@ -182,7 +159,6 @@ export const SYMBOLS: CategoryOfSymbols[] = [
   {
     id: 12,
     name: 'Special Characters',
-    icon: SpecialCharacterIcon,
     color: false,
     chars: [
       { type: 'special', code: 0x2000, mnemonic: 'NQSP', name: 'En Quad' },

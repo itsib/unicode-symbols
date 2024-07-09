@@ -1,14 +1,19 @@
-import { FC, PropsWithChildren, useEffect, useState } from 'react';
+import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { IndexedDbContext } from './indexed-db.context';
 import { IDBExtractError } from '../../utils/indexed-db';
 
 export const IndexedDbProvider: FC<PropsWithChildren> = ({ children }) => {
   const [database, setDatabase] = useState<IDBDatabase | null>(null);
+  const [isReady, setIsReady] = useState(true);
+
+  const dropIndexedDb = useCallback(() => {
+    indexedDB.deleteDatabase(window.appAPI.INDEXED_DB_NAME);
+    window.location.reload();
+  }, []);
 
   // Create IndexedDB instance
   useEffect(() => {
-    const { name, version } = window.appAPI.INDEXED_DB_CONFIG
-    const request = indexedDB.open(name, version);
+    const request = indexedDB.open(window.appAPI.INDEXED_DB_NAME, window.appAPI.INDEXED_DB_VERSION);
 
     request.onerror = error => {
       console.error(IDBExtractError(error));
@@ -19,12 +24,24 @@ export const IndexedDbProvider: FC<PropsWithChildren> = ({ children }) => {
   // Delete database
   useEffect(() => {
     return window.appAPI.on<{ isLoading: boolean }>('drop-idb', () => {
-      indexedDB.deleteDatabase(window.appAPI.INDEXED_DB_CONFIG.name);
+      dropIndexedDb();
     });
-  }, [database]);
+  }, [database, dropIndexedDb]);
+
+  // Delete database
+  useEffect(() => {
+    return window.appAPI.on<{ state: string, data: any }>('db-state', event => {
+      if (['init-start', 'init-process'].includes(event.state)) {
+        setIsReady(false);
+      } else if (event.state === 'init-complete') {
+        setIsReady(true);
+      }
+      console.log(event);
+    });
+  }, [database, dropIndexedDb]);
 
   return (
-    <IndexedDbContext.Provider value={{ database }}>
+    <IndexedDbContext.Provider value={{ isReady, database, dropIndexedDb }}>
       {children}
     </IndexedDbContext.Provider>
   )

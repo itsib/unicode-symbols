@@ -2,9 +2,11 @@ import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { AppConfig, AppConfigKey, APPLICATION_CONTEXT_DEFAULT, ApplicationContext } from './application.context';
 import { useIdbInstance } from '../../hooks/indexed-db/use-idb-instance';
 import { IndexedDbStore } from '../indexed-db/indexed-db.context';
+import { useIdbReady } from '../../hooks/indexed-db/use-idb-ready';
 
 export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
   const database = useIdbInstance();
+  const isReady = useIdbReady();
   const [configValue, setConfigValue] = useState<{ [ Key in AppConfigKey ]: AppConfig<Key> }>(APPLICATION_CONTEXT_DEFAULT.config);
 
   const setConfig = useCallback(function <K extends AppConfigKey, T extends AppConfig<K>>(key: K, value: T) {
@@ -25,7 +27,7 @@ export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
 
   // Restore app configuration
   useEffect(() => {
-    if (!database || !database.objectStoreNames.contains(IndexedDbStore.Config)) {
+    if (!isReady || !database || !database.objectStoreNames.contains(IndexedDbStore.Config)) {
       return;
     }
 
@@ -44,7 +46,7 @@ export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
     };
 
     transaction.onerror = error => console.error(error);
-  }, [database]);
+  }, [database, isReady]);
 
   // Manage context menu
   useEffect(() => {

@@ -35,7 +35,6 @@ export function createMenu(mainWindow: BrowserWindow) {
           label: 'Delete DB',
           click: async () => {
             mainWindow.webContents.send('drop-idb');
-            mainWindow.webContents.reload();
           },
         },
         { type: 'separator' },
