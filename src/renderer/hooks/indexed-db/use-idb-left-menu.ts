@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { IndexedDbStore } from '@app-context';
 import { IdbMenuItem, LeftMenuItem } from '@app-types';
 import { useIdbReady } from './use-idb-ready';
+import { showIdbError } from '../../utils/indexed-db';
 
 export function useIdbLeftMenu(): LeftMenuItem[] {
   const database = useIdbInstance();
@@ -41,10 +42,7 @@ export function useIdbLeftMenu(): LeftMenuItem[] {
 
     transaction.onerror = error => {
       finished = true;
-      if ((error.target as IDBRequest).error.name !== 'AbortError') {
-        console.error((error.target as IDBRequest).error.message)
-      }
-
+      showIdbError(error);
     };
 
     return () => {

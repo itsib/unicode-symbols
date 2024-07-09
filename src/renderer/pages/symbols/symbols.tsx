@@ -4,7 +4,7 @@ import { useAppConfig } from '../../hooks/use-app-config';
 import { useSize } from '../../hooks/use-size';
 import { FixedSizeGrid as Grid, FixedSizeGridProps } from 'react-window';
 import { SCROLL_THUMB_WIDTH, SYMBOL_ITEM_ASPECT_RATIO } from '../../constants/common';
-import { ModalCreateSymbol } from '../../components/modal-create-symbol/modal-create-symbol';
+import { ModalManageSymbol } from '../../components/modal-manage-symbol/modal-manage-symbol';
 import { ISymbolCell, SymbolGridCell } from '../../components/symbol-grid-cell/symbol-grid-cell';
 import { getMinSymbolWidth } from '../../utils/get-min-symbol-width';
 import { AppConfigKey } from '@app-context';
@@ -80,7 +80,7 @@ export const SymbolsPage: FC = () => {
         </div>
       </div>
 
-      <ModalCreateSymbol isOpen={!!active} code={active?.code} onDismiss={() => setActive(null)} />
+      <ModalManageSymbol isOpen={!!active} code={active?.code} onDismiss={() => setActive(null)} />
     </div>
   );
 };

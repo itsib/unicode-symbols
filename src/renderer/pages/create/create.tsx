@@ -3,7 +3,7 @@ import { FixedSizeGrid as Grid, FixedSizeGridProps } from 'react-window';
 import { FormCreateRange } from '../../components/form-create-range/form-create-range';
 import { TSymbolRange } from '../../types';
 import { useNavigate } from 'react-router-dom';
-import { ModalCreateSymbol } from '../../components/modal-create-symbol/modal-create-symbol';
+import { ModalManageSymbol } from '../../components/modal-manage-symbol/modal-manage-symbol';
 import { useSize } from '../../hooks/use-size';
 import { SCROLL_THUMB_WIDTH, SYMBOL_ITEM_ASPECT_RATIO } from '../../constants/common';
 import { ISymbolCell, SymbolGridCell } from '../../components/symbol-grid-cell/symbol-grid-cell';
@@ -70,7 +70,7 @@ export const CreatePage: FC = () => {
         </div>
       </div>
 
-      <ModalCreateSymbol isOpen={!!active} code={active?.code} onDismiss={() => setActive(null)} />
+      <ModalManageSymbol isOpen={!!active} code={active?.code} onDismiss={() => setActive(null)} />
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { AppConfig, AppConfigKey, APPLICATION_CONTEXT_DEFAULT, ApplicationContex
 import { useIdbInstance } from '../../hooks/indexed-db/use-idb-instance';
 import { IndexedDbStore } from '../indexed-db/indexed-db.context';
 import { useIdbReady } from '../../hooks/indexed-db/use-idb-ready';
+import { showIdbError } from '../../utils/indexed-db';
 
 export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
   const database = useIdbInstance();
@@ -22,7 +23,7 @@ export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
       setConfigValue(config => ({ ...config, [key]: value }));
     }
 
-    transaction.onerror = error => console.error(error);
+    transaction.onerror = error => showIdbError(error);
   }, [database]);
 
   // Restore app configuration
@@ -45,7 +46,7 @@ export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
       }
     };
 
-    transaction.onerror = error => console.error(error);
+    transaction.onerror = error => showIdbError(error);
   }, [database, isReady]);
 
   // Manage context menu

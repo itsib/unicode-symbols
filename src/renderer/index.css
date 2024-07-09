@@ -25,6 +25,14 @@
   --border-primary: 199 199 199;
   --divider: 199 199 199;
 
+  /* Skin */
+  --skin-type-0: 255 200 56;
+  --skin-type-1: 252 220 190;
+  --skin-type-2: 228 186 151;
+  --skin-type-3: 190 140 106;
+  --skin-type-4: 170 107 70;
+  --skin-type-5: 114 83 75;
+
   /* Buttons */
   --btn-primary-color: 0 115 229;
   --btn-secondary-color: 235 235 235;

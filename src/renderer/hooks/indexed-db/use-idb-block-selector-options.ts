@@ -3,6 +3,7 @@ import { useIdbInstance } from './use-idb-instance';
 import { FormControlOption } from '../../types/form/form-control-option';
 import { IndexedDbStore } from '@app-context';
 import { IdbBlock } from '@app-types';
+import { showIdbError } from '../../utils/indexed-db';
 
 const FIRST_OPTION: FormControlOption<number> = {
   value: 0,
@@ -40,7 +41,7 @@ export function useIdbBlockSelectorOptions(plane = 1): FormControlOption<number>
 
     transaction.onerror = error => {
       finished = true;
-      console.error(error.target)
+      showIdbError(error);
     };
 
     return () => {

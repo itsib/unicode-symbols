@@ -4,7 +4,7 @@ import { FixedSizeGrid as Grid, FixedSizeGridProps } from 'react-window';
 import { ISymbolCell, SymbolGridCell } from '../../components/symbol-grid-cell/symbol-grid-cell';
 import { getMinSymbolWidth } from '../../utils/get-min-symbol-width';
 import { SCROLL_THUMB_WIDTH, SYMBOL_ITEM_ASPECT_RATIO } from '../../constants/common';
-import { ModalCreateSymbol } from '../../components/modal-create-symbol/modal-create-symbol';
+import { ModalManageSymbol } from '../../components/modal-manage-symbol/modal-manage-symbol';
 import { FormControlInput, FormControlSelect } from '../../components/forms';
 import SearchIcon from '../../../assets/images/search-book.svg';
 import { useIdbSearchSymbol } from '../../hooks/indexed-db/use-idb-search-symbol';
@@ -125,7 +125,7 @@ export const SearchPage: FC = () => {
         ) : null}
       </div>
 
-      <ModalCreateSymbol isOpen={!!active} code={active?.code} onDismiss={() => setActive(null)}/>
+      <ModalManageSymbol isOpen={!!active} code={active?.code} onDismiss={() => setActive(null)}/>
     </div>
   );
 };

@@ -1,3 +1,5 @@
+import { EmojiHandler } from './emoji-handler';
+
 export interface IdbMenuItem {
   /**
    * Menu item ID
@@ -87,6 +89,10 @@ export interface IdbSymbol {
    */
   l: number | undefined;
   /**
+   * Skin color support
+   */
+  s: boolean;
+  /**
    * Keywords for search by name
    */
   k: string[];
@@ -104,18 +110,18 @@ const IGNORE_KEYWORDS = ['SIGN', 'ONE', 'WITH', 'LETTER', 'MARK'];
 
 const DEFAULT_ICON = 'star.svg'
 
-const MENU_ICONS = new Map<number, string>([
-  [1, 'smiles.svg'],
-  [2, 'brain.svg'],
-  [3, 'component.svg'],
-  [4, 'animals.svg'],
-  [5, 'food.svg'],
-  [6, 'airplane.svg'],
-  [7, 'activities.svg'],
-  [8, 'objects.svg'],
-  [9, 'letters.svg'],
-  [10, 'flags.svg'],
-]);
+const MENU_ICONS: Record<number, string> = {
+  [1]: 'smiles.svg',
+  [2]: 'brain.svg',
+  [3]: 'component.svg',
+  [4]: 'animals.svg',
+  [5]: 'food.svg',
+  [6]: 'airplane.svg',
+  [7]: 'activities.svg',
+  [8]: 'objects.svg',
+  [9]: 'letters.svg',
+  [10]: 'flags.svg',
+};
 
 export class IndexedDb {
 
@@ -130,7 +136,7 @@ export class IndexedDb {
 
   private _processedMenu = 0;
 
-  private _processedElements = new Set<number>();
+  private _emojis = new EmojiHandler(30);
 
   private _db: Promise<IDBDatabase>;
 
@@ -218,22 +224,26 @@ export class IndexedDb {
         continue;
       }
       if (line.startsWith('# group:')) {
-        const menuItem = await this._parseMenuItem(line);
+        if (this._processedMenu > 0) {
+          await this._linkMenuToSymbols(this._processedMenu, this._emojis.refund(), this._emojis.getSkinSupport());
+        }
+
+        this._processedMenu += 1;
+
+        const menuItem = await this._parseMenuItem(line, this._processedMenu);
         await this._saveMenuItem(menuItem);
       } else {
-        const codesRaw = line.split(';')[0]?.trim?.();
-        const code = codesRaw?.split(/\s+/)[0]?.trim?.();
+        const clean = line.split('#')[0].trim();
+        const codesString = clean.split(';')[0].trim();
+        if (!codesString)  {
+          continue;
+        }
 
-        if (code) {
-          const id = parseInt(code, 16);
-          if (id && !isNaN(id)) {
-            this._processedElements.add(id);
-
-            if (this._processedElements.size > 30 && this._processedMenu  > 0) {
-              await this._linkMenuToSymbols(this._processedMenu, Array.from(this._processedElements).sort((a, b) => b - a));
-
-              this._processedElements.clear();
-            }
+        const codes = codesString.split(/\s+/).map(code => parseInt(code.trim(), 16));
+        if (codes) {
+          this._emojis.push(codes);
+          if (this._emojis.isFull && this._processedMenu > 0) {
+            await this._linkMenuToSymbols(this._processedMenu, this._emojis.refund(), this._emojis.getSkinSupport());
           }
         }
       }
@@ -338,17 +348,23 @@ export class IndexedDb {
     if (db.objectStoreNames.contains(IdbStoreName.Blocks)) {
       db.deleteObjectStore(IdbStoreName.Blocks);
     }
+    if (db.objectStoreNames.contains(IdbStoreName.Menu)) {
+      db.deleteObjectStore(IdbStoreName.Menu);
+    }
+    if (db.objectStoreNames.contains(IdbStoreName.Planes)) {
+      db.deleteObjectStore(IdbStoreName.Planes);
+    }
   }
 
   private async _getCount(storeName: IdbStoreName): Promise<number> {
-    return new Promise(async (resolve, reject) => {
-      const db = await this._database();
-      const transaction = db!.transaction([storeName], 'readonly');
+    const db = await this._database();
+    const transaction = db!.transaction([storeName], 'readonly');
 
-      const store = transaction.objectStore(storeName);
+    const store = transaction.objectStore(storeName);
 
-      const query = store.count();
+    const query = store.count();
 
+    return new Promise((resolve, reject) => {
       query.onsuccess = () => resolve((query as any)?.result);
 
       query.onerror = error => reject(this._extract(error));
@@ -356,37 +372,40 @@ export class IndexedDb {
   }
 
   private async _saveMenuItem(menuItem: IdbMenuItem): Promise<void> {
-    return new Promise(async (resolve, reject) => {
-      const db = await this._database();
-      const transaction = db!.transaction([IdbStoreName.Menu], 'readwrite');
-      const store = transaction.objectStore(IdbStoreName.Menu);
+    const db = await this._database();
+    const transaction = db!.transaction([IdbStoreName.Menu], 'readwrite');
+    const store = transaction.objectStore(IdbStoreName.Menu);
 
-      store.put(menuItem);
+    store.add(menuItem);
 
+    return new Promise((resolve, reject) => {
       transaction.oncomplete = event => resolve((event.target as any)?.result);
       transaction.onerror = error => reject(this._extract(error));
       transaction.commit();
     });
   }
 
-  private async _linkMenuToSymbols(menuId: number, symbolsIds: number[]): Promise<void> {
-    return new Promise(async (resolve, reject) => {
-      const db = await this._database();
-      const transaction = db!.transaction([IdbStoreName.Symbols], 'readwrite');
-      const store = transaction.objectStore(IdbStoreName.Symbols);
+  private async _linkMenuToSymbols(menuId: number, symbolsIds: number[], skin: Set<number> | undefined): Promise<void> {
+    const db = await this._database();
+    const transaction = db!.transaction([IdbStoreName.Symbols], 'readwrite');
+    const store = transaction.objectStore(IdbStoreName.Symbols);
 
-      let symbolId = symbolsIds.pop();
+    let symbolId = this._getNextKey(symbolsIds);
 
-      const request = store.index('id').openCursor(IDBKeyRange.lowerBound(symbolId, false));
+    const request = store.index('id').openCursor(IDBKeyRange.lowerBound(symbolId, false));
 
+    return new Promise((resolve, reject) => {
       request.onsuccess = event => {
         const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
         if (cursor) {
           if (cursor.value.i === symbolId) {
             cursor.value.l = menuId;
+            cursor.value.s = !!skin && skin.has(cursor.value.i);
+
             cursor.update(cursor.value);
           }
-          symbolId = symbolsIds.pop();
+
+          symbolId = this._getNextKey(symbolsIds, cursor.value.i);
           if (symbolId) {
             cursor.continue(symbolId);
             return;
@@ -401,6 +420,19 @@ export class IndexedDb {
 
   private _extract(error: any): string {
     return (error?.target as any)?.error;
+  }
+
+  private _getNextKey(symbolsIds: number[], min?: number): number | undefined {
+    if (min == null) {
+      return symbolsIds.pop();
+    }
+    let key: number | undefined = undefined;
+    while (true) {
+      key = symbolsIds.pop();
+      if (!key || key > min) {
+        return key;
+      }
+    }
   }
 
   private _parsePlane(line: string): IdbPlane {
@@ -457,25 +489,26 @@ export class IndexedDb {
 
     block = (this._range.count - this._range.values.length) + 1;
 
-    return { i: id, n: name, p: plane, b: block, l: undefined, k: keywords };
+    return {
+      i: id,
+      n: name,
+      p: plane,
+      b: block,
+      l: undefined,
+      s: false,
+      k: keywords,
+    };
   }
 
-  private async _parseMenuItem(line: string): Promise<IdbMenuItem> {
-    const processedId = this._processedMenu;
-    if (processedId && this._processedElements.size > 0) {
-      await this._linkMenuToSymbols(processedId, Array.from(this._processedElements).sort((a, b) => b - a));
-    }
-
-    this._processedElements.clear();
-    this._processedMenu = this._processedMenu + 1;
+  private async _parseMenuItem(line: string, id: number): Promise<IdbMenuItem> {
     const name = line.replace('# group:', '').trim();
-    const icon = MENU_ICONS.get(this._processedMenu) || DEFAULT_ICON;
+    const icon = MENU_ICONS[id] || DEFAULT_ICON;
 
     return {
-      i: this._processedMenu,
+      i: id,
       n: name,
       icon: icon,
-      o: this._processedMenu,
+      o: id,
     }
   }
 }

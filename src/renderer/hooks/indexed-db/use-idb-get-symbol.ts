@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { IdbBlock, IdbSymbol, SymbolMeta } from '@app-types';
 import { IndexedDbStore } from '@app-context';
 import { useIdbInstance } from './use-idb-instance';
+import { formatSymbolName } from '../../utils/format-symbol-name';
+import { showIdbError } from '../../utils/indexed-db';
 
 export function useIdbGetSymbol(id?: number): SymbolMeta | null {
   const database = useIdbInstance();
@@ -42,16 +44,18 @@ export function useIdbGetSymbol(id?: number): SymbolMeta | null {
           code: id,
           name: undefined,
           block: undefined,
+          skinSupport: false,
         });
       }
       setSymbol({
         code: _symbol.i,
-        name: _symbol.n,
+        name: formatSymbolName(_symbol.n),
         block: _symbol.b === _block.i ? _block.n : undefined,
+        skinSupport: _symbol.s,
       });
     };
 
-    transaction.onerror = error => console.error(error);
+    transaction.onerror = error => showIdbError(error);
   }, [database, id]);
 
   return symbol;

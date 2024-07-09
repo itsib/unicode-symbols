@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { IndexedDbContext, IndexedDbStore } from '@app-context';
 import { IdbSymbol } from '@app-types';
+import { showIdbError } from '../../utils/indexed-db';
 
 const MAX_RESULT_ITEMS = 300;
 
@@ -54,7 +55,7 @@ export function useIdbSearchSymbol(search?: string): number[] {
 
     transaction.onerror = error => {
       finished = true;
-      console.error(error.target)
+      showIdbError(error);
     };
 
     return () => {

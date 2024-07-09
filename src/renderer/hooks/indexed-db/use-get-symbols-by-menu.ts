@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { IndexedDbContext, IndexedDbStore } from '@app-context';
 import { IdbSymbol } from '@app-types';
 import { useIdbReady } from './use-idb-ready';
+import { showIdbError } from '../../utils/indexed-db';
 
 export function useGetSymbolsByMenu(link?: number) {
   const isReady = useIdbReady();
@@ -33,9 +34,7 @@ export function useGetSymbolsByMenu(link?: number) {
 
     transaction.onerror = error => {
       finished = true;
-      if ((error.target as IDBRequest).error.name !== 'AbortError') {
-        console.error((error.target as IDBRequest).error.message)
-      }
+      showIdbError(error);
     };
 
     return () => {

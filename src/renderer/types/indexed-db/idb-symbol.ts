@@ -17,4 +17,16 @@ export interface IdbSymbol {
    * Block id includes symbol
    */
   b: number;
+  /**
+   * Left menu link
+   */
+  l: number | undefined;
+  /**
+   * Skin color support
+   */
+  s: boolean;
+  /**
+   * Keywords for search by name
+   */
+  k: string[];
 }

@@ -1,0 +1,117 @@
+.modal-manage-symbol {
+  width: 500px;
+
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .info {
+      margin-bottom: 16px;
+      text-align: center;
+
+      .name {
+        color: rgb(var(--text-primary));
+        font-weight: 600;
+        font-size: 18px;
+      }
+
+      .block-name {
+        margin-top: 8px;
+        color: rgb(var(--text-secondary));
+        font-weight: 400;
+        font-size: 14px;
+      }
+    }
+
+    .symbol {
+      width: 76px;
+      height: 76px;
+      padding: 0;
+      cursor: pointer;
+      color: rgb(var(--text-primary));
+      text-align: center;
+      background-color: transparent;
+      border: 1px dashed transparent;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .1s linear;
+
+      &:hover {
+        border-color: rgb(var(--text-primary) / .3);
+      }
+    }
+
+    .options {
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+
+      .table-codes {
+        font-size: 14px;
+        color: rgb(var(--text-secondary));
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        align-items: center;
+
+        .label {
+          text-align: end;
+        }
+
+        .value {
+          padding: 4px 6px;
+          color: rgb(255 255 255);
+          font-weight: 500;
+          font-family: monospace;
+          white-space: nowrap;
+          background-color: rgb(var(--accent));
+          border-radius: 4px;
+          border: none;
+        }
+      }
+
+      .skin-color-buttons {
+        margin-left: 26px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 10px;
+
+        .btn-skin {
+          width: 26px;
+          height: 26px;
+          border-radius: 50%;
+          background-color: blue;
+
+          &.btn-skin-0 {
+            background-color: rgb(var(--skin-type-0));
+          }
+
+          &.btn-skin-1 {
+            background-color: rgb(var(--skin-type-1));
+          }
+
+          &.btn-skin-2 {
+            background-color: rgb(var(--skin-type-2));
+          }
+
+          &.btn-skin-3 {
+            background-color: rgb(var(--skin-type-3));
+          }
+
+          &.btn-skin-4 {
+            background-color: rgb(var(--skin-type-4));
+          }
+
+          &.btn-skin-5 {
+            background-color: rgb(var(--skin-type-5));
+          }
+        }
+      }
+    }
+  }
+}
