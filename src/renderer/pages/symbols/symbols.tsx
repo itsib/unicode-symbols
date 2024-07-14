@@ -1,70 +1,35 @@
-import React, { CSSProperties, FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { LeftMenu } from '../../components/left-menu/left-menu';
 import { useAppConfig } from '../../hooks/use-app-config';
-import { useSize } from '../../hooks/use-size';
-import { FixedSizeGrid as Grid, FixedSizeGridProps } from 'react-window';
-import { SCROLL_THUMB_WIDTH, SYMBOL_ITEM_ASPECT_RATIO } from '../../constants/common';
-import { ModalManageSymbol } from '../../components/modal-manage-symbol/modal-manage-symbol';
-import { ISymbolCell, SymbolGridCell } from '../../components/symbol-grid-cell/symbol-grid-cell';
-import { getMinSymbolWidth } from '../../utils/get-min-symbol-width';
 import { AppConfigKey } from '@app-context';
 import { useGetSymbolsByMenu } from '../../hooks/indexed-db/use-get-symbols-by-menu';
-import { useIdbReady } from '../../hooks/indexed-db/use-idb-ready';
+import { SymbolsGrid } from '../../components/symbols-grid/symbols-grid';
+import { FormControlInput } from '../../components/forms';
+import { useIdbSearchSymbol } from '../../hooks/indexed-db/use-idb-search-symbol';
+import { ImgClose } from '../../components/images/img-close';
 
 export const SymbolsPage: FC = () => {
-  const isReady = useIdbReady();
+  const ref = useRef(null);
   const [activeCategory] = useAppConfig(AppConfigKey.ActiveCategory);
-  const [iconSize] = useAppConfig(AppConfigKey.IconSize);
-  const size = useSize('symbols-page-grid-container');
+  const [isSearch, setIsSearch] = useState(false);
+  const [search, setSearch] = useState('');
 
-  const codes = useGetSymbolsByMenu(activeCategory);
+  const [favorites] = useAppConfig(AppConfigKey.Favorites);
+  const predefined = useGetSymbolsByMenu(activeCategory);
+  const foundCodes = useIdbSearchSymbol(search);
 
-  const [gridProps, setGridProps] = useState<Omit<FixedSizeGridProps, 'children'> | null>(null);
-  const [active, setActive] = useState<{ code: number } | null>(null);
+  const codes = search ? foundCodes : (activeCategory === 0 ? favorites : predefined);
 
-  const itemDataRef = useRef<ISymbolCell<{ columnCount: number, codes: number[] }>>({
-    columnCount: 0,
-    codes: [],
-    onClick: (code: number) => setActive({ code }),
-    getSymbolCode: (rowIndex: number, columnIndex: number, data: ISymbolCell<{
-      columnCount: number,
-      codes: number[]
-    }>) => {
-      const index = (data.columnCount * rowIndex) + columnIndex;
-      return data.codes[index];
-    },
-  });
 
   useEffect(() => {
-    if (!isReady || !size || !size.height || !size.width) {
-      return;
+    return window.appAPI.on('search', () => setIsSearch(true));
+  }, []);
+
+  useEffect(() => {
+    if (isSearch) {
+      ref.current?.focus?.();
     }
-    const minItemWidth = getMinSymbolWidth(iconSize);
-    const itemHeight = minItemWidth * SYMBOL_ITEM_ASPECT_RATIO;
-
-    const offsetWidth = size.width - SCROLL_THUMB_WIDTH;
-    const columnCount = Math.max(Math.floor(offsetWidth / minItemWidth), 1);
-    const columnWidth = Math.floor((offsetWidth / columnCount) * 100) / 100;
-
-    const rowCount = Math.ceil((codes?.length ?? 0) / columnCount);
-
-    itemDataRef.current.columnCount = columnCount;
-    itemDataRef.current.codes = codes;
-
-    setGridProps({
-      columnCount,
-      columnWidth,
-      height: size.height,
-      rowCount,
-      rowHeight: itemHeight,
-      width: size.width,
-      itemKey: ({ columnIndex, data, rowIndex }) => {
-        const index = (data.columnCount * rowIndex) + columnIndex;
-        const code = data.codes[index];
-        return code ? code : `${columnIndex}-${rowIndex}`;
-      },
-    });
-  }, [codes, size, iconSize, isReady]);
+  }, [isSearch]);
 
   return (
     <div className="symbols-page">
@@ -73,14 +38,26 @@ export const SymbolsPage: FC = () => {
       </div>
 
       <div className="page-content">
-        <div id="symbols-page-grid-container" className="container" style={{ '--symbol-cell-size': `${iconSize}px` } as CSSProperties}>
-          {size && gridProps ? (
-            <Grid itemData={itemDataRef.current} {...gridProps}>{SymbolGridCell}</Grid>
-          ) : null}
-        </div>
-      </div>
+        <div className={`search-wrap ${isSearch ? 'active' : ''}`}>
+          <FormControlInput
+            type="search"
+            id="symbol-serch"
+            placeholder="Search symbol..."
+            value={search}
+            onChange={setSearch}
+            ref={ref}
+          />
 
-      <ModalManageSymbol isOpen={!!active} code={active?.code} onDismiss={() => setActive(null)} />
+          <button className="btn btn-close" onClick={() => {
+            setSearch('');
+            setIsSearch(false);
+          }}>
+            <ImgClose />
+          </button>
+        </div>
+
+        <SymbolsGrid codes={codes} />
+      </div>
     </div>
   );
 };

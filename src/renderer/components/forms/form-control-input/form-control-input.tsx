@@ -1,13 +1,14 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { debounce } from '../../../utils/debounce';
 import { FormControlBaseProps } from '@app-types';
 
 export interface IFormControlInput extends FormControlBaseProps<string> {
   type: string;
+  placeholder?: string;
 }
 
-export const FormControlInput: FC<IFormControlInput> = props => {
-  const { id, name, label, onChange, value, validate, type, debounce: debounceMs = 500, disabled } = props;
+export const FormControlInput = forwardRef((props: IFormControlInput, ref) => {
+  const { id, name, label, onChange, value, validate, type, debounce: debounceMs = 500, disabled, placeholder } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,12 +43,18 @@ export const FormControlInput: FC<IFormControlInput> = props => {
     };
   }, [validate, debounceMs]);
 
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current.focus();
+    }
+  }));
+
   return (
     <div className="form-control form-control-input" onClick={() => inputRef.current?.focus()}>
       {label ? <label htmlFor={id}>{label}</label> : null}
 
       <div className={`control ${error ? 'is-error' : ''} ${disabled ? 'is-disabled' : ''}`}>
-        <input id={id} name={name} type={type} ref={inputRef} />
+        <input id={id} placeholder={placeholder} name={name} type={type} ref={inputRef} />
       </div>
 
       <div className="error">
@@ -55,4 +62,4 @@ export const FormControlInput: FC<IFormControlInput> = props => {
       </div>
     </div>
   );
-};
+});

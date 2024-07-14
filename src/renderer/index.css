@@ -4,7 +4,7 @@
 @import-glob "pages/**/*.css";
 
 :root {
-  /*color: rgba(209, 209, 209, 0.98);*/
+  color: rgba(223, 191, 6, 0.92);
 
   /* Constants */
   --app-font-family: "UbuntuSans";
@@ -15,6 +15,7 @@
   --theme-negative: 0 0 0;
   --black: 0 0 0;
   --white: 255 255 255;
+  --yellow: 223 191 6;
   --accent: 0 115 229;
   --error: 255 0 0;
   --base-bg: 255 255 255;

@@ -27,7 +27,7 @@ export function createMenu(mainWindow: BrowserWindow) {
           acceleratorWorksWhenHidden: true,
           accelerator: 'Ctrl+F',
           click: async () => {
-            mainWindow.webContents.send('redirect', { path: 'search' });
+            mainWindow.webContents.send('search');
           },
         },
         { type: 'separator' },

@@ -4,7 +4,6 @@ import { SettingsPage } from './settings/settings';
 import { CreatePage } from './create/create';
 import { Error404 } from './error-404/error-404';
 import { Layout } from './layout';
-import { SearchPage } from './search/search';
 
 export const ROUTES = createRouter([
   {
@@ -18,10 +17,6 @@ export const ROUTES = createRouter([
       {
         path: 'create',
         Component: CreatePage,
-      },
-      {
-        path: 'search',
-        Component: SearchPage,
       },
       {
         path: 'settings',

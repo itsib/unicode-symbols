@@ -103,6 +103,7 @@ export enum IdbStoreName {
   Blocks = 'blocks',
   Planes = 'planes',
   Config = 'config',
+  Favorites = 'favorites',
   Menu = 'menu',
 }
 
@@ -333,6 +334,7 @@ export class IndexedDb {
       configStore.put(1, 1);
       configStore.put({ begin: 0x0, end: 0xFFFF }, 2);
       configStore.put(false, 3);
+      configStore.put([], 4);
     }
   }
 

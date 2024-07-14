@@ -3,8 +3,9 @@ import { BtnCopy } from '../btn-copy/btn-copy';
 import Modal, { ModalProps } from '../modal/modal';
 import { useIdbGetSymbol } from '../../hooks/indexed-db/use-idb-get-symbol';
 import { ImgClose } from '../images/img-close';
-import { useLog } from '../../hooks/use-log';
 import { ImgSymbol } from '../images/img-symbol';
+import { ImgStar } from '../images/img-star';
+import { useFavorites } from '../../hooks/use-favorites';
 
 export interface IModalCreateSymbol extends ModalProps {
   code?: number;
@@ -29,11 +30,10 @@ export const ModalManageSymbol: FC<IModalCreateSymbol> = ({ isOpen, onDismiss, c
 const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, onDismiss }) => {
   const symbol = useIdbGetSymbol(code);
   const [skin, setSkin] = useState(0);
+  const [isFavorite, toggleFavorite] = useFavorites(code);
 
   const html = `&#${code.toString(10)};`;
   const css = `\\${code.toString(16)}`;
-
-  useLog({ symbol });
 
   return (
     <div className="modal modal-manage-symbol">
@@ -63,9 +63,15 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, 
           ) : null}
         </div>
 
-        <BtnCopy className="symbol" text={String.fromCodePoint(code)}>
-          <ImgSymbol code={code} size={70} skin={skin} />
-        </BtnCopy>
+        <div className="symbol-wrap">
+          <button className="btn btn-favorites" aria-label="Add to favorites" data-tooltip-pos="top" onClick={() => toggleFavorite()}>
+            <ImgStar className="star" active={isFavorite} />
+          </button>
+
+          <BtnCopy className="symbol" text={String.fromCodePoint(code)}>
+            <ImgSymbol code={code} size={70} skin={skin} />
+          </BtnCopy>
+        </div>
 
         <div className="options">
           <div className="table-codes">

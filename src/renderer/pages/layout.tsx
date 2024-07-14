@@ -13,6 +13,7 @@ export const Layout: FC = () => {
   const loading = !useIdbReady();
   const loadingRef = useRef(loading);
 
+
   // Manage display animation
   useEffect(() => {
     const backdrop = backdropRef.current;

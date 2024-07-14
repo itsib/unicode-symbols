@@ -1,0 +1,10 @@
+.symbols-grid {
+  height: 100vh;
+  width: calc(100vw - var(--main-menu-width));
+  overflow: hidden;
+
+  .container {
+    min-height: 100%;
+    width: 100%;
+  }
+}

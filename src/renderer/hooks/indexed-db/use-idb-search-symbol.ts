@@ -3,7 +3,7 @@ import { IndexedDbContext, IndexedDbStore } from '@app-context';
 import { IdbSymbol } from '@app-types';
 import { showIdbError } from '../../utils/indexed-db';
 
-const MAX_RESULT_ITEMS = 300;
+const MAX_RESULT_ITEMS = 500;
 
 export function useIdbSearchSymbol(search?: string): number[] {
   const { database } = useContext(IndexedDbContext);

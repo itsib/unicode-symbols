@@ -1,5 +1,6 @@
 :root {
   /* Sizes */
+  --form-control-height: 38px;
   --form-control-text-md: 14px;
   --form-control-text-sm: 12px;
   --form-control-gap: 4px;
@@ -44,7 +45,7 @@
   .control {
     --form-control-box-shadow: 0 0 0 0 rgb(var(--form-control-focus) / 0);
 
-    height: 38px;
+    height: var(--form-control-height);
     box-sizing: border-box;
     padding: var(--form-control-padding);
     color: rgb(var(--form-control-main));
