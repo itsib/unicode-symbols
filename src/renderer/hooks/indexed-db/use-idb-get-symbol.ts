@@ -45,6 +45,7 @@ export function useIdbGetSymbol(id?: number): SymbolMeta | null {
           name: undefined,
           block: undefined,
           skinSupport: false,
+          restyleSupport: false,
         });
       }
       setSymbol({
@@ -52,6 +53,7 @@ export function useIdbGetSymbol(id?: number): SymbolMeta | null {
         name: formatSymbolName(_symbol.n),
         block: _symbol.b === _block.i ? _block.n : undefined,
         skinSupport: _symbol.s,
+        restyleSupport: _symbol.r,
       });
     };
 

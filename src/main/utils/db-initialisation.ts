@@ -19,7 +19,7 @@ async function canRead(path: string): Promise<void> {
 }
 
 async function sendLineByLine(filepath: string, opts: SendOptions): Promise<void> {
-  const { context, port, skipComments = true } = opts
+  const { context, port } = opts
 
   console.log('\x1b[0;37m›\x1b[0m Starting to send the file \x1b[0;33m%s\x1b[0m', path.basename(filepath));
 
@@ -51,7 +51,7 @@ async function sendLineByLine(filepath: string, opts: SendOptions): Promise<void
 
   const handleLine = async (line: string) => {
     line = line.trim();
-    if (!line || (skipComments && line.startsWith('#'))) {
+    if (!line) {
       return;
     }
     lines.push(line);
@@ -80,13 +80,11 @@ export async function dbInitialisation(event: IpcMainEvent, filesDir: string): P
   await events.once(ipcMain, 'db-ready-transmit');
 
   try {
-    await sendLineByLine(path.join(filesDir, 'planes.csv'), { context: 'planes', port: port1 });
-
     await sendLineByLine(path.join(filesDir, 'blocks.csv'), { context: 'blocks', port: port1 });
 
-    await sendLineByLine(path.join(filesDir, 'names.csv'), { context: 'symbols', port: port1 });
+    await sendLineByLine(path.join(filesDir, 'names.csv'), { context: 'names', port: port1 });
 
-    await sendLineByLine(path.join(filesDir, 'emoji.csv'), { context: 'emoji', port: port1, skipComments: false });
+    await sendLineByLine(path.join(filesDir, 'emoji.csv'), { context: 'emoji', port: port1 });
 
     port1.postMessage({ type: 'close' });
     port1.close();

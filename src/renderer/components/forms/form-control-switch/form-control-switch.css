@@ -1,0 +1,78 @@
+:root {
+  --form-control-switch-width: 46px;
+  --form-control-switch-aspect-ratio: 1.77;
+  --form-control-switch-padding: 3px;
+  /* Computed sizes */
+  --form-control-switch-height: calc(var(--form-control-switch-width) / var(--form-control-switch-aspect-ratio));
+  --form-control-switch-border-radius: calc(var(--form-control-switch-width) / 2);
+  --form-control-switch-margin-thumb: var(--form-control-switch-padding);
+  --form-control-switch-width-thumb: calc(var(--form-control-switch-height) - var(--form-control-switch-margin-thumb) * 2);
+  /* Colors */
+  --form-control-switch-bg: 103 103 103;
+  --form-control-switch-thumb: 255 255 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  --form-control-switch-bg: 103 103 103;
+}
+
+.form-control-switch {
+
+  .switch-wrap {
+    height: auto;
+    width: var(--form-control-switch-width);
+    aspect-ratio: var(--form-control-switch-aspect-ratio);
+    background-color: rgb(var(--form-control-switch-bg));
+    border-radius: calc(var(--form-control-switch-width) / 2);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    flex-grow: 0;
+
+    .hidden-checkbox {
+      inset: 0;
+      cursor: pointer;
+      position: absolute;
+      opacity: 0;
+      z-index: 3;
+    }
+
+    .switch {
+      inset: 0;
+      display: block;
+      position: absolute;
+
+      .switch-thumb {
+        top: var(--form-control-switch-padding);
+        left: var(--form-control-switch-padding);
+        width: var(--form-control-switch-width-thumb);
+        height: auto;
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        background-color: rgb(var(--form-control-switch-thumb));
+        box-shadow: 0 0 2px 2px rgb(0 0 0 / 0.1);
+        transition: left .1s ease-in-out;
+        display: block;
+        position: absolute;
+        z-index: 2;
+      }
+    }
+
+    .hidden-checkbox:checked + .switch {
+      background-color: rgb(var(--form-control-active));
+
+      .switch-thumb {
+        left: calc(var(--form-control-switch-width) - var(--form-control-switch-width-thumb) - var(--form-control-switch-margin-thumb));
+      }
+    }
+
+    .hidden-checkbox:disabled {
+      cursor: default;
+    }
+
+    .hidden-checkbox:disabled + .switch {
+      opacity: .5;
+    }
+  }
+}

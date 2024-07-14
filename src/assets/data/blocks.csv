@@ -1,3 +1,4 @@
+# plane: Basic Multilingual Plane
 0000..007F;Basic Latin
 0080..00FF;Latin-1 Supplement
 0100..017F;Latin Extended-A
@@ -162,6 +163,7 @@ FE50..FE6F;Small Form Variants
 FE70..FEFF;Arabic Presentation Forms-B
 FF00..FFEF;Halfwidth and Fullwidth Forms
 FFF0..FFFF;Specials
+# plane: Supplementary Multilingual Plane
 10000..1007F;Linear B Syllabary
 10080..100FF;Linear B Ideograms
 10100..1013F;Aegean Numbers
@@ -313,6 +315,7 @@ FFF0..FFFF;Specials
 1FA00..1FA6F;Chess Symbols
 1FA70..1FAFF;Symbols and Pictographs Extended-A
 1FB00..1FBFF;Symbols for Legacy Computing
+# plane: Supplementary Ideographic Plane
 20000..2A6DF;CJK Unified Ideographs Extension B
 2A700..2B73F;CJK Unified Ideographs Extension C
 2B740..2B81F;CJK Unified Ideographs Extension D
@@ -320,9 +323,13 @@ FFF0..FFFF;Specials
 2CEB0..2EBEF;CJK Unified Ideographs Extension F
 2EBF0..2EE5F;CJK Unified Ideographs Extension I
 2F800..2FA1F;CJK Compatibility Ideographs Supplement
+# plane: Tertiary Ideographic Plane
 30000..3134F;CJK Unified Ideographs Extension G
 31350..323AF;CJK Unified Ideographs Extension H
+# plane: Supplementary Special-purpose Plane
 E0000..E007F;Tags
 E0100..E01EF;Variation Selectors Supplement
+# plane: Supplementary Private Use Area planes
 F0000..FFFFF;Supplementary Private Use Area-A
+# plane: Supplementary Private Use Area planes
 100000..10FFFF;Supplementary Private Use Area-B

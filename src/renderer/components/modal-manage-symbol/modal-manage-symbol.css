@@ -66,6 +66,49 @@
         transition: all .1s linear;
       }
 
+      .skin-color-buttons {
+        right: -26px;
+        top: 10px;
+        margin-left: 26px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 10px;
+        transform: translateX(100%);
+        position: absolute;
+
+        .btn-skin {
+          width: 22px;
+          height: 22px;
+          border-radius: 4px;
+          background-color: blue;
+
+          &.btn-skin-0 {
+            background-color: rgb(var(--skin-type-0));
+          }
+
+          &.btn-skin-1 {
+            background-color: rgb(var(--skin-type-1));
+          }
+
+          &.btn-skin-2 {
+            background-color: rgb(var(--skin-type-2));
+          }
+
+          &.btn-skin-3 {
+            background-color: rgb(var(--skin-type-3));
+          }
+
+          &.btn-skin-4 {
+            background-color: rgb(var(--skin-type-4));
+          }
+
+          &.btn-skin-5 {
+            background-color: rgb(var(--skin-type-5));
+          }
+        }
+      }
+
       &:hover {
 
         .btn-favorites {
@@ -104,45 +147,6 @@
           background-color: rgb(var(--accent));
           border-radius: 4px;
           border: none;
-        }
-      }
-
-      .skin-color-buttons {
-        margin-left: 26px;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(3, 1fr);
-        gap: 10px;
-
-        .btn-skin {
-          width: 26px;
-          height: 26px;
-          border-radius: 50%;
-          background-color: blue;
-
-          &.btn-skin-0 {
-            background-color: rgb(var(--skin-type-0));
-          }
-
-          &.btn-skin-1 {
-            background-color: rgb(var(--skin-type-1));
-          }
-
-          &.btn-skin-2 {
-            background-color: rgb(var(--skin-type-2));
-          }
-
-          &.btn-skin-3 {
-            background-color: rgb(var(--skin-type-3));
-          }
-
-          &.btn-skin-4 {
-            background-color: rgb(var(--skin-type-4));
-          }
-
-          &.btn-skin-5 {
-            background-color: rgb(var(--skin-type-5));
-          }
         }
       }
     }

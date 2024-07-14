@@ -1,4 +1,4 @@
-import React, { FC, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { debounce } from '../../../utils/debounce';
 import { FormControlBaseProps } from '@app-types';
 

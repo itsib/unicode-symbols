@@ -26,6 +26,10 @@ export interface IdbSymbol {
    */
   s: boolean;
   /**
+   * Restyle support
+   */
+  r: boolean;
+  /**
    * Keywords for search by name
    */
   k: string[];

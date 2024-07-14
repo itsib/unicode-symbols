@@ -64,14 +64,31 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, 
         </div>
 
         <div className="symbol-wrap">
-          <button className="btn btn-favorites" aria-label="Add to favorites" data-tooltip-pos="top" onClick={() => toggleFavorite()}>
-            <ImgStar className="star" active={isFavorite} />
+          <button
+            className="btn btn-favorites"
+            aria-label="Add to favorites"
+            data-tooltip-pos="top"
+            onClick={() => toggleFavorite()}
+          >
+            <ImgStar className="star" active={isFavorite}/>
           </button>
 
           <BtnCopy className="symbol" text={String.fromCodePoint(code)}>
             <ImgSymbol code={code} size={70} skin={skin} />
           </BtnCopy>
+
+          {symbol?.skinSupport ? (
+            <div className="skin-color-buttons">
+              <button type="button" className="btn btn-skin btn-skin-0" onClick={() => setSkin(0)} />
+              <button type="button" className="btn btn-skin btn-skin-1" onClick={() => setSkin(1)} />
+              <button type="button" className="btn btn-skin btn-skin-2" onClick={() => setSkin(2)} />
+              <button type="button" className="btn btn-skin btn-skin-3" onClick={() => setSkin(3)} />
+              <button type="button" className="btn btn-skin btn-skin-4" onClick={() => setSkin(4)} />
+              <button type="button" className="btn btn-skin btn-skin-5" onClick={() => setSkin(5)} />
+            </div>
+          ) : null}
         </div>
+
 
         <div className="options">
           <div className="table-codes">
@@ -88,17 +105,6 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, 
             <div className="label">CSS code</div>
             <BtnCopy className="value" text={css}>{css}</BtnCopy>
           </div>
-
-          {symbol?.skinSupport ? (
-            <div className="skin-color-buttons">
-              <button type="button" className="btn btn-skin btn-skin-0" onClick={() => setSkin(0)} />
-              <button type="button" className="btn btn-skin btn-skin-1" onClick={() => setSkin(1)} />
-              <button type="button" className="btn btn-skin btn-skin-2" onClick={() => setSkin(2)} />
-              <button type="button" className="btn btn-skin btn-skin-3" onClick={() => setSkin(3)} />
-              <button type="button" className="btn btn-skin btn-skin-4" onClick={() => setSkin(4)} />
-              <button type="button" className="btn btn-skin btn-skin-5" onClick={() => setSkin(5)} />
-            </div>
-          ) : null}
         </div>
       </div>
     </div>

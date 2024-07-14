@@ -3,4 +3,5 @@ export interface SymbolMeta {
   name?: string;
   block?: string;
   skinSupport: boolean;
+  restyleSupport: boolean;
 }

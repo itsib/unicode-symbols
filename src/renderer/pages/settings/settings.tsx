@@ -6,11 +6,11 @@ import { PieChart } from '../../components/pie-chart/pie-chart';
 import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
 import { ImgBack } from '../../components/images/img-back';
-import { ImgResource } from '../../components/images/img-resource';
 
 export const SettingsPage: FC = () => {
   const [iconSize, setIconSize] = useAppConfig(AppConfigKey.IconSize);
   const [storage, setStorage] = useState<StorageUsage>();
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined = undefined;

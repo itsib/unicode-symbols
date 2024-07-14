@@ -1,128 +1,12 @@
-import { EmojiHandler } from './emoji-handler';
-
-export interface IdbMenuItem {
-  /**
-   * Menu item ID
-   */
-  i: number;
-  /**
-   * Menu item label
-   */
-  n: string;
-  /**
-   * Menu icon Base64 encoded string or icon url
-   */
-  icon: string;
-  /**
-   * Sort order index
-   */
-  o: number;
-}
-
-export interface IdbPlane {
-  /**
-   * Plane ID
-   */
-  i: number;
-  /**
-   * Plane Name
-   */
-  n: string;
-  /**
-   * Plane name abbr.
-   */
-  a: string;
-  /**
-   * Symbol key for begin range
-   */
-  b: number;
-  /**
-   * Symbol key for end range
-   */
-  e: number;
-}
-
-export interface IdbBlock {
-  /**
-   * Block ID
-   */
-  i: number;
-  /**
-   * Plane id
-   */
-  p: number;
-  /**
-   * Block Name
-   */
-  n: string;
-  /**
-   * Symbol key for begin range
-   */
-  b: number;
-  /**
-   * Symbol key for end range
-   */
-  e: number;
-}
-
-export interface IdbSymbol {
-  /**
-   * Symbol code in unicode.
-   * i = id
-   */
-  i: number;
-  /**
-   * Symbol name in en
-   * n = name
-   */
-  n: string;
-  /**
-   * Plane id
-   */
-  p: number;
-  /**
-   * Block id includes symbol
-   */
-  b: number;
-  /**
-   * Left menu link
-   */
-  l: number | undefined;
-  /**
-   * Skin color support
-   */
-  s: boolean;
-  /**
-   * Keywords for search by name
-   */
-  k: string[];
-}
+import { extractError, IdbBlock, IdbMenuItem, parseBlock, parseEmoji, parseMenuItem, parseSymbol } from './utils';
 
 export enum IdbStoreName {
   Symbols = 'symbols',
   Blocks = 'blocks',
   Planes = 'planes',
   Config = 'config',
-  Favorites = 'favorites',
   Menu = 'menu',
 }
-
-const IGNORE_KEYWORDS = ['SIGN', 'ONE', 'WITH', 'LETTER', 'MARK'];
-
-const DEFAULT_ICON = 'star.svg'
-
-const MENU_ICONS: Record<number, string> = {
-  [1]: 'smiles.svg',
-  [2]: 'brain.svg',
-  [3]: 'component.svg',
-  [4]: 'animals.svg',
-  [5]: 'food.svg',
-  [6]: 'airplane.svg',
-  [7]: 'activities.svg',
-  [8]: 'objects.svg',
-  [9]: 'letters.svg',
-  [10]: 'flags.svg',
-};
 
 export class IndexedDb {
 
@@ -130,14 +14,17 @@ export class IndexedDb {
 
   private readonly _version: number;
 
-  private _range: { count: number; values: number[] } = {
-    count: 0,
-    values: [],
-  };
+  private _blocks: IdbBlock[] = [];
+
+  private _planeIndex = 0;
 
   private _processedMenu = 0;
 
-  private _emojis = new EmojiHandler(30);
+  private _emoji = {
+    codes: new Set<number>(),
+    skin: new Set<number>(),
+    restyle: new Set<number>(),
+  };
 
   private _db: Promise<IDBDatabase>;
 
@@ -151,17 +38,13 @@ export class IndexedDb {
   }
 
   async parseAndSave(context: string, lines: string[]): Promise<void> {
-    // Parse planes
-    if (context === 'planes') {
-      await this.handlePlanes(lines);
-    }
     // Parse blocks
-    else if (context === 'blocks') {
+    if (context === 'blocks') {
       await this.handleBlocks(lines);
     }
     // Parse symbols
-    else if (context === 'symbols') {
-      await this.handleSymbols(lines);
+    else if (context === 'names') {
+      await this.handleNames(lines);
     }
     // Parse emoji
     else if (context === 'emoji') {
@@ -169,52 +52,59 @@ export class IndexedDb {
     }
   }
 
-  async handlePlanes(lines: string[]): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      const db = await this._database();
-      const transaction = db!.transaction([IdbStoreName.Planes], 'readwrite');
-      const store = transaction.objectStore(IdbStoreName.Planes);
-
-      for (const line of lines) {
-        const plane = this._parsePlane(line);
-        store.put(plane);
-      }
-
-      transaction.oncomplete = event => resolve((event.target as any)?.result);
-      transaction.onerror = error => reject(this._extract(error));
-      transaction.commit();
-    });
-  }
-
   async handleBlocks(lines: string[]): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const db = await this._database();
-      const transaction = db!.transaction([IdbStoreName.Blocks], 'readwrite');
-      const store = transaction.objectStore(IdbStoreName.Blocks);
+      const transaction = db!.transaction([IdbStoreName.Blocks, IdbStoreName.Planes], 'readwrite');
+      const blockStore = transaction.objectStore(IdbStoreName.Blocks);
+      const planeStore = transaction.objectStore(IdbStoreName.Planes);
 
-      for (const line of lines) {
-        const block = this._parseBlock(line);
-        store.put(block);
+      for (let line of lines) {
+        line = line.trim()
+        const plane = line.split('# plane:')[1]?.trim();
+        if (plane) {
+          this._planeIndex += 1;
+          planeStore.add(plane, this._planeIndex);
+          continue;
+        }
+        const id = this._blocks.length + 1
+        const block = parseBlock(id, this._planeIndex, line);
+
+        this._blocks.push(block)
+
+        blockStore.put(block);
       }
 
+      transaction.commit();
       transaction.oncomplete = event => resolve((event.target as any)?.result);
-      transaction.onerror = error => reject(this._extract(error));
+      transaction.onerror = error => reject(extractError(error));
     });
   }
 
-  async handleSymbols(lines: string[]): Promise<any> {
+  async handleNames(lines: string[]): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const db = await this._database();
       const transaction = db!.transaction([IdbStoreName.Symbols], 'readwrite');
       const store = transaction.objectStore(IdbStoreName.Symbols);
 
-      for (const line of lines) {
-        const symbol  = this._parseSymbol(line)
+      for (let line of lines) {
+        line = line.trim();
+        const symbol  = parseSymbol(line);
+
+        const block = this._blocks[0];
+        if (block != null && symbol.i > block.e) {
+          this._blocks.shift();
+        }
+
+        symbol.b = this._blocks[0]?.i;
+        symbol.p = this._blocks[0]?.p;
+
         store.put(symbol);
       }
 
+      transaction.commit();
       transaction.oncomplete = event => resolve((event.target as any)?.result);
-      transaction.onerror = error => reject(this._extract(error));
+      transaction.onerror = error => reject(extractError(error));
     });
   }
 
@@ -226,26 +116,29 @@ export class IndexedDb {
       }
       if (line.startsWith('# group:')) {
         if (this._processedMenu > 0) {
-          await this._linkMenuToSymbols(this._processedMenu, this._emojis.refund(), this._emojis.getSkinSupport());
+          // Handle items from the previous menu
+          await this._linkMenuToSymbols();
         }
 
         this._processedMenu += 1;
-
-        const menuItem = await this._parseMenuItem(line, this._processedMenu);
+        const menuItem = parseMenuItem(line, this._processedMenu);
         await this._saveMenuItem(menuItem);
       } else {
-        const clean = line.split('#')[0].trim();
-        const codesString = clean.split(';')[0].trim();
-        if (!codesString)  {
+        // Remove comments
+        const emoji = parseEmoji(line);
+        if (!emoji) {
           continue;
         }
+        this._emoji.codes.add(emoji.code);
+        if (emoji.skin) {
+          this._emoji.skin.add(emoji.code);
+        }
+        if (emoji.restyle) {
+          this._emoji.restyle.add(emoji.code);
+        }
 
-        const codes = codesString.split(/\s+/).map(code => parseInt(code.trim(), 16));
-        if (codes) {
-          this._emojis.push(codes);
-          if (this._emojis.isFull && this._processedMenu > 0) {
-            await this._linkMenuToSymbols(this._processedMenu, this._emojis.refund(), this._emojis.getSkinSupport());
-          }
+        if (this._emoji.codes.size >= 30 && this._processedMenu > 0) {
+          await this._linkMenuToSymbols();
         }
       }
     }
@@ -281,7 +174,7 @@ export class IndexedDb {
       this._db = new Promise<IDBDatabase>((resolve, reject) => {
         const request = indexedDB.open(this._name, this._version);
 
-        request.onerror = error => reject(new Error(this._extract(error)));
+        request.onerror = error => reject(extractError(error));
 
         request.onsuccess = () => resolve(request.result);
 
@@ -299,13 +192,12 @@ export class IndexedDb {
   private _upgrade(event: IDBVersionChangeEvent) {
     const db = (event.target as any)!.result as IDBDatabase;
 
-    db.onerror = error => console.warn(this._extract(error));
+    db.onerror = error => console.warn(extractError(error));
 
     this._clear(db);
 
     // Create indexes for planes store
-    const planesStore = db.createObjectStore(IdbStoreName.Planes, { keyPath: 'i' });
-    planesStore.createIndex('id', 'i', { unique: true });
+    db.createObjectStore(IdbStoreName.Planes, { autoIncrement: true });
 
     // Create indexes for blocks store
     const blocksStore = db.createObjectStore(IdbStoreName.Blocks, { keyPath: 'i' });
@@ -369,7 +261,7 @@ export class IndexedDb {
     return new Promise((resolve, reject) => {
       query.onsuccess = () => resolve((query as any)?.result);
 
-      query.onerror = error => reject(this._extract(error));
+      query.onerror = error => reject(extractError(error));
     });
   }
 
@@ -382,16 +274,18 @@ export class IndexedDb {
 
     return new Promise((resolve, reject) => {
       transaction.oncomplete = event => resolve((event.target as any)?.result);
-      transaction.onerror = error => reject(this._extract(error));
+      transaction.onerror = error => reject(extractError(error));
       transaction.commit();
     });
   }
 
-  private async _linkMenuToSymbols(menuId: number, symbolsIds: number[], skin: Set<number> | undefined): Promise<void> {
+  private async _linkMenuToSymbols(): Promise<void> {
     const db = await this._database();
     const transaction = db!.transaction([IdbStoreName.Symbols], 'readwrite');
     const store = transaction.objectStore(IdbStoreName.Symbols);
 
+    const menuId = this._processedMenu;
+    const symbolsIds = Array.from(this._emoji.codes).sort((a, b) => b - a);
     let symbolId = this._getNextKey(symbolsIds);
 
     const request = store.index('id').openCursor(IDBKeyRange.lowerBound(symbolId, false));
@@ -402,7 +296,8 @@ export class IndexedDb {
         if (cursor) {
           if (cursor.value.i === symbolId) {
             cursor.value.l = menuId;
-            cursor.value.s = !!skin && skin.has(cursor.value.i);
+            cursor.value.s = !!this._emoji.skin && this._emoji.skin.has(cursor.value.i);
+            cursor.value.r = !!this._emoji.restyle && this._emoji.restyle.has(cursor.value.i);
 
             cursor.update(cursor.value);
           }
@@ -414,14 +309,12 @@ export class IndexedDb {
           }
         }
         transaction.commit();
+        this._emoji.codes.clear();
+        this._emoji.skin.clear();
         resolve();
       };
-      transaction.onerror = error => reject(this._extract(error));
+      transaction.onerror = error => reject(extractError(error));
     });
-  }
-
-  private _extract(error: any): string {
-    return (error?.target as any)?.error;
   }
 
   private _getNextKey(symbolsIds: number[], min?: number): number | undefined {
@@ -434,83 +327,6 @@ export class IndexedDb {
       if (!key || key > min) {
         return key;
       }
-    }
-  }
-
-  private _parsePlane(line: string): IdbPlane {
-    line = line.trim();
-    const [range, name, abbr] = line.split(';');
-    const [beginStr, end] = range.split('..');
-    const begin = parseInt(beginStr.trim(), 16);
-    const id = Math.floor(begin / 0x10000) + 1;
-
-    return {
-      i: id,
-      n: name ? name.trim() : '',
-      a: abbr ? abbr.trim() : '',
-      b: begin,
-      e: parseInt(end.trim(), 16),
-    };
-  }
-
-  private _parseBlock(line: string): IdbBlock {
-    line = line.trim();
-    const [range, name] = line.split(';');
-    const [beginStr, end] = range.split('..');
-    const begin = parseInt(beginStr.trim(), 16);
-    const plane = Math.floor(begin / 0x10000) + 1;
-
-    const block: IdbBlock = {
-      i: this._range.values.length + 1,
-      p: plane,
-      n: name.trim(),
-      b: begin,
-      e: parseInt(end.trim(), 16),
-    }
-
-    this._range.count += 1;
-    this._range.values.push(block.e)
-
-    return block;
-  }
-
-  private _parseSymbol(line: string): IdbSymbol {
-    line = line.trim();
-    const [code, nameRaw] = line.split(';');
-    const name = nameRaw.trim();
-    const id = parseInt(code.trim(), 16);
-    const plane = Math.floor(id / 0x10000) + 1;
-    const keywords = name.split(/[\s-_]+/)
-      .filter((word: string) => word.length > 2 && !IGNORE_KEYWORDS.includes(word.toUpperCase()));
-
-    let block: number;
-    const end = this._range.values[0]
-    if (end != null && id > end) {
-      this._range.values.shift();
-    }
-
-    block = (this._range.count - this._range.values.length) + 1;
-
-    return {
-      i: id,
-      n: name,
-      p: plane,
-      b: block,
-      l: undefined,
-      s: false,
-      k: keywords,
-    };
-  }
-
-  private async _parseMenuItem(line: string, id: number): Promise<IdbMenuItem> {
-    const name = line.replace('# group:', '').trim();
-    const icon = MENU_ICONS[id] || DEFAULT_ICON;
-
-    return {
-      i: id,
-      n: name,
-      icon: icon,
-      o: id,
     }
   }
 }
