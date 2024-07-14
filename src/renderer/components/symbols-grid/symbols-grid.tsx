@@ -1,6 +1,5 @@
 import React, { CSSProperties, FC, useEffect, useRef, useState } from 'react';
 import { FixedSizeGrid as Grid, FixedSizeGridProps } from 'react-window';
-import { ISymbolCell } from '../symbol-grid-cell/symbol-grid-cell';
 import { getMinSymbolWidth } from '../../utils/get-min-symbol-width';
 import { SCROLL_THUMB_WIDTH, SYMBOL_ITEM_ASPECT_RATIO } from '../../constants/common';
 import { useIdbReady } from '../../hooks/indexed-db/use-idb-ready';
@@ -8,7 +7,7 @@ import { useSize } from '../../hooks/use-size';
 import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
 import { ModalManageSymbol } from '../modal-manage-symbol/modal-manage-symbol';
-import { GridCellFactory } from './_grid-cell-factory';
+import { GridCellFactory, IGridCellFactory } from './_grid-cell-factory';
 
 export interface ISymbolsGrid {
   codes?: number[];
@@ -22,11 +21,11 @@ export const SymbolsGrid: FC<ISymbolsGrid> = ({ codes }) => {
   const [gridProps, setGridProps] = useState<Omit<FixedSizeGridProps, 'children'> | null>(null);
   const [active, setActive] = useState<{ code: number } | null>(null);
 
-  const itemDataRef = useRef<ISymbolCell<{ columnCount: number, codes: number[] }>>({
+  const itemDataRef = useRef<IGridCellFactory<{ columnCount: number, codes: number[] }>>({
     columnCount: 0,
     codes: [],
     onClick: (code: number) => setActive({ code }),
-    getSymbolCode: (rowIndex: number, columnIndex: number, data: ISymbolCell<{
+    getSymbolCode: (rowIndex: number, columnIndex: number, data: IGridCellFactory<{
       columnCount: number,
       codes: number[]
     }>) => {

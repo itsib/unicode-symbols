@@ -7,15 +7,6 @@ export function createMenu(mainWindow: BrowserWindow) {
       label: 'File',
       submenu: [
         {
-          label: 'Create',
-          registerAccelerator: true,
-          acceleratorWorksWhenHidden: true,
-          accelerator: 'Ctrl+N',
-          click: async () => {
-            mainWindow.webContents.send('redirect', { path: 'create' });
-          },
-        },
-        {
           label: 'Settings',
           click: async () => {
             mainWindow.webContents.send('redirect', { path: 'settings' });

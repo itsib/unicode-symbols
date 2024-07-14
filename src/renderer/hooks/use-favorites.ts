@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useAppConfig } from './use-app-config';
 import { AppConfigKey } from '@app-context';
 
@@ -10,7 +10,7 @@ export function useFavorites(symbol: number): [boolean, () => void] {
   const toggleFavorite = useCallback(() => {
     const index = favorites.indexOf(symbol);
     if (index === -1) {
-      setFavorites([...favorites, symbol]);
+      setFavorites([...favorites, symbol].sort());
     } else {
       favorites.splice(index, 1);
 

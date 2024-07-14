@@ -20,7 +20,6 @@ export const SymbolsPage: FC = () => {
 
   const codes = search ? foundCodes : (activeCategory === 0 ? favorites : predefined);
 
-
   useEffect(() => {
     return window.appAPI.on('search', () => setIsSearch(true));
   }, []);
