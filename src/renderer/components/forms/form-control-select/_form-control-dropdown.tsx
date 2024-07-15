@@ -1,4 +1,4 @@
-import { FormControlOption } from '../../../types/form/form-control-option';
+import { FormControlOption } from '@app-types';
 import React, { CSSProperties, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 

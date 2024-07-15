@@ -29,6 +29,7 @@ function createWindow() {
 
   window.setMinimumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
   window.setMenuBarVisibility(true);
+  window.maximize();
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {

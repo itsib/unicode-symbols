@@ -2,8 +2,9 @@ import { createContext } from 'react';
 
 export enum IndexedDbStore {
   Planes = 'planes',
-  Symbols = 'symbols',
   Blocks = 'blocks',
+  Names = 'names',
+  Emoji = 'emoji',
   Config = 'config',
   Menu = 'menu',
 }

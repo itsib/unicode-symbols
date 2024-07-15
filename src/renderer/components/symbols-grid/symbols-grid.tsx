@@ -10,7 +10,7 @@ import { ModalManageSymbol } from '../modal-manage-symbol/modal-manage-symbol';
 import { GridCellFactory, IGridCellFactory } from './_grid-cell-factory';
 
 export interface ISymbolsGrid {
-  codes?: number[];
+  codes?: (number | string)[];
 }
 
 export const SymbolsGrid: FC<ISymbolsGrid> = ({ codes }) => {
@@ -21,13 +21,13 @@ export const SymbolsGrid: FC<ISymbolsGrid> = ({ codes }) => {
   const [gridProps, setGridProps] = useState<Omit<FixedSizeGridProps, 'children'> | null>(null);
   const [active, setActive] = useState<{ code: number } | null>(null);
 
-  const itemDataRef = useRef<IGridCellFactory<{ columnCount: number, codes: number[] }>>({
+  const itemDataRef = useRef<IGridCellFactory<{ columnCount: number, codes: (number | string)[] }>>({
     columnCount: 0,
     codes: [],
     onClick: (code: number) => setActive({ code }),
     getSymbolCode: (rowIndex: number, columnIndex: number, data: IGridCellFactory<{
       columnCount: number,
-      codes: number[]
+      codes: (number | string)[]
     }>) => {
       const index = (data.columnCount * rowIndex) + columnIndex;
       return data.codes[index];

@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { LeftMenu } from '../../components/left-menu/left-menu';
 import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
-import { useGetSymbolsByMenu } from '../../hooks/indexed-db/use-get-symbols-by-menu';
+import { useGetGroup } from '../../hooks/indexed-db/use-get-group';
 import { SymbolsGrid } from '../../components/symbols-grid/symbols-grid';
 import { FormControlInput } from '../../components/forms';
 import { useIdbSearchSymbol } from '../../hooks/indexed-db/use-idb-search-symbol';
@@ -15,7 +15,7 @@ export const SymbolsPage: FC = () => {
   const [search, setSearch] = useState('');
 
   const [favorites] = useAppConfig(AppConfigKey.Favorites);
-  const predefined = useGetSymbolsByMenu(activeCategory);
+  const predefined = useGetGroup(activeCategory);
   const foundCodes = useIdbSearchSymbol(search);
 
   const codes = search ? foundCodes : (activeCategory === 0 ? favorites : predefined);

@@ -1,4 +1,6 @@
-const MOD_SKIN = 0x1F3FF; // 0x1F3FB, 0x1F3FC, 0x1F3FD, 0x1F3FE, 0x1F3FF
+const SKIN_MOD = 0x1F3FF; // 0x1F3FB, 0x1F3FC, 0x1F3FD, 0x1F3FE, 0x1F3FF
+
+const HAIR_MOD = 0x1F9B3; // 0x1F9B0, 0x1F9B1, 0x1F9B2, 0x1F9B3
 
 const JOINER = 0x200D;
 
@@ -11,14 +13,13 @@ const DEFAULT_ICON = 'star.svg'
 const MENU_ICONS: Record<number, string> = {
   [1]: 'smiles.svg',
   [2]: 'brain.svg',
-  [3]: 'component.svg',
-  [4]: 'animals.svg',
-  [5]: 'food.svg',
-  [6]: 'airplane.svg',
-  [7]: 'activities.svg',
-  [8]: 'objects.svg',
-  [9]: 'letters.svg',
-  [10]: 'flags.svg',
+  [3]: 'animals.svg',
+  [4]: 'food.svg',
+  [5]: 'airplane.svg',
+  [6]: 'activities.svg',
+  [7]: 'objects.svg',
+  [8]: 'letters.svg',
+  [9]: 'flags.svg',
 };
 
 export interface IdbMenuItem {
@@ -63,41 +64,44 @@ export interface IdbBlock {
   e: number;
 }
 
-export interface IdbSymbol {
+export interface IdbName {
   /**
-   * Symbol code in unicode.
-   * i = id
+   * Symbol code or end code if range
+   * c = code
    */
-  i: number;
+  c: number;
   /**
-   * Symbol name in en
+   * Start code if name of symbols range
+   */
+  s?: number;
+  /**
+   * Symbol name, en
    * n = name
    */
   n: string;
   /**
-   * Plane id
-   */
-  p: number;
-  /**
-   * Block id includes symbol
-   */
-  b: number;
-  /**
-   * Left menu link
-   */
-  l: number | undefined;
-  /**
-   * Skin color support
-   */
-  s: boolean;
-  /**
-   * Restyle support
-   */
-  r: boolean;
-  /**
    * Keywords for search by name
    */
   k: string[];
+}
+
+export interface IdbEmoji {
+  /**
+   * Code
+   */
+  c: number;
+  /**
+   * Emoji name
+   */
+  n: string;
+  /**
+   * Emoji group
+   */
+  g: number;
+  /**
+   * Skin supports
+   */
+  s: boolean;
 }
 
 export function parseCode(raw: string): number | null {
@@ -126,28 +130,43 @@ export function parseBlock(id: number, planeIndex: number, line: string): IdbBlo
   } as IdbBlock;
 }
 
-export function parseSymbol(line: string): IdbSymbol {
-  line = line.trim();
-  const [code, nameRaw] = line.split(';');
-  const name = nameRaw.trim();
+export function parseName(line: string): IdbName | null {
+  const [codesRaw, nameRaw] = line.split(';');
+  const [codeRaw, endRaw] = codesRaw.split('..');
+  const name = nameRaw
+    .trim()
+    .split(/\s+/)
+    .map((word, index) => {
+      if (index === 0) {
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      }
+      if (word.length > 1) {
+        return word.toLowerCase();
+      }
+      return word;
+    })
+    .join(' ');
 
-  const id = parseInt(code.trim(), 16);
-  const keywords = name
+
+  const code = parseInt((endRaw ? endRaw : codeRaw).trim(), 16);
+  const start = endRaw ? parseInt(codeRaw.trim(), 16) : undefined;
+  const keywords = nameRaw
     .split(/[\s-_]+/)
     .filter((word: string) => {
       return word.length > 2 && !IGNORE_KEYWORDS.includes(word.toUpperCase())
     });
 
-  return {
-    i: id,
+  const idbName: IdbName = {
+    c: code,
     n: name,
-    p: undefined,
-    b: undefined,
-    l: undefined,
-    s: false,
-    r: false,
     k: keywords,
   };
+
+  if (start) {
+    idbName.s = start;
+  }
+
+  return idbName;
 }
 
 export function parseMenuItem(line: string, id: number): IdbMenuItem {
@@ -162,57 +181,23 @@ export function parseMenuItem(line: string, id: number): IdbMenuItem {
   }
 }
 
-export function parseEmoji(line: string): { code: number; skin: boolean; restyle: boolean; } | null {
-  const clean = line.split('#')[0].trim();
-  const [codesRaw, supports] = clean.split(';');
-  if (!codesRaw || !supports)  {
+export function parseEmoji(line: string, menuId: number): IdbEmoji | null {
+  let [codesRaw, skinRaw, name] = line.split(';');
+  codesRaw = codesRaw.trim();
+  if (!codesRaw)  {
     return null;
   }
-  const codesSplit = codesRaw.split(/\s+/);
-  let code: number | null = null;
-  let joined: number | null = null;
-  let skin = false;
-  let restyle = false;
+  const skin = JSON.parse(skinRaw) as boolean;
 
-  while (codesSplit.length > 0) {
-    const codeRaw = codesSplit.shift();
-    const parsed = parseCode(codeRaw);
-    if (!parsed) {
-      continue;
-    }
-    // First should be code
-    if (code === null) {
-      code = parsed;
-      continue;
-    }
-
-    // Found joiner code
-    if (parsed === JOINER) {
-      const _code = parseCode(codesSplit.shift());
-      if (!_code) {
-        console.warn('No code after join')
-        continue;
-      }
-      joined = _code;
-      continue;
-    }
-
-    // Check support skin color select
-    if (joined === null && (MOD_SKIN^parsed) <= 4) {
-      skin = true;
-      continue;
-    }
-
-    // Style switch support
-    if (joined === null && parsed === RESTYLE) {
-      restyle = true;
-    }
-  }
+  // Parse codes
+  const splitCodes = codesRaw.split(',');
+  const code = splitCodes.length === 1 ? parseInt(splitCodes[0], 16) : parseInt(splitCodes.join(''), 16);
 
   return {
-    code,
-    skin,
-    restyle,
+    c: code,
+    n: name,
+    g: menuId,
+    s: skin,
   }
 }
 

@@ -1,11 +1,20 @@
-import { extractError, IdbBlock, IdbMenuItem, parseBlock, parseEmoji, parseMenuItem, parseSymbol } from './utils';
+import { extractError, IdbEmoji, IdbMenuItem, parseBlock, parseEmoji, parseMenuItem, parseName } from './utils';
 
 export enum IdbStoreName {
-  Symbols = 'symbols',
-  Blocks = 'blocks',
   Planes = 'planes',
-  Config = 'config',
+  Blocks = 'blocks',
+  Names = 'names',
+  Emoji = 'emoji',
   Menu = 'menu',
+  Config = 'config',
+}
+
+export enum AppConfigKey {
+  IconSize,
+  ActiveCategory,
+  DevMode,
+  Favorites,
+  SkinColor,
 }
 
 export class IndexedDb {
@@ -14,17 +23,11 @@ export class IndexedDb {
 
   private readonly _version: number;
 
-  private _blocks: IdbBlock[] = [];
-
   private _planeIndex = 0;
 
-  private _processedMenu = 0;
+  private _blockIndex = 0;
 
-  private _emoji = {
-    codes: new Set<number>(),
-    skin: new Set<number>(),
-    restyle: new Set<number>(),
-  };
+  private _processedMenu = 0;
 
   private _db: Promise<IDBDatabase>;
 
@@ -42,7 +45,7 @@ export class IndexedDb {
     if (context === 'blocks') {
       await this.handleBlocks(lines);
     }
-    // Parse symbols
+    // Parse names
     else if (context === 'names') {
       await this.handleNames(lines);
     }
@@ -67,10 +70,12 @@ export class IndexedDb {
           planeStore.add(plane, this._planeIndex);
           continue;
         }
-        const id = this._blocks.length + 1
-        const block = parseBlock(id, this._planeIndex, line);
-
-        this._blocks.push(block)
+        this._blockIndex += 1;
+        const block = parseBlock(this._blockIndex, this._planeIndex, line);
+        if (!block) {
+          this._blockIndex -= 1;
+          continue;
+        }
 
         blockStore.put(block);
       }
@@ -84,22 +89,15 @@ export class IndexedDb {
   async handleNames(lines: string[]): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const db = await this._database();
-      const transaction = db!.transaction([IdbStoreName.Symbols], 'readwrite');
-      const store = transaction.objectStore(IdbStoreName.Symbols);
+      const transaction = db!.transaction([IdbStoreName.Names], 'readwrite');
+      const store = transaction.objectStore(IdbStoreName.Names);
 
       for (let line of lines) {
         line = line.trim();
-        const symbol  = parseSymbol(line);
-
-        const block = this._blocks[0];
-        if (block != null && symbol.i > block.e) {
-          this._blocks.shift();
+        const name = parseName(line);
+        if (name) {
+          store.put(name);
         }
-
-        symbol.b = this._blocks[0]?.i;
-        symbol.p = this._blocks[0]?.p;
-
-        store.put(symbol);
       }
 
       transaction.commit();
@@ -115,37 +113,22 @@ export class IndexedDb {
         continue;
       }
       if (line.startsWith('# group:')) {
-        if (this._processedMenu > 0) {
-          // Handle items from the previous menu
-          await this._linkMenuToSymbols();
-        }
-
         this._processedMenu += 1;
         const menuItem = parseMenuItem(line, this._processedMenu);
         await this._saveMenuItem(menuItem);
       } else {
         // Remove comments
-        const emoji = parseEmoji(line);
+        const emoji = parseEmoji(line, this._processedMenu);
         if (!emoji) {
           continue;
         }
-        this._emoji.codes.add(emoji.code);
-        if (emoji.skin) {
-          this._emoji.skin.add(emoji.code);
-        }
-        if (emoji.restyle) {
-          this._emoji.restyle.add(emoji.code);
-        }
-
-        if (this._emoji.codes.size >= 30 && this._processedMenu > 0) {
-          await this._linkMenuToSymbols();
-        }
+        await this._saveEmoji(emoji);
       }
     }
   }
 
   async checkInit(): Promise<boolean> {
-    const symbolsCount = await this._getCount(IdbStoreName.Symbols);
+    const symbolsCount = await this._getCount(IdbStoreName.Names);
     const blocksCount = await this._getCount(IdbStoreName.Blocks);
 
     return symbolsCount > 0 && blocksCount > 0;
@@ -206,28 +189,29 @@ export class IndexedDb {
     blocksStore.createIndex('begin', 'b', { unique: true });
     blocksStore.createIndex('end', 'e', { unique: true });
 
-    // Create indexes for symbols store
-    const symbolsStore = db.createObjectStore(IdbStoreName.Symbols, { keyPath: 'i' });
-    symbolsStore.createIndex('id', 'i', { unique: true });
-    symbolsStore.createIndex('block', 'b', { unique: false });
-    symbolsStore.createIndex('plane', 'p', { unique: false });
-    symbolsStore.createIndex('link', 'l', { unique: false });
-    symbolsStore.createIndex('search', 'k', { unique: false, multiEntry: true });
+    // Create indexes for names store
+    const namesStore = db.createObjectStore(IdbStoreName.Names, { keyPath: 'c' });
+    namesStore.createIndex('code', 'c', { unique: true });
+    namesStore.createIndex('start', 's', { unique: false });
+    namesStore.createIndex('search', 'k', { unique: false, multiEntry: true });
+
+    // Create indexes for emoji store
+    const emojiStore = db.createObjectStore(IdbStoreName.Emoji, { keyPath: 'c' });
+    emojiStore.createIndex('code', 'c', { unique: false });
+    emojiStore.createIndex('group', 'g', { unique: false });
 
     // Create main menu store
     const menuStore = db.createObjectStore(IdbStoreName.Menu, { keyPath: 'i' });
     menuStore.createIndex('order', 'o', { unique: true });
 
     // Create app settings store
-    if(!db.objectStoreNames.contains(IdbStoreName.Config)) {
-      const configStore = db.createObjectStore(IdbStoreName.Config, { autoIncrement: true });
+    const configStore = db.createObjectStore(IdbStoreName.Config, { autoIncrement: true });
 
-      configStore.put(34, 0);
-      configStore.put(1, 1);
-      configStore.put({ begin: 0x0, end: 0xFFFF }, 2);
-      configStore.put(false, 3);
-      configStore.put([], 4);
-    }
+    configStore.put(34, AppConfigKey.IconSize);
+    configStore.put(1, AppConfigKey.ActiveCategory);
+    configStore.put(false, AppConfigKey.DevMode);
+    configStore.put([], AppConfigKey.Favorites);
+    configStore.put(0, AppConfigKey.SkinColor);
   }
 
   /**
@@ -236,8 +220,8 @@ export class IndexedDb {
    * @private
    */
   private _clear(db: IDBDatabase): void {
-    if (db.objectStoreNames.contains(IdbStoreName.Symbols)) {
-      db.deleteObjectStore(IdbStoreName.Symbols);
+    if (db.objectStoreNames.contains(IdbStoreName.Names)) {
+      db.deleteObjectStore(IdbStoreName.Names);
     }
     if (db.objectStoreNames.contains(IdbStoreName.Blocks)) {
       db.deleteObjectStore(IdbStoreName.Blocks);
@@ -247,6 +231,9 @@ export class IndexedDb {
     }
     if (db.objectStoreNames.contains(IdbStoreName.Planes)) {
       db.deleteObjectStore(IdbStoreName.Planes);
+    }
+    if (db.objectStoreNames.contains(IdbStoreName.Config)) {
+      db.deleteObjectStore(IdbStoreName.Config);
     }
   }
 
@@ -279,54 +266,21 @@ export class IndexedDb {
     });
   }
 
-  private async _linkMenuToSymbols(): Promise<void> {
+  private async _saveEmoji(emoji: IdbEmoji): Promise<void> {
     const db = await this._database();
-    const transaction = db!.transaction([IdbStoreName.Symbols], 'readwrite');
-    const store = transaction.objectStore(IdbStoreName.Symbols);
+    const transaction = db!.transaction([IdbStoreName.Emoji], 'readwrite');
+    const store = transaction.objectStore(IdbStoreName.Emoji);
 
-    const menuId = this._processedMenu;
-    const symbolsIds = Array.from(this._emoji.codes).sort((a, b) => b - a);
-    let symbolId = this._getNextKey(symbolsIds);
-
-    const request = store.index('id').openCursor(IDBKeyRange.lowerBound(symbolId, false));
+    store.add(emoji);
 
     return new Promise((resolve, reject) => {
-      request.onsuccess = event => {
-        const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
-        if (cursor) {
-          if (cursor.value.i === symbolId) {
-            cursor.value.l = menuId;
-            cursor.value.s = !!this._emoji.skin && this._emoji.skin.has(cursor.value.i);
-            cursor.value.r = !!this._emoji.restyle && this._emoji.restyle.has(cursor.value.i);
-
-            cursor.update(cursor.value);
-          }
-
-          symbolId = this._getNextKey(symbolsIds, cursor.value.i);
-          if (symbolId) {
-            cursor.continue(symbolId);
-            return;
-          }
-        }
-        transaction.commit();
-        this._emoji.codes.clear();
-        this._emoji.skin.clear();
-        resolve();
+      transaction.oncomplete = event => resolve((event.target as any)?.result);
+      transaction.onerror = error => {
+        console.log(emoji);
+        console.error(extractError(error));
+        resolve(null);
       };
-      transaction.onerror = error => reject(extractError(error));
+      transaction.commit();
     });
-  }
-
-  private _getNextKey(symbolsIds: number[], min?: number): number | undefined {
-    if (min == null) {
-      return symbolsIds.pop();
-    }
-    let key: number | undefined = undefined;
-    while (true) {
-      key = symbolsIds.pop();
-      if (!key || key > min) {
-        return key;
-      }
-    }
   }
 }

@@ -1,0 +1,57 @@
+:root {
+  /* Skin */
+  --skin-type-0: 255 200 56;
+  --skin-type-1: 252 220 190;
+  --skin-type-2: 228 186 151;
+  --skin-type-3: 190 140 106;
+  --skin-type-4: 170 107 70;
+  --skin-type-5: 114 83 75;
+}
+
+.skin-color-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+
+  .btn-skin {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border-radius: 4px;
+    color: rgb(var(--base-bg));
+
+    &.active:after {
+      content: "\2713";
+      top: 1px;
+      color: inherit;
+      font-size: 18px;
+      line-height: 20px;
+      position: relative;
+    }
+
+    &.btn-skin-0 {
+      background-color: rgb(var(--skin-type-0));
+    }
+
+    &.btn-skin-1 {
+      background-color: rgb(var(--skin-type-1));
+    }
+
+    &.btn-skin-2 {
+      background-color: rgb(var(--skin-type-2));
+    }
+
+    &.btn-skin-3 {
+      background-color: rgb(var(--skin-type-3));
+    }
+
+    &.btn-skin-4 {
+      background-color: rgb(var(--skin-type-4));
+    }
+
+    &.btn-skin-5 {
+      background-color: rgb(var(--skin-type-5));
+    }
+  }
+}

@@ -1,11 +1,16 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { BtnCopy } from '../btn-copy/btn-copy';
 import Modal, { ModalProps } from '../modal/modal';
-import { useIdbGetSymbol } from '../../hooks/indexed-db/use-idb-get-symbol';
+import { useIdbGetSymbolMeta } from '../../hooks/indexed-db/use-idb-get-symbol-meta';
 import { ImgClose } from '../images/img-close';
 import { ImgSymbol } from '../images/img-symbol';
 import { ImgStar } from '../images/img-star';
 import { useFavorites } from '../../hooks/use-favorites';
+import { SkinColorPicker } from '../skin-color-picker/skin-color-picker';
+import { SymbolSkinColor } from '@app-types';
+import { genSymbolView, genSymbolCodes, SymbolCodeOutput } from '../../utils/gen-symbol-view';
+import { useAppConfig } from '../../hooks/use-app-config';
+import { AppConfigKey } from '@app-context';
 
 export interface IModalCreateSymbol extends ModalProps {
   code?: number;
@@ -28,12 +33,18 @@ export const ModalManageSymbol: FC<IModalCreateSymbol> = ({ isOpen, onDismiss, c
 };
 
 const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, onDismiss }) => {
-  const symbol = useIdbGetSymbol(code);
-  const [skin, setSkin] = useState(0);
+  const symbolMeta = useIdbGetSymbolMeta(code);
+  const [defaultSkin, setDefaultSkin] = useAppConfig(AppConfigKey.SkinColor);
+  const [_skin, setSkin] = useState<SymbolSkinColor>(defaultSkin);
+  const skin = symbolMeta?.skin ? _skin : 0;
   const [isFavorite, toggleFavorite] = useFavorites(code);
 
-  const html = `&#${code.toString(10)};`;
-  const css = `\\${code.toString(16)}`;
+  const codesSet = useMemo(() => genSymbolCodes(code, skin), [code, skin]);
+
+  const html = genSymbolView(codesSet, SymbolCodeOutput.HTML);
+  const css = genSymbolView(codesSet, SymbolCodeOutput.CSS);
+  const hex = genSymbolView(codesSet, SymbolCodeOutput.HEX);
+  const dec = genSymbolView(codesSet, SymbolCodeOutput.DEC);
 
   return (
     <div className="modal modal-manage-symbol">
@@ -53,12 +64,12 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, 
       <div className="modal-content">
         <div className="info">
           <div className="name">
-            <span>{symbol?.name}</span>
+            <span>{symbolMeta?.name}</span>
           </div>
 
-          {symbol?.block ? (
+          {symbolMeta?.block ? (
             <div className="block-name">
-              <span>{symbol.block}</span>
+              <span>{symbolMeta.block}</span>
             </div>
           ) : null}
         </div>
@@ -73,18 +84,17 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, 
             <ImgStar className="star" active={isFavorite}/>
           </button>
 
-          <BtnCopy className="symbol" text={String.fromCodePoint(code)}>
-            <ImgSymbol code={code} size={70} skin={skin} />
+          <BtnCopy className="symbol" text={String.fromCodePoint(...codesSet)}>
+            <ImgSymbol code={html} size={70} />
           </BtnCopy>
 
-          {symbol?.skinSupport ? (
-            <div className="skin-color-buttons">
-              <button type="button" className="btn btn-skin btn-skin-0" onClick={() => setSkin(0)} />
-              <button type="button" className="btn btn-skin btn-skin-1" onClick={() => setSkin(1)} />
-              <button type="button" className="btn btn-skin btn-skin-2" onClick={() => setSkin(2)} />
-              <button type="button" className="btn btn-skin btn-skin-3" onClick={() => setSkin(3)} />
-              <button type="button" className="btn btn-skin btn-skin-4" onClick={() => setSkin(4)} />
-              <button type="button" className="btn btn-skin btn-skin-5" onClick={() => setSkin(5)} />
+          {symbolMeta?.skin ? (
+            <div className="right-color-picker">
+              <SkinColorPicker value={skin} onChange={setSkin} />
+
+              <button type="button" className={`btn btn-primary ${skin === defaultSkin ? 'hidden' : ''}`} onClick={() => setDefaultSkin(skin)}>
+                <span>Make it default</span>
+              </button>
             </div>
           ) : null}
         </div>
@@ -93,11 +103,10 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code, 
         <div className="options">
           <div className="table-codes">
             <div className="label">Code</div>
-            <BtnCopy className="value" text={code.toString(10)}>{code.toString(10)}</BtnCopy>
+            <BtnCopy className="value" text={dec}>{dec}</BtnCopy>
 
             <div className="label">Hex Code</div>
-            <BtnCopy className="value"
-                     text={'0x' + code.toString(16).toUpperCase()}>{'0x' + code.toString(16).toUpperCase()}</BtnCopy>
+            <BtnCopy className="value" text={hex}>{hex}</BtnCopy>
 
             <div className="label">HTML code</div>
             <BtnCopy className="value" text={html}>{html}</BtnCopy>

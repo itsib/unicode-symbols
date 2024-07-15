@@ -1,5 +1,4 @@
-import { BrowserWindow, Menu, MessageChannelMain } from 'electron';
-import { DEVTOOLS_WIDTH, WINDOW_WIDTH } from '../constants';
+import { BrowserWindow, Menu } from 'electron';
 
 export function createMenu(mainWindow: BrowserWindow) {
   const menu = Menu.buildFromTemplate([
@@ -71,13 +70,13 @@ export function createMenu(mainWindow: BrowserWindow) {
           acceleratorWorksWhenHidden: true,
           accelerator: 'F12',
           click: async () => {
-            const [_, height] = mainWindow.getSize();
+            // const [_, height] = mainWindow.getSize();
 
             if (mainWindow.webContents.isDevToolsOpened()) {
-              mainWindow.setSize(WINDOW_WIDTH, height);
+              // mainWindow.setSize(WINDOW_WIDTH, height);
               mainWindow.webContents.closeDevTools();
             } else {
-              mainWindow.setSize(WINDOW_WIDTH + DEVTOOLS_WIDTH, height);
+              // mainWindow.setSize(WINDOW_WIDTH + DEVTOOLS_WIDTH, height);
               mainWindow.webContents.toggleDevTools();
             }
           },

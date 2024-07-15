@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { LottiePlayer } from '../components/lottie-player/lottie-player';
 import initializationAnimation from '../../assets/animations/initialization.json'

@@ -1,0 +1,27 @@
+.error-500-page {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  .image {
+
+    img {
+      height: 220px;
+    }
+  }
+
+  .message {
+    margin-top: 20px;
+    font-size: 24px;
+  }
+
+  .sub-message {
+    max-width: 360px;
+    margin-top: 20px;
+    text-align: center;
+    color: rgb(var(--text-secondary))
+  }
+}

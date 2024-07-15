@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { IndexedDbContext, IndexedDbStore } from '@app-context';
-import { IdbSymbol } from '@app-types';
+import { IdbName } from '@app-types';
 import { showIdbError } from '../../utils/indexed-db';
 
 const MAX_RESULT_ITEMS = 500;
@@ -34,8 +34,8 @@ export function useIdbSearchSymbol(search?: string): number[] {
       query = IDBKeyRange.lowerBound(lower, false);
     }
 
-    const transaction = database!.transaction([IndexedDbStore.Symbols], 'readonly');
-    const request = transaction.objectStore(IndexedDbStore.Symbols).index('search').openCursor(query);
+    const transaction = database!.transaction([IndexedDbStore.Names], 'readonly');
+    const request = transaction.objectStore(IndexedDbStore.Names).index('search').openCursor(query);
 
     const ids: number[] = [];
     let finished = false;
@@ -43,8 +43,8 @@ export function useIdbSearchSymbol(search?: string): number[] {
     request.onsuccess = (event) => {
       const cursor = (event.target as any).result;
       if (cursor && ids.length < MAX_RESULT_ITEMS) {
-        const symbol = cursor.value as IdbSymbol;
-        ids.push(symbol.i)
+        const symbol = cursor.value as IdbName;
+        ids.push(symbol.c)
 
         cursor.continue();
       } else {

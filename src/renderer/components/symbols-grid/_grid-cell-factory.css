@@ -8,7 +8,7 @@
   justify-content: center;
 
   .inner-container {
-    padding: 8px 8px;
+    padding: 4px 8px;
     font-size: var(--symbol-cell-size);
     text-align: center;
     border-radius: 6px;
@@ -30,6 +30,7 @@
     }
 
     .subscribe {
+      height: 28px;
       color: rgb(var(--text-secondary) / 0.8);
       font-size: .3em;
     }

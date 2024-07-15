@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Size } from '../types';
+import { Size } from '@app-types';
 
 export function useSize(elementId: string): Size {
   const [size, setSize] = useState<Size>({ width: 0, height: 0 });

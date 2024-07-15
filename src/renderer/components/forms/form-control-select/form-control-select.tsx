@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FormControlBaseProps } from '@app-types';
-import { FormControlOption } from '../../../types/form/form-control-option';
+import { FormControlBaseProps, FormControlOption } from '@app-types';
 import { FormControlDropdown } from './_form-control-dropdown';
 
 export interface IFormControlSelect<T extends number | string> extends FormControlBaseProps<T> {

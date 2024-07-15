@@ -1,6 +1,6 @@
 import type { ConfigEnv, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
-import { join, resolve } from 'path';
+import { join } from 'path';
 import { pluginAttachToAssets, pluginExposeRenderer } from '../../vite.base.config';
 
 // https://vitejs.dev/config
@@ -8,8 +8,6 @@ export default defineConfig((env) => {
   const forgeEnv = env as ConfigEnv<'renderer'>;
   const { root, mode, forgeConfigSelf } = forgeEnv;
   const name = forgeConfigSelf.name ?? '';
-
-  console.log(__dirname)
 
   return {
     root,
@@ -25,7 +23,6 @@ export default defineConfig((env) => {
       pluginAttachToAssets([
         'src/assets/data/names.csv',
         'src/assets/data/blocks.csv',
-        'src/assets/data/planes.csv',
         'src/assets/data/emoji.csv',
         'src/assets/images',
       ]),

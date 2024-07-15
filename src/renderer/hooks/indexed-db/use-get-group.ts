@@ -1,29 +1,29 @@
 import { useContext, useEffect, useState } from 'react';
 import { IndexedDbContext, IndexedDbStore } from '@app-context';
-import { IdbSymbol } from '@app-types';
+import { IdbEmoji } from '@app-types';
 import { useIdbReady } from './use-idb-ready';
 import { showIdbError } from '../../utils/indexed-db';
 
-export function useGetSymbolsByMenu(link?: number) {
+export function useGetGroup(groupId?: number): number[] {
   const isReady = useIdbReady();
   const { database } = useContext(IndexedDbContext);
   const [codes, setCodes] = useState<number[]>([]);
 
   useEffect(() => {
-    if (!isReady || !database || link == null) {
+    if (!isReady || !database || groupId == null) {
       return setCodes([]);
     }
 
     let finished = false;
     const _codes: number[] = [];
-    const transaction = database!.transaction([IndexedDbStore.Symbols], 'readonly');
-    const request = transaction.objectStore(IndexedDbStore.Symbols).index('link').openCursor(link);
+    const transaction = database!.transaction([IndexedDbStore.Emoji], 'readonly');
+    const request = transaction.objectStore(IndexedDbStore.Emoji).index('group').openCursor(groupId);
 
     request.onsuccess = (event) => {
       const cursor = (event.target as any).result;
       if (cursor) {
-        const symbol = cursor.value as IdbSymbol;
-        _codes.push(symbol.i)
+        const symbol = cursor.value as IdbEmoji;
+        _codes.push(symbol.c)
 
         cursor.continue();
       } else {
@@ -42,7 +42,7 @@ export function useGetSymbolsByMenu(link?: number) {
         transaction.abort();
       }
     };
-  }, [link, isReady, database]);
+  }, [groupId, isReady, database]);
 
   return codes;
 }
