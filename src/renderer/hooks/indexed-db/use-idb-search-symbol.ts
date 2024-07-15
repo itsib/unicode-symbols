@@ -1,28 +1,43 @@
-import { useContext, useEffect, useState } from 'react';
-import { IndexedDbContext, IndexedDbStore } from '@app-context';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { AppConfigKey, IndexedDbContext, IndexedDbStore } from '@app-context';
 import { IdbName } from '@app-types';
 import { showIdbError } from '../../utils/indexed-db';
+import { useAppConfig } from '../use-app-config';
 
 const MAX_RESULT_ITEMS = 500;
 
 export function useIdbSearchSymbol(search?: string): number[] {
   const { database } = useContext(IndexedDbContext);
+  const [numberBase] = useAppConfig(AppConfigKey.NumberBase);
   const [symbolCodes, setSymbolCodes] = useState<number[]>([]);
 
-  useEffect(() => {
-    if (!database || !search || search === '0x' || search === '0') {
-      return setSymbolCodes([]);
+  const foundByNumbers = useMemo(() => {
+    if(!search) {
+      return []
     }
-    // Search by char code
-    if (/^[0-9]+$/.test(search) || /^0x[a-fA-F0-9]+$/.test(search)) {
-      let cursor = parseInt(search, /^[0-9]+$/.test(search) ? 10 : 16);
+    const regExp = numberBase === 16 ? /^(?:0x)?[a-fA-F0-9]+$/ : /^[0-9]+$/;
+    if (regExp.test(search)) {
+      let cursor = parseInt(search, numberBase);
+      if (cursor > 0x10FFFF) {
+        return [];
+      }
       const result = new Array(MAX_RESULT_ITEMS);
       for (let i = 0; i < MAX_RESULT_ITEMS; i++) {
-        result[i] = cursor++;
+        result[i] = cursor;
+        cursor += 1;
+        if (cursor > 0x10FFFF) {
+          break;
+        }
       }
-      return setSymbolCodes(result);
+      return result;
     }
+    return [];
+  }, [search, numberBase]);
 
+  useEffect(() => {
+    if (!database || !search || !foundByNumbers.length) {
+      return setSymbolCodes([]);
+    }
     // Search by name
     const offset = 1;
     const lower = search.toUpperCase();
@@ -63,7 +78,7 @@ export function useIdbSearchSymbol(search?: string): number[] {
         transaction.abort();
       }
     };
-  }, [search, database]);
+  }, [search, database, foundByNumbers]);
 
-  return symbolCodes;
+  return foundByNumbers.length ? foundByNumbers : symbolCodes;
 }

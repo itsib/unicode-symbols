@@ -6,19 +6,30 @@
 
   .container {
 
-    .back-link {
+    .caption {
       margin-bottom: 16px;
-      color: rgb(var(--text-primary));
       font-size: 18px;
-      text-decoration: none;
+      color: rgb(var(--text-primary));
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+
+      .back-link {
+        color: rgb(var(--text-primary));
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .header {
+        margin-right: 6px;
+      }
     }
 
     .card {
       width: 500px;
-      height: 400px;
+      height: auto;
 
       .card-row {
         padding: 16px 20px;
@@ -26,6 +37,10 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+
+        &:last-child {
+          border-bottom: none;
+        }
 
         .option-name {
           width: 140px;
@@ -93,6 +108,14 @@
               display: block;
             }
           }
+        }
+      }
+
+      .card-row.number-base {
+
+        .option-control {
+          --form-control-height: 34px;
+          width: 200px;
         }
       }
     }

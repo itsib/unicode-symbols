@@ -4,7 +4,7 @@
 @import-glob "pages/**/*.css";
 
 :root {
-  color: rgba(223, 191, 6, 0.92);
+  color: rgba(234, 234, 234, 0.94);
 
   /* Constants */
   --app-font-family: "UbuntuSans";
@@ -18,13 +18,13 @@
   --yellow: 223 191 6;
   --accent: 0 115 229;
   --error: 255 0 0;
-  --base-bg: 255 255 255;
-  --second-bg: 248 248 248;
+  --base-bg: 250 250 250;
+  --second-bg: 234 234 234;
   --scroll-thumb: 248 248 248;
   --text-primary: 0 0 0;
   --text-secondary: 65 65 65;
-  --border-primary: 199 199 199;
-  --divider: 199 199 199;
+  --border-primary: 220 220 220;
+  --divider: 220 220 220;
 
   /* Buttons */
   --btn-primary-color: 0 115 229;

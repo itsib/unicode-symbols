@@ -6,7 +6,8 @@ export enum AppConfigKey {
   ActiveCategory,
   DevMode,
   Favorites,
-  SkinColor
+  SkinColor,
+  NumberBase,
 }
 
 export type AppConfig<Key extends AppConfigKey> =
@@ -14,7 +15,8 @@ export type AppConfig<Key extends AppConfigKey> =
     Key extends AppConfigKey.ActiveCategory ? number :
       Key extends AppConfigKey.DevMode ? boolean :
         Key extends AppConfigKey.Favorites ? number[] :
-          Key extends AppConfigKey.SkinColor ? SymbolSkinColor : never;
+          Key extends AppConfigKey.SkinColor ? SymbolSkinColor :
+            Key extends AppConfigKey.NumberBase ? number : never;
 
 export interface IApplicationContext {
   config: { [ Key in AppConfigKey ]: AppConfig<Key> };
@@ -28,6 +30,7 @@ export const APPLICATION_CONTEXT_DEFAULT: IApplicationContext = {
     [AppConfigKey.DevMode]: false,
     [AppConfigKey.Favorites]: [],
     [AppConfigKey.SkinColor]: 0,
+    [AppConfigKey.NumberBase]: 16,
   },
   setConfig: () => {throw new Error('Not implemented')},
 };

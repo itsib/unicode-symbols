@@ -15,6 +15,7 @@ export enum AppConfigKey {
   DevMode,
   Favorites,
   SkinColor,
+  NumberBase,
 }
 
 export class IndexedDb {
@@ -204,14 +205,17 @@ export class IndexedDb {
     const menuStore = db.createObjectStore(IdbStoreName.Menu, { keyPath: 'i' });
     menuStore.createIndex('order', 'o', { unique: true });
 
-    // Create app settings store
-    const configStore = db.createObjectStore(IdbStoreName.Config, { autoIncrement: true });
+    // Create app settings store if not exists
+    if(!db.objectStoreNames.contains(IdbStoreName.Config)) {
+      const configStore = db.createObjectStore(IdbStoreName.Config, { autoIncrement: true });
 
-    configStore.put(34, AppConfigKey.IconSize);
-    configStore.put(1, AppConfigKey.ActiveCategory);
-    configStore.put(false, AppConfigKey.DevMode);
-    configStore.put([], AppConfigKey.Favorites);
-    configStore.put(0, AppConfigKey.SkinColor);
+      configStore.put(34, AppConfigKey.IconSize);
+      configStore.put(1, AppConfigKey.ActiveCategory);
+      configStore.put(false, AppConfigKey.DevMode);
+      configStore.put([], AppConfigKey.Favorites);
+      configStore.put(0, AppConfigKey.SkinColor);
+      configStore.put(16, AppConfigKey.NumberBase);
+    }
   }
 
   /**
@@ -231,9 +235,6 @@ export class IndexedDb {
     }
     if (db.objectStoreNames.contains(IdbStoreName.Planes)) {
       db.deleteObjectStore(IdbStoreName.Planes);
-    }
-    if (db.objectStoreNames.contains(IdbStoreName.Config)) {
-      db.deleteObjectStore(IdbStoreName.Config);
     }
   }
 
