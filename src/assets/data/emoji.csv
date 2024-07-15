@@ -26,7 +26,6 @@
 1FAE8;false;shaking face;🫨
 1F614;false;pensive face;😔
 1F924;false;drooling face;🤤
-1FAE9;false;face with bags under eyes;🫩
 1F912;false;face with thermometer;🤒
 1F922;false;nauseated face;🤢
 1F927;false;sneezing face;🤧
@@ -225,7 +224,6 @@
 1F5E3;false;speaking head;🗣
 1F465;false;busts in silhouette;👥
 1F46A;false;family;👪
-1FAC6;false;fingerprint;🫆
 # group: Animals & Nature
 1F435;false;monkey face;🐵
 1F98D;false;gorilla;🦍
@@ -302,7 +300,6 @@
 1F341;false;maple leaf;🍁
 1F343;false;leaf fluttering in wind;🍃
 1FABA;false;nest with eggs;🪺
-1FABE;false;leafless tree;🪾
 # group: Food & Drink
 1F347;false;grapes;🍇
 1F349;false;watermelon;🍉
@@ -322,7 +319,6 @@
 1F9C5;false;onion;🧅
 1FAD8;false;beans;🫘
 1FADA;false;ginger root;🫚
-1FADC;false;root vegetable;🫜
 1F950;false;croissant;🥐
 1FAD3;false;flatbread;🫓
 1F96F;false;bagel;🥯
@@ -793,13 +789,6 @@
 A9;false;copyright;©
 AE;false;registered;®
 2122;false;trade mark;™
-23,20E3;false;keycap - #;#⃣
-30,20E3;false;keycap - 0;0⃣
-32,20E3;false;keycap - 2;2⃣
-34,20E3;false;keycap - 4;4⃣
-36,20E3;false;keycap - 6;6⃣
-38,20E3;false;keycap - 8;8⃣
-1F51F;false;keycap - 10;🔟
 1F521;false;input latin lowercase;🔡
 1F523;false;input symbols;🔣
 1F170;false;A button (blood type);🅰

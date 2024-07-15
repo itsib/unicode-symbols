@@ -30,12 +30,22 @@ function codeConverter(code: number, output: SymbolCodeOutput): string {
 }
 
 export function genSymbolCodes(code: number | number[], skin: SymbolSkinColor = 0): number[] {
-  if (typeof code === 'number' && code > 0xffffffff) {
-    const stringCode = code.toString(16);
-    code = [
-      parseInt(stringCode.slice(0, stringCode.length / 2), 16),
-      parseInt(stringCode.slice(stringCode.length / 2), 16),
-    ]
+  if (typeof code === 'number') {
+    if (code > 0xffffffff) {
+      const stringCode = code.toString(16);
+      code = [
+        parseInt(stringCode.slice(0, stringCode.length / 2), 16),
+        parseInt(stringCode.slice(stringCode.length / 2), 16),
+      ]
+    } else {
+      const hex = code.toString(16).toLowerCase();
+      if (hex.length === 6 && hex.endsWith('20e3')) {
+        code = [
+          parseInt(hex.slice(0, 2), 16),
+          parseInt(hex.slice(2), 16),
+        ]
+      }
+    }
   }
 
   const set = typeof code === 'number' ? [code] : [...code];

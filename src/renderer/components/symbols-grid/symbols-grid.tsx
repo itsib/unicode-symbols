@@ -15,6 +15,7 @@ export interface ISymbolsGrid {
 
 export const SymbolsGrid: FC<ISymbolsGrid> = ({ codes }) => {
   const isReady = useIdbReady();
+  const gridRef = useRef();
   const size = useSize('symbols-grid-container');
   const [iconSize] = useAppConfig(AppConfigKey.IconSize);
 
@@ -65,10 +66,14 @@ export const SymbolsGrid: FC<ISymbolsGrid> = ({ codes }) => {
     });
   }, [codes, size, iconSize, isReady]);
 
+  useEffect(() => {
+    (gridRef.current as any)?.scrollTo?.({ scrollTop: 0 });
+  }, [size, gridProps, codes]);
+
   return (
     <div id="symbols-grid-container" className="symbols-grid" style={{ '--symbol-cell-size': `${iconSize}px` } as CSSProperties}>
       {size && gridProps ? (
-        <Grid itemData={itemDataRef.current} {...gridProps}>{GridCellFactory}</Grid>
+        <Grid ref={gridRef} itemData={itemDataRef.current} {...gridProps}>{GridCellFactory}</Grid>
       ) : null}
 
       <ModalManageSymbol isOpen={!!active} code={active?.code} onDismiss={() => setActive(null)} />
