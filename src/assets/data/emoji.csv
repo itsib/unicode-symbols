@@ -225,67 +225,115 @@
 1F465;false;busts in silhouette;👥
 1F46A;false;family;👪
 # group: Animals & Nature
-1F435;false;monkey face;🐵
-1F98D;false;gorilla;🦍
-1F436;false;dog face;🐶
-1F9AE;false;guide dog;🦮
-1F43A;false;wolf;🐺
-1F99D;false;raccoon;🦝
-1F408;false;cat;🐈
-1F42F;false;tiger face;🐯
-1F406;false;leopard;🐆
-1FACE;false;moose;🫎
-1F40E;false;horse;🐎
-1F993;false;zebra;🦓
-1F9AC;false;bison;🦬
-1F402;false;ox;🐂
-1F404;false;cow;🐄
-1F416;false;pig;🐖
-1F43D;false;pig nose;🐽
-1F411;false;ewe;🐑
-1F42A;false;camel;🐪
-1F999;false;llama;🦙
-1F418;false;elephant;🐘
-1F98F;false;rhinoceros;🦏
-1F985;false;eagle;🦅
-1F42D;false;mouse face;🐭
 1F400;false;rat;🐀
+1F401;false;mouse;🐁
+1F402;false;ox;🐂
+1F403;false;water buffalo;🐃
+1F404;false;cow;🐄
+1F405;false;tiger;🐅
+1F406;false;leopard;🐆
+1F407;false;rabbit;🐇
+1F408;false;cat;🐈
+1F409;false;dragon;🐉
+1F40A;false;crocodile;🐊
+1F40B;false;whale;🐋
+1F40C;false;snail;🐌
+1F40D;false;snake;🐍
+1F40E;false;horse;🐎
+1F40F;false;ram;🐏
+1F410;false;goat;🐐
+1F411;false;ewe;🐑
+1F412;false;monkey;🐒
+1F413;false;rooster;🐓
+1F414;false;chicken;🐔
+1F415;false;dog;🐕
+1F416;false;pig;🐖
+1F417;false;boar;🐗
+1F418;false;elephant;🐘
+1F419;false;octopus;🐙
+1F41A;false;spiral shell;🐚
+1F41B;false;bug;🐛
+1F41C;false;ant;🐜
+1F41D;false;honeybee;🐝
+1F41E;false;lady beetle;🐞
+1F41F;false;fish;🐟
+1F420;false;tropical fish;🐠
+1F421;false;blowfish;🐡
+1F422;false;turtle;🐢
+1F423;false;hatching chick;🐣
+1F424;false;baby chick;🐤
+1F425;false;front-facing baby chick;🐥
+1F426;false;bird;🐦
+1F427;false;penguin;🐧
+1F428;false;koala;🐨
+1F429;false;poodle;🐩
+1F42A;false;camel;🐪
+1F42B;false;bactrian camel;🐫
+1F42C;false;dolphin;🐬
+1F42D;false;mouse face;🐭
+1F42E;false;cow face;🐮
+1F42F;false;tiger face;🐯
 1F430;false;rabbit face;🐰
-1F43F;false;chipmunk;🐿
-1F994;false;hedgehog;🦔
+1F431;false;cat face;🐱
+1F432;false;dragon face;🐲
+1F433;false;spouting whale;🐳
+1F434;false;horse face;🐴
+1F435;false;monkey face;🐵
+1F436;false;dog face;🐶
+1F437;false;pig face;🐷
+1F438;false;frog;🐸
+1F439;false;hamster face;🐹
+1F43A;false;wolf;🐺
 1F43B;false;bear;🐻
 1F43C;false;panda;🐼
-1F9A6;false;otter;🦦
-1F998;false;kangaroo;🦘
+1F43D;false;pig nose;🐽
 1F43E;false;paw prints;🐾
-1F414;false;chicken;🐔
-1F423;false;hatching chick;🐣
-1F425;false;front-facing baby chick;🐥
-1F427;false;penguin;🐧
-1F54A;false;dove;🕊
+1F43F;false;chipmunk;🐿
+1F980;false;crab;🦀
+1F981;false;lion face;🦁
+1F982;false;lion face;🦂
+1F983;false;turkey;🦃
+1F984;false;unicorn face;🦄
+1F985;false;eagle;🦅
 1F986;false;duck;🦆
-1F989;false;owl;🦉
-1FAB6;false;feather;🪶
-1F99A;false;peacock;🦚
-1FABD;false;wing;🪽
-1F438;false;frog;🐸
-1F422;false;turtle;🐢
-1F40D;false;snake;🐍
-1F409;false;dragon;🐉
-1F996;false;T-Rex;🦖
-1F40B;false;whale;🐋
-1F9AD;false;seal;🦭
-1F420;false;tropical fish;🐠
+1F987;false;bat;🦇
 1F988;false;shark;🦈
-1F41A;false;spiral shell;🐚
-1FABC;false;jellyfish;🪼
+1F989;false;owl;🦉
+1F98A;false;fox face;🦊
 1F98B;false;butterfly;🦋
-1F41C;false;ant;🐜
-1FAB2;false;beetle;🪲
+1F98C;false;deer;🦌
+1F98D;false;gorilla;🦍
+1F98E;false;lizard;🦎
+1F98F;false;rhinoceros;🦏
+1F990;false;shrimp;🦐
+1F991;false;shrimp;🦑
+1F992;false;giraffe;🦒
+1F993;false;zebra;🦓
+1F994;false;hedgehog;🦔
+1F995;false;sauropod;🦕
+1F996;false;T-Rex;🦖
 1F997;false;cricket;🦗
+1F998;false;kangaroo;🦘
+1F999;false;llama;🦙
+1F99A;false;peacock;🦚
+1F99B;false;hippopotamus;🦛
+1F99C;false;parrot;🦜
+1F99D;false;raccoon;🦝
+1F99E;false;lobster;🦞
+1F99F;false;mosquito;🦟
+1F9A0;false;microbe;🦠
+1F9AE;false;guide dog;🦮
+1FACE;false;moose;🫎
+1F9AC;false;bison;🦬
+1F9A6;false;otter;🦦
+1F54A;false;dove;🕊
+1FAB6;false;feather;🪶
+1FABD;false;wing;🪽
+1F9AD;false;seal;🦭
+1FABC;false;jellyfish;🪼
+1FAB2;false;beetle;🪲
 1F577;false;spider;🕷
 1F578;false;spider web;🕸
-1F99F;false;mosquito;🦟
 1FAB1;false;worm;🪱
 1F490;false;bouquet;💐
 1F4AE;false;white flower;💮
@@ -355,8 +403,6 @@
 1F365;false;fish cake with swirl;🍥
 1F361;false;dango;🍡
 1F960;false;fortune cookie;🥠
-1F980;false;crab;🦀
-1F990;false;shrimp;🦐
 1F9AA;false;oyster;🦪
 1F367;false;shaved ice;🍧
 1F369;false;doughnut;🍩
@@ -488,6 +534,7 @@
 1F31E;false;sun with face;🌞
 2B50;false;star;⭐
 1F320;false;shooting star;🌠
+1F30C;false;milky way;🌌
 2601;false;cloud;☁
 26C8;false;cloud with lightning and rain;⛈
 1F324;false;sun behind small cloud;🌤

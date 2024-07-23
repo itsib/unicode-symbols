@@ -135,6 +135,7 @@
     .arrows {
       left: 20px;
       right: 20px;
+      height: 0;
       top: 30%;
       position: absolute;
       display: flex;
