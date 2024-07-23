@@ -4,7 +4,7 @@ import { IdbName } from '@app-types';
 import { showIdbError } from '../../utils/indexed-db';
 import { useAppConfig } from '../use-app-config';
 
-const MAX_RESULT_ITEMS = 500;
+const MAX_RESULT_ITEMS = 0x1000;
 
 export function useIdbSearchSymbol(search?: string): number[] {
   const { database } = useContext(IndexedDbContext);
@@ -12,14 +12,14 @@ export function useIdbSearchSymbol(search?: string): number[] {
   const [symbolCodes, setSymbolCodes] = useState<number[]>([]);
 
   const foundByNumbers = useMemo(() => {
-    if(!search) {
-      return []
+    if (!search) {
+      return null;
     }
     const regExp = numberBase === 16 ? /^(?:0x)?[a-fA-F0-9]+$/ : /^[0-9]+$/;
     if (regExp.test(search)) {
       let cursor = parseInt(search, numberBase);
       if (cursor > 0x10FFFF) {
-        return [];
+        return null;
       }
       const result = new Array(MAX_RESULT_ITEMS);
       for (let i = 0; i < MAX_RESULT_ITEMS; i++) {
@@ -31,13 +31,14 @@ export function useIdbSearchSymbol(search?: string): number[] {
       }
       return result;
     }
-    return [];
+    return null;
   }, [search, numberBase]);
 
   useEffect(() => {
-    if (!database || !search || !foundByNumbers.length) {
+    if (!database || !search || !/^[A-Za-z0-9\s]+$/.test(search) || foundByNumbers?.length) {
       return setSymbolCodes([]);
     }
+
     // Search by name
     const offset = 1;
     const lower = search.toUpperCase();
@@ -80,5 +81,5 @@ export function useIdbSearchSymbol(search?: string): number[] {
     };
   }, [search, database, foundByNumbers]);
 
-  return foundByNumbers.length ? foundByNumbers : symbolCodes;
+  return foundByNumbers?.length ? foundByNumbers : symbolCodes;
 }

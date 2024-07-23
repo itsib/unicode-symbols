@@ -58,5 +58,5 @@ export function genSymbolCodes(code: number | number[], skin: SymbolSkinColor = 
 }
 
 export function genSymbolView(codesSet: number[], output: SymbolCodeOutput): string {
-  return codesSet.map(code => codeConverter(code, output)).join('');
+  return codesSet.map(code => codeConverter(code, output)).join('').trim();
 }

@@ -12,51 +12,86 @@
     overflow: hidden;
     position: relative;
 
-    .search-wrap {
+    .search-dropdown {
       top: 0;
       right: 0;
       width: 300px;
       padding: 10px 16px 10px 10px;
       background-color: rgb(var(--second-bg));
-      border-bottom-left-radius: 8px;
+      border-radius: 0 0 0 8px;
       position: absolute;
+      display: flex;
       transform: translateY(-100%);
       transition: all .2s ease-out;
       z-index: 30;
 
-      .form-control {
-        --form-control-height: 32px;
-        --form-control-text-md: 13px;
-        --form-control-padding: 4px 6px;
-        --form-control-border-radius: 4px;
-
-        .error {
-          display: none;
-        }
+      .btn-pull {
+        margin-left: -6px;
+        padding: 4px;
       }
 
-      .btn-close {
-        right: 18px;
-        top: 17px;
-        color: rgb(var(--text-secondary));
-        opacity: .8;
-        position: absolute;
-        transition: opacity .2s ease-out;
-        z-index: 3;
+      .search-block {
+        width: 100%;
+        position: relative;
 
-        &:hover {
-          opacity: 1;
+        .form-control {
+          width: 100%;
+          --form-control-height: 32px;
+          --form-control-text-md: 13px;
+          --form-control-padding: 4px 6px;
+          --form-control-border-radius: 4px;
+
+          .error {
+            display: none;
+          }
+        }
+
+        .btn-close {
+          right: 4px;
+          top: 8px;
+          color: rgb(var(--text-secondary));
+          opacity: .8;
+          position: absolute;
+          transition: opacity .2s ease-out;
+          z-index: 3;
+
+          &:hover {
+            opacity: 1;
+          }
         }
       }
 
       &.active {
         transform: translateY(0);
       }
+
+      &.left {
+        right: unset;
+        left: 0;
+        padding: 10px 10px 10px 16px;
+        border-radius: 0 0 8px 0;
+        flex-direction: row-reverse;
+
+        .btn-pull {
+          margin-left: 0;
+          margin-right: -6px;
+        }
+      }
     }
 
-    .container {
-      min-height: 100%;
-      width: 100%;
+    .not-found {
+      top: 50%;
+      width: 400px;
+      max-width: 100%;
+      margin: 0 auto 0;
+      transform: translateY(-50%);
+      position: relative;
+      opacity: 0;
+      transition: opacity .3s ease-out;
+
+      &.show {
+        opacity: 1;
+      }
     }
   }
 }

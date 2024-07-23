@@ -28,10 +28,9 @@
   margin: 0;
   padding: 0;
   border: 1px solid rgb(var(--modal-border-color) / 0.4);
-  border-radius: var(--modal-border-radius) var(--modal-border-radius) 0 0;
+  border-radius: var(--modal-border-radius);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 
   .modal-header {
     height: 42px;
@@ -40,6 +39,7 @@
     justify-content: center;
     position: relative;
     background-color: rgb(var(--modal-bg-header));
+    border-radius: var(--modal-border-radius) var(--modal-border-radius) 0 0;
     border-bottom: 1px solid rgb(var(--modal-border-color));
 
     .btn {
@@ -81,5 +81,6 @@
 
   .modal-content {
     padding: 20px 20px 30px;
+    border-radius: 0 0 var(--modal-border-radius) var(--modal-border-radius);
   }
 }

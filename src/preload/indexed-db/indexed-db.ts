@@ -6,16 +6,6 @@ export enum IdbStoreName {
   Names = 'names',
   Emoji = 'emoji',
   Menu = 'menu',
-  Config = 'config',
-}
-
-export enum AppConfigKey {
-  IconSize,
-  ActiveCategory,
-  DevMode,
-  Favorites,
-  SkinColor,
-  NumberBase,
 }
 
 export class IndexedDb {
@@ -204,18 +194,6 @@ export class IndexedDb {
     // Create main menu store
     const menuStore = db.createObjectStore(IdbStoreName.Menu, { keyPath: 'i' });
     menuStore.createIndex('order', 'o', { unique: true });
-
-    // Create app settings store if not exists
-    if(!db.objectStoreNames.contains(IdbStoreName.Config)) {
-      const configStore = db.createObjectStore(IdbStoreName.Config, { autoIncrement: true });
-
-      configStore.put(34, AppConfigKey.IconSize);
-      configStore.put(1, AppConfigKey.ActiveCategory);
-      configStore.put(false, AppConfigKey.DevMode);
-      configStore.put([], AppConfigKey.Favorites);
-      configStore.put(0, AppConfigKey.SkinColor);
-      configStore.put(16, AppConfigKey.NumberBase);
-    }
   }
 
   /**

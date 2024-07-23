@@ -1,9 +1,7 @@
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { AppConfig, AppConfigKey, APPLICATION_CONTEXT_DEFAULT, ApplicationContext } from './application.context';
 import { useIdbInstance } from '../../hooks/indexed-db/use-idb-instance';
-import { IndexedDbStore } from '../indexed-db/indexed-db.context';
 import { useIdbReady } from '../../hooks/indexed-db/use-idb-ready';
-import { showIdbError } from '../../utils/indexed-db';
 
 export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
   const database = useIdbInstance();
@@ -11,42 +9,24 @@ export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
   const [configValue, setConfigValue] = useState<{ [ Key in AppConfigKey ]: AppConfig<Key> }>(APPLICATION_CONTEXT_DEFAULT.config);
 
   const setConfig = useCallback(function <K extends AppConfigKey, T extends AppConfig<K>>(key: K, value: T) {
-    if (!database) {
-      throw new Error('IndexedDB unavailable')
-    }
-    const transaction = database.transaction(IndexedDbStore.Config, 'readwrite');
-    const store = transaction.objectStore(IndexedDbStore.Config);
-
-    const request = store.put(value, key);
-
-    request.onsuccess = () => {
-      setConfigValue(config => ({ ...config, [key]: value }));
-    }
-
-    transaction.onerror = error => showIdbError(error);
+    setConfigValue(_config => ({ ..._config, [key]: value }));
+    localStorage.setItem(`app-config-${key}`, JSON.stringify(value));
   }, [database]);
 
   // Restore app configuration
   useEffect(() => {
-    if (!isReady || !database || !database.objectStoreNames.contains(IndexedDbStore.Config)) {
-      return;
-    }
-
-    const transaction = database.transaction([IndexedDbStore.Config], 'readonly');
-    const request = transaction.objectStore(IndexedDbStore.Config).openCursor();
-
-    const _config: any = {};
-    request.onsuccess = event => {
-      const cursor = (event.target as IDBRequest).result;
-      if (cursor) {
-        _config[cursor.key] = cursor.value;
-        cursor.continue();
-      } else {
-        setConfigValue(_config);
+    const keys = Object.values(AppConfigKey).filter(key => typeof key === 'number');
+    for (const key of keys) {
+      let value = localStorage.getItem(`app-config-${key}`);
+      if (!value) {
+        value = JSON.stringify((APPLICATION_CONTEXT_DEFAULT.config as any)[key]);
+        localStorage.setItem(`app-config-${key}`, value);
       }
-    };
 
-    transaction.onerror = error => showIdbError(error);
+      if (value) {
+        setConfigValue(_config => ({ ..._config, [key]: JSON.parse(value) }));
+      }
+    }
   }, [database, isReady]);
 
   // Manage context menu

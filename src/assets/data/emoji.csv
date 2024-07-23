@@ -247,6 +247,7 @@
 1F999;false;llama;🦙
 1F418;false;elephant;🐘
 1F98F;false;rhinoceros;🦏
+1F985;false;eagle;🦅
 1F42D;false;mouse face;🐭
 1F400;false;rat;🐀
 1F430;false;rabbit face;🐰
@@ -299,6 +300,7 @@
 2618;false;shamrock;☘
 1F341;false;maple leaf;🍁
 1F343;false;leaf fluttering in wind;🍃
+1F344;false;mushroom;🍄
 1FABA;false;nest with eggs;🪺
 # group: Food & Drink
 1F347;false;grapes;🍇
@@ -313,6 +315,10 @@
 1F965;false;coconut;🥥
 1F346;false;eggplant;🍆
 1F955;false;carrot;🥕
+1F32D;false;hot dog;🌭
+1F32E;false;taco;🌮
+1F32F;false;burrito;🌯
+1F330;false;chestnut;🌰
 1F336;false;hot pepper;🌶
 1F952;false;cucumber;🥒
 1F966;false;broccoli;🥦
@@ -323,10 +329,18 @@
 1FAD3;false;flatbread;🫓
 1F96F;false;bagel;🥯
 1F9C7;false;waffle;🧇
-1F356;false;meat on bone;🍖
-1F969;false;cut of meat;🥩
 1F354;false;hamburger;🍔
 1F355;false;pizza;🍕
+1F356;false;meat on bone;🍖
+1F357;false;poultry leg;🍗
+1F358;false;rice cracker;🍘
+1F359;false;rice ball;🍙
+1F35A;false;cooked rice;🍚
+1F35B;false;curry and rice;🍛
+1F35C;false;steaming bowl;🍜
+1F35D;false;spaghetti;🍝
+1F35E;false;bread;🍞
+1F969;false;cut of meat;🥩
 1F96A;false;sandwich;🥪
 1F32F;false;burrito;🌯
 1F959;false;stuffed flatbread;🥙
@@ -336,9 +350,6 @@
 1F957;false;green salad;🥗
 1F9C8;false;butter;🧈
 1F96B;false;canned food;🥫
-1F358;false;rice cracker;🍘
-1F35A;false;cooked rice;🍚
-1F35C;false;steaming bowl;🍜
 1F360;false;roasted sweet potato;🍠
 1F363;false;sushi;🍣
 1F365;false;fish cake with swirl;🍥
