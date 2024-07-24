@@ -10,7 +10,7 @@
     "idbVersion": 5
   },
   "scripts": {
-    "start": "electron-forge start",
+    "start": "VITE_CJS_IGNORE_WARNING=true electron-forge start",
     "build": "VITE_CJS_IGNORE_WARNING=true electron-forge --verbose make",
     "package": "electron-forge package",
     "publish": "electron-forge publish",

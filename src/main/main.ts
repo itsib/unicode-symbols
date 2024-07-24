@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
+import { app, BrowserWindow, ipcMain, IpcMainEvent, session } from 'electron';
 import path from 'path';
 import { createMenu } from './utils/app-menu';
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from './constants';
@@ -37,6 +37,14 @@ function createWindow() {
   } else {
     window.loadFile(path.join(__dirname, `../renderer/${VITE_MAIN_WINDOW_NAME}/index.html`)).catch(console.error);
   }
+
+  session.defaultSession.setPermissionCheckHandler((wc, permission, callback) =>  {
+    // if (permission === 'local-fonts') {
+    //   console.log('Denying check permission to local-fonts')
+    //   return false;
+    // }
+    return false;
+  })
 
   createMenu(window);
 
