@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { LeftMenu } from '../../components/left-menu/left-menu';
 import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
@@ -10,6 +10,7 @@ import { ImgClose } from '../../components/images/img-close';
 import animation from '../../../assets/animations/magnifier.json';
 import { LottiePlayer } from '../../components/lottie-player/lottie-player';
 import { ImgArrow } from '../../components/images/img-arrow';
+import { useOutletContext } from 'react-router-dom';
 
 export const SymbolsPage: FC = () => {
   const inputRef = useRef<HTMLInputElement>();
@@ -17,7 +18,10 @@ export const SymbolsPage: FC = () => {
   const [isSearch, setIsSearch] = useState(false);
   const [isSearchRight, setIsSearchRight] = useState(false);
   const [search, setSearch] = useState('');
+
   const [showPlayer, setShowPlayer] = useState(false);
+  const { loading } = useOutletContext<{ loading: boolean }>();
+  const skeletonItems = useMemo(() => new Array(24).fill(1), [])
 
   const [favorites] = useAppConfig(AppConfigKey.Favorites);
   const predefined = useGetGroup(activeCategory);
@@ -96,7 +100,11 @@ export const SymbolsPage: FC = () => {
 
         {codes?.length ? (
           <SymbolsGrid codes={codes} />
-        ) : (
+        ) : loading ? (
+          <div className="main-loading">
+            {skeletonItems.map((_, key) => (<div key={key} className="pulse"/>))}
+          </div>
+          ) : (
           <div className={`not-found ${showPlayer ? 'show' : ''}`}>
             <LottiePlayer className="animation" object={animation} loop={false} />
           </div>

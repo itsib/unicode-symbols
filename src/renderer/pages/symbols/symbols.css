@@ -79,6 +79,22 @@
       }
     }
 
+    .main-loading {
+      padding: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+
+      > div {
+        width: 60px;
+        height: 80px;
+        border-radius: 5px;
+        background-color: rgb(var(--second-bg) / 0.5);
+      }
+    }
+
     .not-found {
       top: 50%;
       width: 400px;

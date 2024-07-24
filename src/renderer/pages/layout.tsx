@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useMemo, useRef } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { LottiePlayer } from '../components/lottie-player/lottie-player';
 import initializationAnimation from '../../assets/animations/initialization.json'
@@ -67,7 +67,7 @@ export const Layout: FC = () => {
         <div className="message">Creating a Database</div>
       </div>
       <div className="main-wrap" ref={mainRef}>
-        <Outlet />
+        <Outlet context={{ loading }}/>
       </div>
     </div>
   );

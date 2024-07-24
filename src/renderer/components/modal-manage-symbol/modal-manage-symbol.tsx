@@ -51,8 +51,6 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: 
   const hex = genSymbolView(codesSet, SymbolCodeOutput.HEX);
   const dec = genSymbolView(codesSet, SymbolCodeOutput.DEC);
 
-  useLog({ isSupportArrow });
-
   return (
     <div className="modal modal-manage-symbol">
       <div className="modal-header">
