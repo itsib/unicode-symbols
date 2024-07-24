@@ -1,12 +1,12 @@
 import type { ConfigEnv, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
 import { join } from 'path';
-import { pluginAttachToAssets, pluginExposeRenderer } from '../../vite.base.config';
+import { vitePluginExposeDevServer } from '../../forge/vite-plugins/vite-plugin-expose-dev-server';
+import { vitePluginCopyResources } from '../../forge/vite-plugins/vite-plugin-copy-resources';
 
 // https://vitejs.dev/config
 export default defineConfig((env) => {
-  const forgeEnv = env as ConfigEnv<'renderer'>;
-  const { root, mode, forgeConfigSelf } = forgeEnv;
+  const { root, mode, forgeConfigSelf } = env as ConfigEnv<'renderer'>;
   const name = forgeConfigSelf.name ?? '';
 
   return {
@@ -17,10 +17,23 @@ export default defineConfig((env) => {
       outDir: `.vite/renderer/${name}`,
       assetsInlineLimit: 0,
       cssCodeSplit: false,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            '@react': [
+              'react',
+              'react-dom',
+              'react-router-dom',
+              'react-window',
+            ],
+            '@app-lottie': ['lottie-web/build/player/lottie_light'],
+          },
+        }
+      },
     },
     plugins: [
-      pluginExposeRenderer(name),
-      pluginAttachToAssets([
+      vitePluginExposeDevServer(name),
+      vitePluginCopyResources([
         'src/assets/data/names.csv',
         'src/assets/data/blocks.csv',
         'src/assets/data/emoji.csv',

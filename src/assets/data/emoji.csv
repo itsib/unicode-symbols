@@ -467,7 +467,6 @@
 1F96A;false;sandwich;🥪
 1F96B;false;canned food;🥫
 1F96F;false;bagel;🥯
-1F9AA;false;oyster;🦪
 1F9C1;false;cupcake;🧁
 1F9C3;false;beverage box;🧃
 1F9C5;false;onion;🧅
@@ -515,7 +514,7 @@
 1F30B;false;volcano;🌋
 1F30C;false;milky way;🌌
 1F30D;false;globe showing Europe-Africa;🌍
-1F30D;false;earth globe americas;🌎
+1F30E;false;earth globe americas;🌎
 1F30F;false;globe showing Asia-Australia;🌏
 1F310;false;globe with meridians;🌐
 1F311;false;new moon symbol;🌑
@@ -643,7 +642,6 @@
 26F8;false;ice skate;⛸
 1F380;false;ribbon;🎀
 1F381;false;wrapped present;🎁
-1F382;false;birthday cake;🎂
 1F383;false;jack-o-lantern;🎃
 1F384;false;christmas tree;🎄
 1F386;false;fireworks;🎆

@@ -1,6 +1,11 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { IndexedDb } from './indexed-db/indexed-db';
-import pkg from '../../package.json';
+
+declare global {
+  const VITE_APP_VERSION: string;
+  const VITE_INDEXED_DB_NAME: string;
+  const VITE_INDEXED_DB_VERSION: number;
+}
 
 contextBridge.exposeInMainWorld('appAPI', {
   /**
@@ -27,17 +32,21 @@ contextBridge.exposeInMainWorld('appAPI', {
     };
   },
   /**
+   * App version from package json file.
+   */
+  APP_VERSION: VITE_APP_VERSION,
+  /**
    * IndexedDB store name
    */
-  INDEXED_DB_NAME: pkg.config['idb-name'],
+  INDEXED_DB_NAME: VITE_INDEXED_DB_NAME,
   /**
    * IndexedDB model version
    */
-  INDEXED_DB_VERSION: pkg.config['idb-version'],
+  INDEXED_DB_VERSION: VITE_INDEXED_DB_VERSION,
 });
 
 (async function init() {
-  const dataBase = IndexedDb.get(pkg.config['idb-name'], pkg.config['idb-version']);
+  const dataBase = IndexedDb.get(VITE_INDEXED_DB_NAME, VITE_INDEXED_DB_VERSION);
   if (await dataBase.checkInit()) {
     await dataBase.close();
     return;

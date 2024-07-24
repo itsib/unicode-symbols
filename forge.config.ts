@@ -4,7 +4,7 @@ import { MakerDebConfig } from '@electron-forge/maker-deb';
 import { getGenerateAssetsHook } from './forge';
 import path from 'node:path';
 
-const config: ForgeConfig = {
+export const config: ForgeConfig = {
   packagerConfig: {
     name: 'Unicode Symbols',
     executableName: 'unicode-symbols',
@@ -20,7 +20,7 @@ const config: ForgeConfig = {
           name: 'unicode-symbols',
           icon: 'src/assets/logos/512x512.png',
           productName: 'Unicode Symbols',
-          genericName: 'Characters',
+          genericName: 'Unicode Symbols',
           maintainer: 'https://github.com/itsib',
           categories: ['Graphics', 'Utility'],
           description: 'Utility application to browse and search unusual characters.',

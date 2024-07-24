@@ -22,7 +22,7 @@ export function createMenu(mainWindow: BrowserWindow) {
         },
         { type: 'separator' },
         {
-          label: 'Delete DB',
+          label: 'Reload DB',
           click: async () => {
             mainWindow.webContents.send('drop-idb');
           },
@@ -44,7 +44,6 @@ export function createMenu(mainWindow: BrowserWindow) {
       submenu: [
         {
           label: 'Reload',
-          // icon: path.resolve('src/assets/icons/reload.png'),
           registerAccelerator: true,
           acceleratorWorksWhenHidden: true,
           accelerator: 'F5',
@@ -54,7 +53,6 @@ export function createMenu(mainWindow: BrowserWindow) {
         },
         {
           label: 'Hide Menu    ',
-          // icon: path.resolve('src/assets/icons/hide-menu.png'),
           registerAccelerator: true,
           acceleratorWorksWhenHidden: true,
           accelerator: 'Ctrl+M',
@@ -65,18 +63,13 @@ export function createMenu(mainWindow: BrowserWindow) {
         { type: 'separator' },
         {
           label: 'Dev Tools',
-          // icon: path.resolve('src/assets/icons/code.png'),
           registerAccelerator: true,
           acceleratorWorksWhenHidden: true,
           accelerator: 'F12',
           click: async () => {
-            // const [_, height] = mainWindow.getSize();
-
             if (mainWindow.webContents.isDevToolsOpened()) {
-              // mainWindow.setSize(WINDOW_WIDTH, height);
               mainWindow.webContents.closeDevTools();
             } else {
-              // mainWindow.setSize(WINDOW_WIDTH + DEVTOOLS_WIDTH, height);
               mainWindow.webContents.toggleDevTools();
             }
           },

@@ -10,7 +10,7 @@ if (require('electron-squirrel-startup')) {
 }
 
 const RESOURCES_PATH = app.isPackaged
-  ? path.join(process.resourcesPath, 'app.asar', '.vite/renderer', MAIN_WINDOW_VITE_NAME, 'assets')
+  ? path.join(process.resourcesPath, 'app.asar', '.vite/renderer', VITE_MAIN_WINDOW_NAME, 'assets')
   : path.join(__dirname, '../../src/assets');
 
 function createWindow() {
@@ -32,10 +32,10 @@ function createWindow() {
   window.maximize();
 
   // and load the index.html of the app.
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    window.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL).catch(console.error);
+  if (VITE_MAIN_WINDOW_SERVER_PORT) {
+    window.loadURL(`http://localhost:${VITE_MAIN_WINDOW_SERVER_PORT}`).catch(console.error);
   } else {
-    window.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)).catch(console.error);
+    window.loadFile(path.join(__dirname, `../renderer/${VITE_MAIN_WINDOW_NAME}/index.html`)).catch(console.error);
   }
 
   createMenu(window);
@@ -60,7 +60,7 @@ app.whenReady()
     ipcMain.on('db-init', (event: IpcMainEvent) => {
       let filesDir: string;
       if (app.isPackaged) {
-        filesDir = path.join(process.resourcesPath, 'app.asar/.vite/renderer', MAIN_WINDOW_VITE_NAME, 'assets');
+        filesDir = path.join(process.resourcesPath, 'app.asar/.vite/renderer', VITE_MAIN_WINDOW_NAME, 'assets');
       } else {
         filesDir = path.join(__dirname, '../../src/assets/data');
       }

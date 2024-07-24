@@ -1,4 +1,4 @@
-import Lottie, { AnimationConfigWithPath, AnimationItem } from 'lottie-web';
+import Lottie, { AnimationConfigWithPath, AnimationItem } from 'lottie-web/build/player/lottie_light';
 import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { getId } from '../../utils/get-id';
 
