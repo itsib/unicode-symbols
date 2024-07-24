@@ -15,6 +15,9 @@ export function getBuildConfig(env: ConfigEnv<'build'>): UserConfig {
   return {
     root,
     mode,
+    define: {
+      'VITE_IDB_VERSION': JSON.stringify(pkg.config['idb-version']),
+    },
     build: {
       // target: 'esnext',
       // Prevent multiple builds from interfering with each other.

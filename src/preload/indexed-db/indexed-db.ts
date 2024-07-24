@@ -214,6 +214,9 @@ export class IndexedDb {
     if (db.objectStoreNames.contains(IdbStoreName.Planes)) {
       db.deleteObjectStore(IdbStoreName.Planes);
     }
+    if (db.objectStoreNames.contains(IdbStoreName.Emoji)) {
+      db.deleteObjectStore(IdbStoreName.Emoji);
+    }
   }
 
   private async _getCount(storeName: IdbStoreName): Promise<number> {

@@ -13,7 +13,6 @@ export const Layout: FC = () => {
   const loading = !useIdbReady();
   const loadingRef = useRef(loading);
 
-
   // Manage display animation
   useEffect(() => {
     const backdrop = backdropRef.current;
@@ -64,7 +63,7 @@ export const Layout: FC = () => {
     <div className="layout-page">
       <div className="loading-backdrop" ref={backdropRef}>
         <LottiePlayer className="animation" object={initializationAnimation} loop={true}/>
-        <div className="message">Creating a Database</div>
+        <div className="message">Updating the Database</div>
       </div>
       <div className="main-wrap" ref={mainRef}>
         <Outlet context={{ loading }}/>

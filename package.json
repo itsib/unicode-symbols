@@ -5,6 +5,10 @@
   "author": "Sergey <itsib.su@gmail.com>",
   "license": "ISC",
   "main": ".vite/build/main.js",
+  "config": {
+    "idb-name": "UnicodeSymbols",
+    "idb-version": 5
+  },
   "scripts": {
     "start": "electron-forge start",
     "build": "electron-forge --verbose make",
@@ -42,14 +46,20 @@
     "electron": "^31.1.0",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1",
-    "postcss": "8.4.38",
+    "postcss": "8.4.39",
     "postcss-import": "^16.1.0",
     "postcss-import-ext-glob": "^2.1.1",
     "postcss-nesting": "^12.1.5",
     "puppeteer-core": "^22.12.1",
     "svgo": "^3.3.2",
     "ts-node": "^10.9.2",
-    "typescript": "~4.5.4",
+    "typescript": "~5.5.4",
     "vite": "^5.3.1"
+  },
+  "overrides": {
+    "lodash": "^4.17.21",
+    "@electron-forge/core": {
+      "lodash": "^4.17.21"
+    }
   }
 }

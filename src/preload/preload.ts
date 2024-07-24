@@ -1,8 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { IndexedDb } from './indexed-db/indexed-db';
-
-const INDEXED_DB_NAME = 'UnicodeSymbols';
-const INDEXED_DB_VERSION = 3;
+import pkg from '../../package.json';
 
 contextBridge.exposeInMainWorld('appAPI', {
   /**
@@ -31,15 +29,15 @@ contextBridge.exposeInMainWorld('appAPI', {
   /**
    * IndexedDB store name
    */
-  INDEXED_DB_NAME,
+  INDEXED_DB_NAME: pkg.config['idb-name'],
   /**
    * IndexedDB model version
    */
-  INDEXED_DB_VERSION,
+  INDEXED_DB_VERSION: pkg.config['idb-version'],
 });
 
 (async function init() {
-  const dataBase = IndexedDb.get(INDEXED_DB_NAME, INDEXED_DB_VERSION);
+  const dataBase = IndexedDb.get(pkg.config['idb-name'], pkg.config['idb-version']);
   if (await dataBase.checkInit()) {
     await dataBase.close();
     return;
