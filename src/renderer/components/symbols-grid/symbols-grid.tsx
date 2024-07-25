@@ -18,12 +18,14 @@ export const SymbolsGrid: FC<ISymbolsGrid> = ({ codes }) => {
   const gridRef = useRef();
   const size = useSize('symbols-grid-container');
   const [iconSize] = useAppConfig(AppConfigKey.IconSize);
+  const [numberBase] = useAppConfig(AppConfigKey.NumberBase);
 
   const [gridProps, setGridProps] = useState<Omit<FixedSizeGridProps, 'children'> | null>(null);
   const [active, setActive] = useState<{ code: number } | null>(null);
 
   const itemDataRef = useRef<IGridCellFactory<{ columnCount: number, codes: (number | string)[] }>>({
     columnCount: 0,
+    numberBase,
     codes: [],
     onClick: (code: number) => setActive({ code }),
     getSymbolCode: (rowIndex: number, columnIndex: number, data: IGridCellFactory<{
@@ -50,6 +52,7 @@ export const SymbolsGrid: FC<ISymbolsGrid> = ({ codes }) => {
 
     itemDataRef.current.columnCount = columnCount;
     itemDataRef.current.codes = codes;
+    itemDataRef.current.numberBase = numberBase;
 
     setGridProps({
       columnCount,
@@ -64,7 +67,7 @@ export const SymbolsGrid: FC<ISymbolsGrid> = ({ codes }) => {
         return code ? code : `${columnIndex}-${rowIndex}`;
       },
     });
-  }, [codes, size, iconSize, isReady]);
+  }, [codes, size, iconSize, isReady, numberBase]);
 
   useEffect(() => {
     (gridRef.current as any)?.scrollTo?.({ scrollTop: 0 });

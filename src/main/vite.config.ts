@@ -48,9 +48,6 @@ export default defineConfig(async (env): Promise<UserConfig> => {
     },
     plugins: [
       vitePluginServerRestart('restart'),
-      vitePluginCopyResources([
-        'src/assets/icons',
-      ]),
     ],
     resolve: {
       mainFields: [

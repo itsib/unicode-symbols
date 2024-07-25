@@ -1,0 +1,10 @@
+.card-row.number-base-control {
+
+  .option-control {
+
+    .control-wrap {
+      width: 200px;
+      margin-left: auto;
+    }
+  }
+}

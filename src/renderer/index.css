@@ -7,8 +7,9 @@
   color: rgba(234, 234, 234, 0.94);
 
   /* Constants */
-  --app-font-family: "UbuntuSans";
+  --app-font-family: "Ubuntu";
   --modal-z-index: 99;
+  --popup-z-index: 110;
 
   /* Colors */
   --theme-color: 255 255 255;

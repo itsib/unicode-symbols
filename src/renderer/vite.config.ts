@@ -13,6 +13,7 @@ export default defineConfig((env) => {
     root,
     mode,
     base: './',
+    logLevel: 'info',
     build: {
       outDir: `.vite/renderer/${name}`,
       assetsInlineLimit: 0,

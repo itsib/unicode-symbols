@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "VITE_CJS_IGNORE_WARNING=true electron-forge start",
-    "build": "VITE_CJS_IGNORE_WARNING=true electron-forge --verbose make",
+    "build": "VITE_CJS_IGNORE_WARNING=true electron-forge make --enable-logging",
     "package": "electron-forge package",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",

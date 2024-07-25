@@ -1,26 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FormControlSelect, FormControlSlider } from '../../components/forms';
-import { FormControlOption, StorageUsage } from '@app-types';
+import { StorageUsage } from '@app-types';
 import { PieChart } from '../../components/pie-chart/pie-chart';
-import { useAppConfig } from '../../hooks/use-app-config';
-import { AppConfigKey } from '@app-context';
 import { ImgBack } from '../../components/images/img-back';
 
-const NUMBERS_BASE_OPTIONS: FormControlOption<number>[] = [
-  {
-    label: 'Decimals',
-    value: 10,
-  },
-  {
-    label: 'Hexadecimal',
-    value: 16,
-  }
-];
-
 export const SettingsPage: FC = () => {
-  const [iconSize, setIconSize] = useAppConfig(AppConfigKey.IconSize);
-  const [numberBase, setNumberBase] = useAppConfig(AppConfigKey.NumberBase);
   const [storage, setStorage] = useState<StorageUsage>();
 
   useEffect(() => {
@@ -58,27 +42,6 @@ export const SettingsPage: FC = () => {
         </div>
 
         <div className="card">
-          <div className="card-row icon-size-control">
-            <div className="option-name">
-              <span>Icon Size</span>
-            </div>
-
-            <div className="option-control">
-              <div className="inner-value">{iconSize}px</div>
-
-              <div className="inner-control">
-                <FormControlSlider
-                  id="font-size-control"
-                  value={iconSize}
-                  min={26}
-                  step={4}
-                  max={50}
-                  debounce={1}
-                  onChange={setIconSize}
-                />
-              </div>
-            </div>
-          </div>
           <div className="card-row storage-usage">
             <div className="option-name">
               <span>Storage Usage</span>
@@ -104,20 +67,6 @@ export const SettingsPage: FC = () => {
                 </div>
               </div>
             ) : null}
-          </div>
-          <div className="card-row number-base">
-            <div className="option-name">
-              <span>Numbers Base</span>
-            </div>
-
-            <div className="option-control">
-              <FormControlSelect
-                options={NUMBERS_BASE_OPTIONS}
-                id="nimbers-base-selector"
-                value={numberBase}
-                onChange={setNumberBase}
-              />
-            </div>
           </div>
         </div>
       </div>

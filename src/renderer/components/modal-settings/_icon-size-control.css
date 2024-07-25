@@ -1,0 +1,17 @@
+.card-row.icon-size-control {
+
+  .option-control {
+    display: flex;
+    align-items: center;
+
+    .inner-value {
+      min-width: 40px;
+      margin-right: 18px;
+      font-size: 16px;
+    }
+
+    .inner-control {
+      width: 100%;
+    }
+  }
+}

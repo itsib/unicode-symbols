@@ -57,24 +57,6 @@
         }
       }
 
-      .card-row.icon-size-control {
-
-        .option-control {
-          display: flex;
-          align-items: center;
-
-          .inner-value {
-            min-width: 40px;
-            margin-right: 18px;
-            font-size: 16px;
-          }
-
-          .inner-control {
-            width: 100%;
-          }
-        }
-      }
-
       .card-row.storage-usage {
         padding: 6px 20px;
 
@@ -108,14 +90,6 @@
               display: block;
             }
           }
-        }
-      }
-
-      .card-row.number-base {
-
-        .option-control {
-          --form-control-height: 34px;
-          width: 200px;
         }
       }
     }

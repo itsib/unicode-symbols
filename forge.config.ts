@@ -30,6 +30,13 @@ export const config: ForgeConfig = {
         }
       }
     },
+    // {
+    //   name: '@electron-forge/maker-squirrel',
+    //   config: {
+    //     author: 'Sergey <itsib.su@gmail.com>',
+    //     description: 'Utility application to browse and search unusual characters.'
+    //   }
+    // },
   ],
   plugins: [
     {

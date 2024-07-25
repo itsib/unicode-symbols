@@ -8,7 +8,7 @@ export function createMenu(mainWindow: BrowserWindow) {
         {
           label: 'Settings',
           click: async () => {
-            mainWindow.webContents.send('redirect', { path: 'settings' });
+            mainWindow.webContents.send('settings');
           },
         },
         {

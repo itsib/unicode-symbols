@@ -1,17 +1,22 @@
-import React, { FC, useEffect, useMemo, useRef } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import React, { CSSProperties, FC, useEffect, useRef, useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import { LottiePlayer } from '../components/lottie-player/lottie-player';
-import initializationAnimation from '../../assets/animations/initialization.json'
 import { useIdbReady } from '../hooks/indexed-db/use-idb-ready';
+import { ModalSettings } from '../components/modal-settings/modal-settings';
+import { useAppConfig } from '../hooks/use-app-config';
+import { AppConfigKey } from '@app-context';
+import initializationAnimation from '../../assets/animations/initialization.json';
 
 const DURATION = 400;
 
 export const Layout: FC = () => {
-  const navigate = useNavigate();
+  const [fontFamily] = useAppConfig(AppConfigKey.FontFamily);
   const backdropRef = useRef<HTMLDivElement>();
   const mainRef = useRef<HTMLDivElement>();
   const loading = !useIdbReady();
   const loadingRef = useRef(loading);
+
+  const [isSettings, setIsSettings] = useState(false);
 
   // Manage display animation
   useEffect(() => {
@@ -56,11 +61,11 @@ export const Layout: FC = () => {
 
   // Manage redirects from main process
   useEffect(() => {
-    return window.appAPI.on<{ path: string }>('redirect', ({ path }) => navigate(path));
+    return window.appAPI.on<{ path: string }>('settings', () => setIsSettings(true));
   }, []);
 
   return (
-    <div className="layout-page">
+    <div className="layout-page" style={{ '--app-font-family': fontFamily } as CSSProperties}>
       <div className="loading-backdrop" ref={backdropRef}>
         <LottiePlayer className="animation" object={initializationAnimation} loop={true}/>
         <div className="message">Updating the Database</div>
@@ -68,6 +73,8 @@ export const Layout: FC = () => {
       <div className="main-wrap" ref={mainRef}>
         <Outlet context={{ loading }}/>
       </div>
+
+      <ModalSettings onDismiss={() => setIsSettings(false)} isOpen={isSettings} />
     </div>
   );
 };

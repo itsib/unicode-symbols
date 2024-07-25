@@ -38,6 +38,8 @@ export default defineConfig(async (env): Promise<UserConfig> => {
         },
       },
     },
-    plugins: [vitePluginServerRestart('reload')],
+    plugins: [
+      vitePluginServerRestart('reload'),
+    ],
   };
 });

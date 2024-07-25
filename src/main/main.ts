@@ -38,11 +38,10 @@ function createWindow() {
     window.loadFile(path.join(__dirname, `../renderer/${VITE_MAIN_WINDOW_NAME}/index.html`)).catch(console.error);
   }
 
-  session.defaultSession.setPermissionCheckHandler((wc, permission, callback) =>  {
-    // if (permission === 'local-fonts') {
-    //   console.log('Denying check permission to local-fonts')
-    //   return false;
-    // }
+  session.defaultSession.setPermissionCheckHandler((wc, permission: string, callback) =>  {
+    if (permission === 'local-fonts' || permission === 'background-sync') {
+      return true;
+    }
     return false;
   })
 

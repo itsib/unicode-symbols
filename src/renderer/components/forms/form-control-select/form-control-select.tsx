@@ -51,7 +51,7 @@ export function FormControlSelect<T extends number | string>(props: IFormControl
         </svg>
       </div>
 
-      <FormControlDropdown value={value} options={options} open={open} rect={rect} onDismiss={() => setOpen(false)} onChange={onChangeCallback} />
+      <FormControlDropdown id={id} value={value} options={options} open={open} rect={rect} onDismiss={() => setOpen(false)} onChange={onChangeCallback} />
 
       <div className="error">
         <span>{error}</span>
