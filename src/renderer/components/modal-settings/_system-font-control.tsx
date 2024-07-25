@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
+import { AppConfigKey } from '@app-context';
 import { FormControlSelect } from '../forms';
 import { useSystemFonts } from '../../hooks/use-system-fonts';
 import { useAppConfig } from '../../hooks/use-app-config';
-import { AppConfigKey } from '@app-context';
 
 export const SystemFontControl: FC = () => {
   const fonts = useSystemFonts();
@@ -11,7 +11,7 @@ export const SystemFontControl: FC = () => {
   return (
     <div className="card-row system-font-control">
       <div className="option-name">
-        <span>Font</span>
+        <span>Font Family</span>
       </div>
 
       <div className="option-control">

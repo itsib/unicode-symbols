@@ -8,10 +8,9 @@ import { ImgStar } from '../images/img-star';
 import { useFavorites } from '../../hooks/use-favorites';
 import { SkinColorPicker } from '../skin-color-picker/skin-color-picker';
 import { SymbolSkinColor } from '@app-types';
-import { genSymbolView, genSymbolCodes, SymbolCodeOutput } from '../../utils/gen-symbol-view';
+import { genSymbolCodes, genSymbolView, SymbolCodeOutput } from '../../utils/gen-symbol-view';
 import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
-import { useLog } from '../../hooks/use-log';
 import { ImgArrow } from '../images/img-arrow';
 
 export interface IModalCreateSymbol extends ModalProps {
@@ -37,6 +36,7 @@ export const ModalManageSymbol: FC<IModalCreateSymbol> = ({ isOpen, onDismiss, c
 const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: _code, onDismiss }) => {
   const [code, setCode] = useState(_code);
   const symbolMeta = useIdbGetSymbolMeta(code);
+  const [fontFamily] = useAppConfig(AppConfigKey.FontFamily);
   const [defaultSkin, setDefaultSkin] = useAppConfig(AppConfigKey.SkinColor);
   const [_skin, setSkin] = useState<SymbolSkinColor>(defaultSkin);
   const skin = symbolMeta?.skin ? _skin : 0;
@@ -89,11 +89,15 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: 
             <ImgStar className="star" active={isFavorite}/>
           </button>
 
+
           <BtnCopy className="symbol" text={String.fromCodePoint(...codesSet)}>
-            <ImgSymbol code={html} size={70} />
+            <div style={{ fontFamily: fontFamily }}>
+              <ImgSymbol code={code} size={70}/>
+            </div>
           </BtnCopy>
 
-          {symbolMeta?.skin ? (
+
+        {symbolMeta?.skin ? (
             <div className="right-color-picker">
               <SkinColorPicker value={skin} onChange={setSkin} />
 

@@ -31,7 +31,7 @@ function codeConverter(code: number, output: SymbolCodeOutput): string {
 
 export function genSymbolCodes(code: number | number[], skin: SymbolSkinColor = 0): number[] {
   if (typeof code === 'number') {
-    if (code > 0xffffffff) {
+    if (code > 0xFFFFFFFF) {
       const stringCode = code.toString(16);
       code = [
         parseInt(stringCode.slice(0, stringCode.length / 2), 16),

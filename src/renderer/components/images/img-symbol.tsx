@@ -1,19 +1,14 @@
 import React, { memo } from 'react';
-import { genSymbolCodes, genSymbolView, SymbolCodeOutput } from '../../utils/gen-symbol-view';
+import { genSymbolCodes } from '../../utils/gen-symbol-view';
+import { SymbolSkinColor } from '@app-types';
 
 export interface IImgSymbol extends Omit<React.HTMLAttributes<HTMLDivElement>, 'style'> {
   size?: number | string;
-  code?: string | number;
+  code?: number | number[];
+  skin?: SymbolSkinColor;
 }
 
-export const ImgSymbol = memo(function IImgSymbol({ size = 42, code, ...props }: IImgSymbol) {
-  let html: string;
-  if (typeof code === 'number') {
-    html = genSymbolView(genSymbolCodes(code), SymbolCodeOutput.HTML);
-  } else {
-    html = code;
-  }
-
+export const ImgSymbol = memo(function IImgSymbol({ size = 42, code, skin, ...props }: IImgSymbol) {
   return (
     <div
       style={{
@@ -26,7 +21,11 @@ export const ImgSymbol = memo(function IImgSymbol({ size = 42, code, ...props }:
       }}
       {...props}
     >
-      {code ? <span dangerouslySetInnerHTML={{ __html: html }}/> : null}
+      {Array.isArray(code) ? (
+        <>{String.fromCodePoint(...code)}</>
+      ) : code ? (
+        <>{String.fromCodePoint(...genSymbolCodes(code, skin))}</>
+      ) : null}
     </div>
   );
 });

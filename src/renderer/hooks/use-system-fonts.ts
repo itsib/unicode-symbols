@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { FormControlOption } from '@app-types';
 import { DEFAULT_FONT_FAMILY } from '../constants/common';
 
-const FIRST = { label: DEFAULT_FONT_FAMILY, value: DEFAULT_FONT_FAMILY };
+const FIRST = {
+  label: `<span style="font-family: '${DEFAULT_FONT_FAMILY}'">${DEFAULT_FONT_FAMILY}</span>`,
+  value: DEFAULT_FONT_FAMILY,
+};
 
 declare global {
   interface FontData {
@@ -22,11 +25,14 @@ export function useSystemFonts(): FormControlOption<string>[] {
     queryLocalFonts()
       .then(fonts => {
         const indexed: Record<string, FormControlOption<string>> = {
-          [FIRST.value]: { label: 'Roboto', value: 'Roboto' }
+          [FIRST.value]: FIRST,
         };
 
         for (let i = 0; i < fonts.length; i++) {
-          indexed[fonts[i].family] = { label: fonts[i].family, value: fonts[i].family };
+          indexed[fonts[i].family] = {
+            label: `<span style="font-family: '${fonts[i].family}'; line-height: 0">${fonts[i].family}</span>`,
+            value: fonts[i].family,
+          };
         }
 
         Reflect.deleteProperty(indexed, FIRST.value);

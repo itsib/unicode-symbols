@@ -8,8 +8,8 @@ export type ExtendData = Record<string, any>;
 
 export type IGridCellFactory<T extends ExtendData> = T & {
   numberBase: number;
-  onClick: (code: number | string) => void;
-  getSymbolCode: (rowIndex: number, columnIndex: number, data: IGridCellFactory<T>) => number | string | null;
+  onClick: (code: number) => void;
+  getSymbolCode: (rowIndex: number, columnIndex: number, data: IGridCellFactory<T>) => number | null;
 }
 
 export function GridCellFactory<T extends ExtendData = ExtendData>({ style, rowIndex, columnIndex, data }: GridChildComponentProps<IGridCellFactory<T>>) {

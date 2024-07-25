@@ -1,4 +1,5 @@
 :root {
+  --form-control-select-t: 0;
   --form-control-select-h: 0;
   --form-control-select-hw: 0;
   --form-control-select-ch: 0;
@@ -7,7 +8,7 @@
 
 .form-control-dropdown {
   left: calc(var(--form-control-select-ch) - var(--form-control-select-hw));
-  top: calc(var(--form-control-select-cv) - 30px);
+  top: var(--form-control-select-t);
   width: calc(var(--form-control-select-hw) * 2);
   position: absolute;
 

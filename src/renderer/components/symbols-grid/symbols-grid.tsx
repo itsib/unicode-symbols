@@ -30,7 +30,7 @@ export const SymbolsGrid: FC<ISymbolsGrid> = ({ codes }) => {
     onClick: (code: number) => setActive({ code }),
     getSymbolCode: (rowIndex: number, columnIndex: number, data: IGridCellFactory<{
       columnCount: number,
-      codes: (number | string)[]
+      codes: number[],
     }>) => {
       const index = (data.columnCount * rowIndex) + columnIndex;
       return data.codes[index];

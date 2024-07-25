@@ -18,12 +18,12 @@ export function FormControlDropdown<T extends number | string>(props: IFormContr
   const [process, setProcess] = useState(false);
   const [dropdownClass, setDropdownClass] = useState<string>('animation-from');
 
+  const fullHeight = (options.length * 38) + 16;
   const ch = rect ? (rect.left + (rect.width / 2)) : 0;
   const cv = rect ? (rect.top + (rect.height / 2)) : 0;
   const hw = rect ? ((rect.width / 2) + Math.min(rect.left, 10)) : 0; // Half width
-  const h = Math.min(window.innerHeight - cv, 460);
-
-  useLog({ h });
+  const h = Math.min((window.innerHeight - cv) * 1.5, 460, fullHeight);
+  const t = cv - (h / 2);
 
   function onClickOverlay(event: React.MouseEvent<HTMLDivElement>) {
     event.stopPropagation();
@@ -56,8 +56,7 @@ export function FormControlDropdown<T extends number | string>(props: IFormContr
     if (process || open) {
       const timeout = setTimeout(() => {
         const option = document.getElementById(`${id}-active`);
-        option.scrollIntoView({ block: 'start' });
-        option.parentElement.parentElement.parentElement.scrollBy(0, -10)
+        option.scrollIntoView({ block: 'center' });
       }, 20);
 
       return () => {
@@ -71,6 +70,7 @@ export function FormControlDropdown<T extends number | string>(props: IFormContr
     <div
       className="form-control-dropdown"
       style={{
+        '--form-control-select-t': `${Math.round(t)}px`,
         '--form-control-select-h': `${Math.round(h)}px`,
         '--form-control-select-hw': `${Math.round(hw)}px`,
         '--form-control-select-ch': `${Math.round(ch)}px`,
@@ -94,7 +94,7 @@ function Option<T extends number | string>(props: FormControlOption<T> & { id: s
   return (
     <li className="option">
       <button type="button" id={active ? `${id}-active` : null} className={`btn btn-option ${active ? 'active' : ''}`} value={value} onClick={() => onClick(value)}>
-        <span>{label}</span>
+        <span dangerouslySetInnerHTML={{ __html: label }} />
 
         {active ? (
           <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" className="active-check">

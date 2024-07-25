@@ -35,7 +35,13 @@ export function FormControlSelect<T extends number | string>(props: IFormControl
       input.value = '';
     } else {
       const selected = options.find(opt => opt.value === value);
-      input.value = selected ? selected.label : '';
+      if (!selected) {
+        input.value = '';
+      } else {
+        const span = document.createElement('span');
+        span.innerHTML = selected.label;
+        input.value = span.innerText;
+      }
     }
   }, [value, options]);
 
