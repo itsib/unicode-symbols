@@ -1,38 +1,68 @@
-import { FormControlOption } from '@app-types';
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useLog } from '../../../hooks/use-log';
+import { FixedSizeList, ListChildComponentProps } from 'react-window';
+
+interface ItemData {
+  id: string;
+  options: Record<string, any>[];
+  valueKey: string;
+  labelKey: string;
+  value: number | string;
+  onClickItemBtn(_value: number | string): void
+}
 
 export interface IFormControlDropdown<T extends number | string> {
   id: string;
   open?: boolean;
   rect?: DOMRect;
   value?: T;
-  options: FormControlOption<T>[];
+  valueKey?: string;
+  labelKey?: string;
+  options: Record<string, any> [];
   onChange?: (value: T) => void;
   onDismiss?: () => void;
 }
 
 export function FormControlDropdown<T extends number | string>(props: IFormControlDropdown<T>) {
-  const { id, value, options, rect, open, onChange, onDismiss } = props;
+  const { id, value, valueKey = 'value', labelKey = 'label', options, rect, open, onChange, onDismiss } = props;
+  const ref = useRef<FixedSizeList>();
   const [process, setProcess] = useState(false);
   const [dropdownClass, setDropdownClass] = useState<string>('animation-from');
 
-  const fullHeight = (options.length * 38) + 16;
-  const ch = rect ? (rect.left + (rect.width / 2)) : 0;
-  const cv = rect ? (rect.top + (rect.height / 2)) : 0;
-  const hw = rect ? ((rect.width / 2) + Math.min(rect.left, 10)) : 0; // Half width
-  const h = Math.min((window.innerHeight - cv) * 1.5, 460, fullHeight);
-  const t = cv - (h / 2);
+  const points = useMemo(() => {
+    if (!rect) {
+      return null;
+    }
+    const padding = 10;
+    const centerX = rect.left + (rect.width / 2);
+    const centerY = rect.top + (rect.height / 2);
+    const itemHeight = 38;
+    const fullHeight = options.length * itemHeight;
+    const maxHeight = (window.innerHeight - centerY - 20) * 2;
+
+    const width = Math.max(rect.width, 100) + padding;
+    const height = Math.min(maxHeight, fullHeight, 460);
+    const left = centerX - (width / 2);
+    const top = centerY - (height / 2);
+
+    return { width, height, left, top, itemHeight, padding }
+  }, [rect, options.length])
+
+  const itemDataRef = useRef<ItemData>({
+    id,
+    options,
+    valueKey,
+    labelKey,
+    value,
+    onClickItemBtn(_value: string | number) {
+      onDismiss?.();
+      onChange?.(_value as T);
+    }
+  });
 
   function onClickOverlay(event: React.MouseEvent<HTMLDivElement>) {
     event.stopPropagation();
     onDismiss?.();
-  }
-
-  function onClickItemBtn(_value: T) {
-    onDismiss?.();
-    onChange?.(_value);
   }
 
   useEffect(() => {
@@ -53,10 +83,10 @@ export function FormControlDropdown<T extends number | string>(props: IFormContr
   }, [open]);
 
   useEffect(() => {
-    if (process || open) {
+    if (open) {
       const timeout = setTimeout(() => {
-        const option = document.getElementById(`${id}-active`);
-        option.scrollIntoView({ block: 'center' });
+        const index = options.findIndex(opt => opt[valueKey] === value);
+        ref.current.scrollToItem(index, 'center');
       }, 20);
 
       return () => {
@@ -64,24 +94,36 @@ export function FormControlDropdown<T extends number | string>(props: IFormContr
       }
     }
 
-  }, [process, open, id]);
+  }, [open, value, valueKey, options]);
 
-  return process || open ? createPortal(
+  useEffect(() => {
+    itemDataRef.current.id = id;
+    itemDataRef.current.options = options;
+    itemDataRef.current.valueKey = valueKey;
+    itemDataRef.current.labelKey = labelKey;
+    itemDataRef.current.value = value;
+  }, [options, valueKey, labelKey, value, id]);
+
+  return (process || open) && rect && points ? createPortal(
     <div
       className="form-control-dropdown"
       style={{
-        '--form-control-select-t': `${Math.round(t)}px`,
-        '--form-control-select-h': `${Math.round(h)}px`,
-        '--form-control-select-hw': `${Math.round(hw)}px`,
-        '--form-control-select-ch': `${Math.round(ch)}px`,
-        '--form-control-select-cv': `${Math.round(cv)}px`,
-      } as CSSProperties}
+        left: `${points.left}px`,
+        top: `${points.top}px`,
+      }}
     >
       <div className="select-dropdown-overlay" aria-label="dropdown overlay" onClick={onClickOverlay} />
       <div className={`select-dropdown-menu ${dropdownClass}`} aria-label="dropdown">
-        <ul className="menu-items">
-          {options.map(option => <Option<T> key={option.value} id={id} onClick={onClickItemBtn} active={value === option.value} {...option} />)}
-        </ul>
+        <FixedSizeList
+          height={points.height}
+          itemCount={options.length}
+          itemSize={points.itemHeight}
+          width={points.width}
+          itemData={itemDataRef.current}
+          ref={ref}
+        >
+          {Option}
+        </FixedSizeList>
       </div>
 
     </div>,
@@ -89,19 +131,26 @@ export function FormControlDropdown<T extends number | string>(props: IFormContr
   ) : null;
 }
 
-function Option<T extends number | string>(props: FormControlOption<T> & { id: string; active?: boolean, onClick: (value: T) => void }) {
-  const { id, value, label, active, onClick } = props;
-  return (
-    <li className="option">
-      <button type="button" id={active ? `${id}-active` : null} className={`btn btn-option ${active ? 'active' : ''}`} value={value} onClick={() => onClick(value)}>
-        <span dangerouslySetInnerHTML={{ __html: label }} />
+function Option(props: ListChildComponentProps<ItemData>) {
+  const { data, style, index } = props;
+  const option = data.options[index];
+  const label = option[data.labelKey];
+  const value = option[data.valueKey];
 
-        {active ? (
-          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" className="active-check">
-            <path d="M13.969 2.969L6.5 10.438l-4.469-4.47L.97 7.032l5.531 5.53 8.531-8.53z" fill="currentColor" />
-          </svg>
-        ) : null}
-      </button>
-    </li>
+  const id = data.id;
+  const active = data.value === value;
+
+  return (
+    <button type="button" style={style} id={active ? `${id}-active` : null}
+            className={`btn btn-option ${active ? 'active' : ''}`} value={value}
+            onClick={() => data.onClickItemBtn(value)}>
+      <span dangerouslySetInnerHTML={{ __html: label }}/>
+
+      {active ? (
+        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" className="active-check">
+          <path d="M13.969 2.969L6.5 10.438l-4.469-4.47L.97 7.032l5.531 5.53 8.531-8.53z" fill="currentColor"/>
+        </svg>
+      ) : null}
+    </button>
   );
 }

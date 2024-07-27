@@ -7,14 +7,11 @@
 }
 
 .form-control-dropdown {
-  left: calc(var(--form-control-select-ch) - var(--form-control-select-hw));
-  top: var(--form-control-select-t);
-  width: calc(var(--form-control-select-hw) * 2);
   position: absolute;
 
   .select-dropdown-menu {
-    max-height: var(--form-control-select-h);
-    overflow-y: auto;
+    padding: 4px;
+    overflow: hidden;
     background-color: rgb(var(--form-control-dropdown-bg));
     box-shadow: var(--form-control-dropdown-shadow);
     border-radius: calc(var(--form-control-border-radius) + 2px);
@@ -24,39 +21,30 @@
     transition: all .15s ease-in;
     z-index: var(--popup-z-index);
 
-    .menu-items {
-      margin: 0;
-      padding: 8px 6px;
+    .btn-option {
+      width: 100%;
+      height: 38px;
+      padding: 6px 12px;
+      border-radius: var(--form-control-border-radius);
+      font-weight: normal;
+      font-family: inherit;
+      text-align: start;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
-      .option {
-        list-style: none;
+      &.active {
+        background-color: rgb(var(--form-control-dropdown-hover) / 0.6);
+      }
 
-        .btn-option {
-          width: 100%;
-          min-height: 38px;
-          padding: 6px 12px;
-          border-radius: var(--form-control-border-radius);
-          font-weight: normal;
-          font-family: inherit;
-          text-align: start;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
+      &:hover {
+        background-color: rgb(var(--form-control-dropdown-hover));
+      }
 
-          &.active {
-            background-color: rgb(var(--form-control-dropdown-hover) / 0.6);
-          }
-
-          &:hover {
-            background-color: rgb(var(--form-control-dropdown-hover));
-          }
-
-          .active-check {
-            width: 16px;
-            height: 16px;
-            aspect-ratio: 1/1;
-          }
-        }
+      .active-check {
+        width: 16px;
+        height: 16px;
+        aspect-ratio: 1/1;
       }
     }
 

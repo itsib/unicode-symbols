@@ -211,7 +211,7 @@ hr {
 
 ::-webkit-scrollbar-button {
   height: 6px;
-  background-color: transparent;
+  background-color: rgb(var(--scroll-thumb));;
 }
 
 ::-webkit-scrollbar-thumb {

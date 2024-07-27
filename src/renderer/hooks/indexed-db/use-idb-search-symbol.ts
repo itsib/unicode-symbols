@@ -15,6 +15,13 @@ export function useIdbSearchSymbol(search?: string): number[] {
     if (!search) {
       return null;
     }
+    if (search.length <= 2 && /^[^a-zA-Z0-9\s]+$/.test(search)) {
+      const code = search.codePointAt(0);
+      if (code > 0x1000 && code < 0x1FFFF) {
+        return [code];
+      }
+    }
+
     const regExp = numberBase === 16 ? /^(?:0x)?[a-fA-F0-9]+$/ : /^[0-9]+$/;
     if (regExp.test(search)) {
       let cursor = parseInt(search, numberBase);

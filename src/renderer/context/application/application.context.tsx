@@ -10,16 +10,19 @@ export enum AppConfigKey {
   SkinColor,
   NumberBase,
   FontFamily,
+  SearchResult,
 }
 
 export type AppConfig<Key extends AppConfigKey> =
   Key extends AppConfigKey.IconSize ? number :
-    Key extends AppConfigKey.ActiveCategory ? number :
-      Key extends AppConfigKey.DevMode ? boolean :
-        Key extends AppConfigKey.Favorites ? number[] :
-          Key extends AppConfigKey.SkinColor ? SymbolSkinColor :
-            Key extends AppConfigKey.NumberBase ? number :
-              Key extends AppConfigKey.FontFamily ? string : never;
+  Key extends AppConfigKey.ActiveCategory ? number :
+  Key extends AppConfigKey.DevMode ? boolean :
+  Key extends AppConfigKey.Favorites ? number[] :
+  Key extends AppConfigKey.SkinColor ? SymbolSkinColor :
+  Key extends AppConfigKey.NumberBase ? number :
+  Key extends AppConfigKey.FontFamily ? string :
+  Key extends AppConfigKey.SearchResult ? number :
+      never;
 
 export interface IApplicationContext {
   config: { [ Key in AppConfigKey ]: AppConfig<Key> };
@@ -35,6 +38,7 @@ export const APPLICATION_CONTEXT_DEFAULT: IApplicationContext = {
     [AppConfigKey.SkinColor]: 0,
     [AppConfigKey.NumberBase]: 16,
     [AppConfigKey.FontFamily]: DEFAULT_FONT_FAMILY,
+    [AppConfigKey.SearchResult]: 0x1000,
   },
   setConfig: () => {throw new Error('Not implemented')},
 };

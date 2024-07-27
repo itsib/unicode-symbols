@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { FormControlOption } from '@app-types';
 import { DEFAULT_FONT_FAMILY } from '../constants/common';
 
 const FIRST = {
   label: `<span style="font-family: '${DEFAULT_FONT_FAMILY}'">${DEFAULT_FONT_FAMILY}</span>`,
-  value: DEFAULT_FONT_FAMILY,
+  family: DEFAULT_FONT_FAMILY,
 };
 
 declare global {
@@ -18,28 +17,38 @@ declare global {
   function queryLocalFonts(): Promise<FontData[]>;
 }
 
-export function useSystemFonts(): FormControlOption<string>[] {
-  const [fontFamilies, setFontFamilies] = useState<FormControlOption<string>[]>([]);
+let GET_FONTS: Promise<FontData[]> | null = null;
+
+function getFonts(): Promise<FontData[]> {
+  if (!GET_FONTS) {
+    GET_FONTS = queryLocalFonts();
+  }
+  return GET_FONTS;
+}
+
+export function useSystemFonts(): { label: string; family: string }[] {
+  const [fontFamilies, setFontFamilies] = useState<{ label: string; family: string }[]>([]);
 
   useEffect(() => {
-    queryLocalFonts()
+    getFonts()
       .then(fonts => {
-        const indexed: Record<string, FormControlOption<string>> = {
-          [FIRST.value]: FIRST,
+        const indexed: {[key: string]: { label: string; family: string }} = {
+          [FIRST.family]: FIRST,
         };
 
-        for (let i = 0; i < fonts.length; i++) {
-          indexed[fonts[i].family] = {
-            label: `<span style="font-family: '${fonts[i].family}'; line-height: 0">${fonts[i].family}</span>`,
-            value: fonts[i].family,
-          };
+        for (const font of fonts) {
+          indexed[font.family] = {
+            label: `<span style="font-family: '${font.family}'">${font.family}</span>`,
+            family: font.family,
+          }
         }
 
-        Reflect.deleteProperty(indexed, FIRST.value);
+        Reflect.deleteProperty(indexed, FIRST.family)
 
         setFontFamilies([FIRST, ...Object.values(indexed)]);
       })
       .catch(error => {
+        GET_FONTS = null;
         console.error(error);
       });
   }, []);

@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FormControlBaseProps, FormControlOption } from '@app-types';
+import { FormControlBaseProps } from '@app-types';
 import { FormControlDropdown } from './_form-control-dropdown';
 
 export interface IFormControlSelect<T extends number | string> extends FormControlBaseProps<T> {
-  options: FormControlOption<T>[];
+  options: Record<string, any>[];
+  valueKey?: string;
+  labelKey?: string;
 }
 
 export function FormControlSelect<T extends number | string>(props: IFormControlSelect<T>) {
-  const { id, name, label, onChange, value, validate, options } = props;
+  const { id, name, label, onChange, value, validate, options, valueKey = 'value', labelKey = 'label' } = props;
   const ref = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,7 +36,7 @@ export function FormControlSelect<T extends number | string>(props: IFormControl
     if (value == null) {
       input.value = '';
     } else {
-      const selected = options.find(opt => opt.value === value);
+      const selected = options.find(opt => opt[valueKey] === value);
       if (!selected) {
         input.value = '';
       } else {
@@ -43,7 +45,7 @@ export function FormControlSelect<T extends number | string>(props: IFormControl
         input.value = span.innerText;
       }
     }
-  }, [value, options]);
+  }, [value, options, valueKey]);
 
   return (
     <div className="form-control form-control-select">
@@ -57,7 +59,17 @@ export function FormControlSelect<T extends number | string>(props: IFormControl
         </svg>
       </div>
 
-      <FormControlDropdown id={id} value={value} options={options} open={open} rect={rect} onDismiss={() => setOpen(false)} onChange={onChangeCallback} />
+      <FormControlDropdown
+        id={id}
+        value={value}
+        options={options}
+        labelKey={labelKey}
+        valueKey={valueKey}
+        open={open}
+        rect={rect}
+        onDismiss={() => setOpen(false)}
+        onChange={onChangeCallback}
+      />
 
       <div className="error">
         <span>{error}</span>
