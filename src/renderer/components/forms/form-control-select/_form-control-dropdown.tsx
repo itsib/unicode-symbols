@@ -141,9 +141,13 @@ function Option(props: ListChildComponentProps<ItemData>) {
   const active = data.value === value;
 
   return (
-    <button type="button" style={style} id={active ? `${id}-active` : null}
-            className={`btn btn-option ${active ? 'active' : ''}`} value={value}
-            onClick={() => data.onClickItemBtn(value)}>
+    <button
+      type="button"
+      style={style} id={active ? `${id}-active` : null}
+      className={`btn btn-option ${active ? 'active' : ''}`}
+      value={value}
+      onClick={() => data.onClickItemBtn(value)}
+    >
       <span dangerouslySetInnerHTML={{ __html: label }}/>
 
       {active ? (

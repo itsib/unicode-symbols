@@ -10,7 +10,6 @@ export interface IFormControlInput extends FormControlBaseProps<string> {
 
 export const FormControlInput = forwardRef((props: IFormControlInput, ref: ForwardedRef<HTMLInputElement>) => {
   const { id, name, label, onChange, value, validate, type, tabIndex, debounce: debounceMs = 500, disabled, placeholder } = props;
-  const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Update input value
