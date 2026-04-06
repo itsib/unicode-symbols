@@ -7,7 +7,7 @@ export function vitePluginCopyResources(files: string[]): Plugin {
   let output = false
 
   async function readdir(dir: string): Promise<string[]> {
-    return new Promise((resolve, reject) => {
+    return new Promise<string[]>((resolve, reject) => {
       fs.readdir(dir, { recursive: true, encoding: 'utf8' }, (err, files) => {
         if (err) {
           return reject(err);
@@ -18,7 +18,7 @@ export function vitePluginCopyResources(files: string[]): Plugin {
   }
 
   async function stat(file: string): Promise<fs.Stats> {
-    return new Promise((resolve, reject) => {
+    return new Promise<fs.Stats>((resolve, reject) => {
       fs.stat(file, (err, stats) => {
         if (err) {
           return reject(err);
@@ -29,7 +29,7 @@ export function vitePluginCopyResources(files: string[]): Plugin {
   }
 
   async function exists(file: string): Promise<boolean> {
-    return new Promise(resolve => {
+    return new Promise<boolean>(resolve => {
       fs.access(file, fs.constants.R_OK, err => {
         if (err) {
           return resolve(false);
@@ -40,7 +40,7 @@ export function vitePluginCopyResources(files: string[]): Plugin {
   }
 
   async function copy(src: string, dist: string): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       fs.cp(src, dist, { force: true, recursive: false }, (err) => {
         if (err) {
           return reject(err)

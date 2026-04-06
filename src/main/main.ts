@@ -1,49 +1,51 @@
-import { app, BrowserWindow, ipcMain, IpcMainEvent, session } from 'electron';
-import path from 'path';
+import { app, BrowserWindow, ipcMain, session } from 'electron';
 import { createMenu } from './utils/app-menu';
-import { WINDOW_HEIGHT, WINDOW_WIDTH } from './constants';
-import { copyText, createContextmenu } from './utils/context-menu';
-import { dbInitialisation } from './utils/db-initialisation';
+import { onContextmenu, onCopyText } from './utils/context-menu';
+import started from 'electron-squirrel-startup';
+import { resolve } from 'node:path';
+import { fileRead } from './utils/file-read';
 
-if (require('electron-squirrel-startup')) {
+export const DEVTOOLS_WIDTH = 500;
+export const WINDOW_WIDTH = 900;
+export const WINDOW_HEIGHT = 600;
+
+if (started) {
   app.quit();
 }
-
-const RESOURCES_PATH = app.isPackaged
-  ? path.join(process.resourcesPath, 'app.asar', '.vite/renderer', VITE_MAIN_WINDOW_NAME, 'assets')
-  : path.join(__dirname, '../../src/assets');
 
 function createWindow() {
   const window = new BrowserWindow({
     show: false,
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
-    icon: path.join(RESOURCES_PATH, '/brand/96x96.png'),
+    icon: 'resources/icon.png',
     webPreferences: {
       sandbox: true,
       devTools: true,
-      preload: path.join(__dirname, 'preload.js'),
+      preload: resolve(__dirname, 'preload.js'),
       nodeIntegration: false,
     },
   });
+  onContextmenu;
 
+  window.webContents.openDevTools();
   window.setMinimumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
   window.setMenuBarVisibility(true);
   window.maximize();
 
   // and load the index.html of the app.
-  if (VITE_MAIN_WINDOW_SERVER_PORT) {
-    window.loadURL(`http://localhost:${VITE_MAIN_WINDOW_SERVER_PORT}`).catch(console.error);
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    window.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL).catch(console.error);
   } else {
-    window.loadFile(path.join(__dirname, `../renderer/${VITE_MAIN_WINDOW_NAME}/index.html`)).catch(console.error);
+    window.loadFile(resolve(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)).catch(console.error);
   }
 
-  session.defaultSession.setPermissionCheckHandler((wc, permission: string, callback) =>  {
+  session.defaultSession.setPermissionCheckHandler((wc, permission: string, callback) => {
     if (permission === 'local-fonts' || permission === 'background-sync') {
       return true;
     }
     return false;
-  })
+  });
 
   createMenu(window);
 
@@ -58,32 +60,21 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.whenReady()
-  .then(() => {
-    ipcMain.on('copy-text', (_: IpcMainEvent, text: string) => copyText(text));
-
-    ipcMain.on('show-context-menu', (event: IpcMainEvent, meta?: any) => createContextmenu(event, meta));
-
-    ipcMain.on('db-init', (event: IpcMainEvent) => {
-      let filesDir: string;
-      if (app.isPackaged) {
-        filesDir = path.join(process.resourcesPath, 'app.asar/.vite/renderer', VITE_MAIN_WINDOW_NAME, 'assets');
-      } else {
-        filesDir = path.join(__dirname, '../../src/assets/data');
-      }
-
-      return dbInitialisation(event, filesDir);
-    });
-
+app.on('activate', () => {
+  // On OS X it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
+  }
+});
 
-    app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
-      }
-    });
-  })
-  .catch(console.log);
+app.on('ready', () => {
+  ipcMain.on('copy', onCopyText);
+  ipcMain.on('menu', onContextmenu);
+  ipcMain.on('file:read', fileRead);
+
+  createWindow();
+});
 
 
 

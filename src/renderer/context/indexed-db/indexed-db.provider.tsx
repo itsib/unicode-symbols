@@ -1,42 +1,45 @@
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { IndexedDbContext } from './indexed-db.context';
-import { IDBExtractError } from '../../utils/indexed-db';
+import { Database } from '../../utils/database';
+import { initDatabaseData } from '../../utils/database-init';
+
+let DATABASE: Database | null = null
 
 export const IndexedDbProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [database, setDatabase] = useState<IDBDatabase | null>(null);
-  const [isReady, setIsReady] = useState(true);
+  const [database, setDatabase] = useState<Database | null>(null);
+  const [isReady, setIsReady] = useState(false);
 
   const dropIndexedDb = useCallback(() => {
-    indexedDB.deleteDatabase(window.appAPI.INDEXED_DB_NAME);
-    window.location.reload();
+    Database.drop(window.appAPI.INDEXED_DB_NAME)
+      .then(() => window.location.reload())
+      .catch(console.error);
   }, []);
 
   // Create IndexedDB instance
   useEffect(() => {
-    const request = indexedDB.open(window.appAPI.INDEXED_DB_NAME, window.appAPI.INDEXED_DB_VERSION);
-
-    request.onerror = error => {
-      console.error(IDBExtractError(error));
-    };
-    request.onsuccess = () => setDatabase(request.result);
+    if (!DATABASE) {
+      DATABASE = Database.get({
+        name: window.appAPI.INDEXED_DB_NAME,
+        version: window.appAPI.INDEXED_DB_VERSION,
+        async onInit(db: IDBDatabase) {
+          try {
+            await initDatabaseData(db)
+          } catch (error: unknown) {
+            console.error(error)
+          }
+        },
+        onReady() {
+          setIsReady(true)
+        }
+      })
+    }
+    setDatabase(DATABASE)
   }, []);
 
   // Delete database
   useEffect(() => {
     return window.appAPI.on<{ isLoading: boolean }>('drop-idb', () => {
       dropIndexedDb();
-    });
-  }, [database, dropIndexedDb]);
-
-  // Delete database
-  useEffect(() => {
-    return window.appAPI.on<{ state: string, data: any }>('db-state', event => {
-      if (['init-start', 'init-process'].includes(event.state)) {
-        setIsReady(false);
-      } else if (event.state === 'init-complete') {
-        setIsReady(true);
-      }
-      console.log(event);
     });
   }, [database, dropIndexedDb]);
 

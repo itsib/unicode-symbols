@@ -1,5 +1,4 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import { IndexedDb } from './indexed-db/indexed-db';
 
 declare global {
   const VITE_APP_VERSION: string;
@@ -12,12 +11,47 @@ contextBridge.exposeInMainWorld('appAPI', {
    * Insert string to clip board
    * @param text
    */
-  copyText: (text: string) => ipcRenderer.send('copy-text', text),
+  copy: (text: string) => ipcRenderer.send('copy', text),
   /**
    * Show native context menu
    * @param meta
    */
-  showContextMenu: (meta?: any) => ipcRenderer.send('show-context-menu', meta),
+  menu: (meta?: any) => ipcRenderer.send('menu', meta),
+  /**
+   * Read data file for database init
+   * @param filename
+   */
+  fileRead(filename: string) {
+    return new Promise<string>((resolve, reject) => {
+      let data = ''
+
+      const disconnect = () => {
+        ipcRenderer.off('file:read:chunk', onChunk);
+        ipcRenderer.off('file:read:end', onEnd);
+        ipcRenderer.off('file:read:error', onError);
+      }
+
+      const onChunk = (_event: IpcRendererEvent, chunk: string) => {
+        data += chunk
+      }
+
+      const onEnd = (_event: IpcRendererEvent) => {
+        disconnect()
+        resolve(data)
+      }
+
+      const onError = (_event: IpcRendererEvent, error: any) => {
+        disconnect()
+        reject(error)
+      }
+
+      ipcRenderer.on('file:read:chunk', onChunk)
+      ipcRenderer.on('file:read:end', onEnd);
+      ipcRenderer.on('file:read:error', onError);
+
+      ipcRenderer.send('file:read', filename);
+    })
+  },
   /**
    * Add main process event listener
    * @param eventName
@@ -44,58 +78,3 @@ contextBridge.exposeInMainWorld('appAPI', {
    */
   INDEXED_DB_VERSION: VITE_INDEXED_DB_VERSION,
 });
-
-(async function init() {
-  const dataBase = IndexedDb.get(VITE_INDEXED_DB_NAME, VITE_INDEXED_DB_VERSION);
-  if (await dataBase.checkInit()) {
-    await dataBase.close();
-    return;
-  }
-
-  ipcRenderer.emit('db-state', null, { state: 'init-start' });
-
-  ipcRenderer.once('port', event => {
-    const port = event.ports[0] as MessagePort;
-    let disabled = false;
-    let lastContext: string = null;
-
-    port.onmessageerror = (error) => {
-      console.log(error);
-      ipcRenderer.emit('db-state', null, { state: 'init-error', data: error });
-    }
-
-    port.onmessage = (messageEvent) => {
-      const type = messageEvent.data.type;
-      const context = messageEvent.data.context;
-      const data = messageEvent.data.data;
-
-      switch (type) {
-        case 'error':
-          disabled = true;
-          dataBase.close();
-          ipcRenderer.emit('db-state', null, { state: 'init-error', data });
-          console.error(data);
-          break;
-        case 'close':
-          disabled = true;
-          dataBase.close();
-          ipcRenderer.emit('db-state', null, { state: 'init-complete' });
-          break;
-        case 'data':
-          if (!disabled) {
-            if (!lastContext || context !== lastContext) {
-              ipcRenderer.emit('db-state', null, { state: 'init-process', data: context });
-              lastContext = context;
-            }
-
-            dataBase.parseAndSave(context, data).then(() => ipcRenderer.send('read-next-line'));
-          }
-          break;
-      }
-    };
-
-    ipcRenderer.send('db-ready-transmit');
-  });
-
-  ipcRenderer.send('db-init');
-})();

@@ -1,5 +1,4 @@
-import { animated, easings, useSpring } from '@react-spring/web';
-import React, { FC, PropsWithChildren, useEffect, useRef, useState } from 'react';
+import React, { type FC, type PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 export interface ModalProps {
@@ -10,31 +9,9 @@ export interface ModalProps {
 const Modal: FC<PropsWithChildren<ModalProps>> = ({ isOpen, onDismiss, children }) => {
   const [overlay, setOverlay] = useState<HTMLDivElement | null>(null);
   const [, setShowUp] = useState(false);
-  const [isAnimated, setIsAnimated] = useState(false);
+  const [isAnimated] = useState(false);
   const isAnimatedRef = useRef(isAnimated);
   isAnimatedRef.current = isAnimated;
-
-  const [overlayStyles, overlayApi] = useSpring(
-    () => ({
-      from: { opacity: 0 },
-      to: { opacity: 1 },
-      config: {
-        easing: easings.easeInBack(100),
-      },
-    }),
-    [],
-  );
-
-  const [contentStyles, contentApi] = useSpring(
-    () => ({
-      from: { y: 16 },
-      to: { y: 0 },
-      config: {
-        easing: easings.easeInBack(100),
-      },
-    }),
-    [],
-  );
 
   useEffect(() => {
     if (!isOpen || !window || !overlay) {
@@ -52,27 +29,14 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({ isOpen, onDismiss, children 
     };
   }, [overlay, isOpen]);
 
-  useEffect(() => {
-    if (isOpen) {
-      setIsAnimated(true);
-      overlayApi.set({ opacity: 0 });
-      overlayApi.start({ opacity: 1 });
-      contentApi.set({ y: 16 });
-      contentApi.start({ y: 0 });
-    } else if (isAnimatedRef.current) {
-      overlayApi.start({ opacity: 0 });
-      contentApi.start({ y: 16 })[0].then(() => setIsAnimated(false));
-    }
-  }, [contentApi, overlayApi, isOpen]);
-
   return isOpen || isAnimated ? (
     <>
       {createPortal(
-        <animated.div style={overlayStyles} aria-label="dialog overlay" className="modal-overlay" onClick={() => onDismiss()} ref={setOverlay}>
-          <animated.div style={contentStyles} aria-label="dialog content" className="modal-overlay-content" onClick={event => event.stopPropagation()}>
+        <div aria-label="dialog overlay" className="modal-overlay" onClick={() => onDismiss()} ref={setOverlay}>
+          <div aria-label="dialog content" className="modal-overlay-content" onClick={event => event.stopPropagation()}>
             {children}
-          </animated.div>
-        </animated.div>,
+          </div>
+        </div>,
         document.body,
       )}
     </>

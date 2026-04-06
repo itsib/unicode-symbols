@@ -18,7 +18,7 @@ export const BtnCopy: FC<IBtnCopy> = ({ text, tooltip = 'Copy to clipboard', too
       onClick={event => {
         event.stopPropagation();
         if (text) {
-          window.appAPI.copyText(text);
+          window.appAPI.copy(text);
           const button = event.currentTarget as HTMLButtonElement;
           button.setAttribute('aria-label', 'Copied  ✔');
         }

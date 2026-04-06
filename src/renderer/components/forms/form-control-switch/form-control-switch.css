@@ -13,7 +13,9 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  --form-control-switch-bg: 103 103 103;
+  :root {
+    --form-control-switch-bg: 103 103 103;
+  }
 }
 
 .form-control-switch {

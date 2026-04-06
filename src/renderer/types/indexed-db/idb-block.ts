@@ -4,7 +4,11 @@ export interface IdbBlock {
    */
   i: number,
   /**
-   * Block Name
+   * Plane name index (reference to the primary key of store 'planes')
+   */
+  p: number
+  /**
+   * Block Name of Unicode space
    */
   n: string;
   /**

@@ -34,15 +34,21 @@
         width: 100%;
         position: relative;
 
-        .form-control {
+        input {
           width: 100%;
-          --form-control-height: 32px;
-          --form-control-text-md: 13px;
-          --form-control-padding: 4px 6px;
-          --form-control-border-radius: 4px;
+          height: auto;
+          padding: 0.5rem 0.75em;
+          font-size: 1rem;
+          background: transparent;
+          border: 1px solid rgba(var(--text-secondary) / 0.6);
+          outline: none;
+          box-sizing: border-box;
+          color: rgb(var(--text-primary));
+          border-radius: 4px;
+          transition: border-color .15s ease-in-out;
 
-          .error {
-            display: none;
+          &:focus {
+            border: 1px solid rgba(var(--text-primary) / 0.8);
           }
         }
 
@@ -102,12 +108,7 @@
       margin: 0 auto 0;
       transform: translateY(-50%);
       position: relative;
-      opacity: 0;
-      transition: opacity .3s ease-out;
-
-      &.show {
-        opacity: 1;
-      }
+      opacity: 1;
     }
   }
 }

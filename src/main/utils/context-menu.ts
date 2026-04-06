@@ -1,12 +1,15 @@
 import { BrowserWindow, Menu, IpcMainEvent, clipboard } from 'electron';
 
-export function copyText(text: string) {
+function copyText(text: string) {
   clipboard.writeText(text);
   console.log(`\x1b[32m✔\x1b[0m \x1b[36mClipboard write:\x1b[0m ${text}`);
 }
 
-export function createContextmenu(event: IpcMainEvent, meta?: any) {
-  console.log(meta);
+export function onCopyText(event: IpcMainEvent, text: string) {
+  copyText(text)
+}
+
+export function onContextmenu(event: IpcMainEvent, meta?: any) {
   const template = [];
   if (meta.code != null && typeof meta.code === 'number') {
     template.push(

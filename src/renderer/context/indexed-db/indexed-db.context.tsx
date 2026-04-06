@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import { Database } from '../../utils/database';
 
 export enum IndexedDbStore {
   Planes = 'planes',
@@ -11,7 +12,7 @@ export enum IndexedDbStore {
 
 export interface IIndexedDbContext {
   isReady: boolean;
-  database: IDBDatabase | null;
+  database: Database | null;
   dropIndexedDb: () => void;
 }
 

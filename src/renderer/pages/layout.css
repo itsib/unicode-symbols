@@ -4,8 +4,8 @@
   .loading-backdrop {
     inset: 0;
     background-color: rgb(var(--theme-color) / .6);
-    display: none;
-    opacity: 0;
+    display: flex;
+    opacity: 1;
     align-items: center;
     justify-content: center;
     flex-direction: column;

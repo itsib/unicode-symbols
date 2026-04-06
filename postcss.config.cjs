@@ -1,4 +1,4 @@
-import path from 'node:path';
+const path = require('node:path');
 
 /** @type {import('postcss').Config} */
 module.exports = {

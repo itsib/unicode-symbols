@@ -1,10 +1,10 @@
-import React, { memo } from 'react';
+import React from 'react';
 
 export interface IImgArrow extends Omit<React.SVGProps<SVGSVGElement>, 'viewBox' | 'xmlns'> {
   direction?: 'left' | 'right';
 }
 
-export const ImgArrow = memo(function ImgBack({ direction = 'left', ...props }: IImgArrow) {
+export const ImgArrow = React.memo(function ImgBack({ direction = 'left', ...props }: IImgArrow) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" {...props}>
       {direction === 'left' ? (

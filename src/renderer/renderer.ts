@@ -9,8 +9,9 @@ declare global {
     INDEXED_DB_NAME: string,
     INDEXED_DB_VERSION: number,
     on<TData = void>(eventName: string, callback: (data: TData) => void): () => void;
-    copyText(text: string): void;
-    showContextMenu(meta?: any): void;
+    copy(text: string): void;
+    menu(meta?: any): void;
     getSymbolName(id: number): Promise<string>;
+    fileRead(filename: string): Promise<string>;
   }
 }

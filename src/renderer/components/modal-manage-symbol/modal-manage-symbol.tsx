@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { BtnCopy } from '../btn-copy/btn-copy';
 import Modal, { ModalProps } from '../modal/modal';
-import { useIdbGetSymbolMeta } from '../../hooks/indexed-db/use-idb-get-symbol-meta';
+import { useSymbolMeta } from '../../hooks/use-symbol-meta';
 import { ImgClose } from '../images/img-close';
 import { ImgSymbol } from '../images/img-symbol';
 import { ImgStar } from '../images/img-star';
@@ -14,11 +14,11 @@ import { AppConfigKey } from '@app-context';
 import { ImgArrow } from '../images/img-arrow';
 
 export interface IModalCreateSymbol extends ModalProps {
-  code?: number;
+  code?: number | null;
 }
 
 export const ModalManageSymbol: FC<IModalCreateSymbol> = ({ isOpen, onDismiss, code }) => {
-  const codeRef = useRef<number | undefined>(code);
+  const codeRef = useRef<number | undefined | null>(code);
 
   useEffect(() => {
     if (code) {
@@ -34,13 +34,15 @@ export const ModalManageSymbol: FC<IModalCreateSymbol> = ({ isOpen, onDismiss, c
 };
 
 const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: _code, onDismiss }) => {
-  const [code, setCode] = useState(_code);
-  const symbolMeta = useIdbGetSymbolMeta(code);
   const [fontFamily] = useAppConfig(AppConfigKey.FontFamily);
   const [defaultSkin, setDefaultSkin] = useAppConfig(AppConfigKey.SkinColor);
+
+  const [code, setCode] = useState(_code);
+  const meta = useSymbolMeta(code);
+
   const [_skin, setSkin] = useState<SymbolSkinColor>(defaultSkin);
-  const skin = symbolMeta?.skin ? _skin : 0;
-  const [isFavorite, toggleFavorite] = useFavorites(code);
+  const skin = meta?.skin ? _skin : 0;
+  const [isFavorite, toggleFavorite] = useFavorites(code as number);
 
   const codesSet = useMemo(() => genSymbolCodes(code, skin), [code, skin]);
 
@@ -69,12 +71,12 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: 
       <div className="modal-content">
         <div className="info">
           <div className="name">
-            <span>{symbolMeta?.name}</span>
+            <span>{meta?.name}</span>
           </div>
 
-          {symbolMeta?.block ? (
+          {meta?.block ? (
             <div className="block-name">
-              <span>{symbolMeta.block}</span>
+              <span>{meta.block}</span>
             </div>
           ) : null}
         </div>
@@ -97,7 +99,7 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: 
           </BtnCopy>
 
 
-        {symbolMeta?.skin ? (
+        {meta?.skin ? (
             <div className="right-color-picker">
               <SkinColorPicker value={skin} onChange={setSkin} />
 

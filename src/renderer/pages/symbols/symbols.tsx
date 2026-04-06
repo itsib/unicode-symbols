@@ -2,36 +2,45 @@ import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { LeftMenu } from '../../components/left-menu/left-menu';
 import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
-import { useGetGroup } from '../../hooks/indexed-db/use-get-group';
+import { useCodesByGroup } from '../../hooks/use-codes-by-group';
 import { SymbolsGrid } from '../../components/symbols-grid/symbols-grid';
-import { FormControlInput } from '../../components/forms';
-import { useIdbSearchSymbol } from '../../hooks/indexed-db/use-idb-search-symbol';
+import { useCodesBySearch } from '../../hooks/indexed-db/use-codes-by-search';
 import { ImgClose } from '../../components/images/img-close';
-import animation from '../../../assets/animations/magnifier.json';
-import { LottiePlayer } from '../../components/lottie-player/lottie-player';
 import { ImgArrow } from '../../components/images/img-arrow';
 import { useOutletContext } from 'react-router-dom';
+import { NothingFound } from '../../components/nothing-found/nothing-found';
+import { debounce } from '../../utils/debounce';
+import { useLog } from '../../hooks/use-log';
 
 export const SymbolsPage: FC = () => {
-  const inputRef = useRef<HTMLInputElement>();
   const [activeCategory] = useAppConfig(AppConfigKey.ActiveCategory);
+
+  // Search stuff
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [isSearch, setIsSearch] = useState(false);
   const [isSearchRight, setIsSearchRight] = useState(false);
   const [search, setSearch] = useState('');
 
-  const [showPlayer, setShowPlayer] = useState(false);
   const { loading } = useOutletContext<{ loading: boolean }>();
-  const skeletonItems = useMemo(() => new Array(24).fill(1), [])
+  const skeletonItems = useMemo(() => new Array(24).fill(1), []);
 
-  const [favorites] = useAppConfig(AppConfigKey.Favorites);
-  const predefined = useGetGroup(activeCategory);
-  const foundCodes = useIdbSearchSymbol(search);
+  const foundCodes = useCodesBySearch(search);
+  const groupCodes = useCodesByGroup(activeCategory);
 
-  const codes = search ? foundCodes : (activeCategory === 0 ? favorites : predefined);
+  const codes = search ? foundCodes : groupCodes;
+
+  function cleanSearch() {
+    setIsSearch(false);
+    inputRef.current.value = ''
+    setSearch('');
+  }
 
   // Open search
   useEffect(() => {
-    return window.appAPI.on('search', () => {
+    const input = inputRef.current
+    if (!input) return
+
+    const unsubscribe =  window.appAPI.on('search', () => {
       setIsSearch(true);
       inputRef.current?.focus?.();
 
@@ -44,24 +53,20 @@ export const SymbolsPage: FC = () => {
 
       inputRef.current?.addEventListener('keydown', onKey);
     });
+
+    const setValue = debounce<string>(value => setSearch(value), 800)
+    const onInput = (event: Event) => setValue(((event.target as any).value || '') as string)
+
+    input.addEventListener('input', onInput)
+
+    return () => {
+      unsubscribe()
+      input.removeEventListener('change', onInput)
+    };
   }, []);
 
-  // Remote animation show delay
-  useEffect(() => {
-    if (codes?.length) {
-      return setShowPlayer(false);
-    }
-
-    const timer = setTimeout(() => setShowPlayer(true), 300);
-    return () => clearTimeout(timer);
-  }, [codes]);
-
   // Reset search after category change
-  useEffect(() => {
-    setIsSearch(false);
-    inputRef.current.value = '';
-    setSearch('');
-  }, [activeCategory]);
+  useEffect(() => cleanSearch(), [activeCategory]);
 
   return (
     <div className="symbols-page">
@@ -76,39 +81,30 @@ export const SymbolsPage: FC = () => {
           </button>
 
           <div className="search-block">
-            <FormControlInput
-              type="search"
-              tabIndex={1}
+            <input
               id="symbol-serch"
+              type="search"
               placeholder="Search symbol..."
-              value={search}
-              onChange={setSearch}
+              tabIndex={1}
+              autoFocus
               ref={inputRef}
             />
 
-            <button
-              className="btn btn-close"
-              onClick={() => {
-                setSearch('');
-                setIsSearch(false);
-              }}
-            >
+            <button type="button" className="btn btn-close" onClick={cleanSearch}>
               <ImgClose />
             </button>
           </div>
         </div>
 
-        {codes?.length ? (
-          <SymbolsGrid codes={codes} />
-        ) : loading ? (
+        {loading ? (
           <div className="main-loading">
             {skeletonItems.map((_, key) => (<div key={key} className="pulse"/>))}
           </div>
-          ) : (
-          <div className={`not-found ${showPlayer ? 'show' : ''}`}>
-            <LottiePlayer className="animation" object={animation} loop={false} />
-          </div>
-        )}
+        ) : codes?.length ? (
+          <SymbolsGrid codes={codes} />
+        ) : search.length ? (
+          <NothingFound />
+        ) : null}
       </div>
     </div>
   );

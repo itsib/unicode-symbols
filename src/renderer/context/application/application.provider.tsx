@@ -51,7 +51,7 @@ export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
         y: event.pageY,
       }
 
-      window.appAPI.showContextMenu({ code, position });
+      window.appAPI.menu({ code, position });
     };
 
     document.body.addEventListener('contextmenu', onContextmenu);

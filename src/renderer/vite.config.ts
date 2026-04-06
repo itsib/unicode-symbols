@@ -1,8 +1,11 @@
 import type { ConfigEnv, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
-import { join } from 'path';
+import { join, resolve } from 'node:path';
+import { fileURLToPath, URL } from 'node:url'
 import { vitePluginExposeDevServer } from '../../forge/vite-plugins/vite-plugin-expose-dev-server';
 import { vitePluginCopyResources } from '../../forge/vite-plugins/vite-plugin-copy-resources';
+
+const ROOT = resolve(fileURLToPath(new URL(import.meta.url)), '../../..')
 
 // https://vitejs.dev/config
 export default defineConfig((env) => {
@@ -27,7 +30,6 @@ export default defineConfig((env) => {
               'react-router-dom',
               'react-window',
             ],
-            '@app-lottie': ['lottie-web/build/player/lottie_light'],
           },
         }
       },
@@ -35,18 +37,18 @@ export default defineConfig((env) => {
     plugins: [
       vitePluginExposeDevServer(name),
       vitePluginCopyResources([
-        'src/assets/data/names.csv',
-        'src/assets/data/blocks.csv',
-        'src/assets/data/emoji.csv',
-        'src/assets/images',
+        'resources/data/names.csv',
+        'resources/data/blocks.csv',
+        'resources/data/emoji.csv',
+        'resources/images',
       ]),
     ],
     resolve: {
       preserveSymlinks: true,
       alias: {
-        '/@': join(__dirname, ''),
-        '@app-types': join(__dirname, 'types/index.ts'),
-        '@app-context': join(__dirname, 'context/index.ts'),
+        '/@': join(root, 'src/renderer'),
+        '@app-types': join(root, 'src/renderer/types/index.ts'),
+        '@app-context': join(root, 'src/renderer/context/index.ts'),
       }
     },
     clearScreen: false,

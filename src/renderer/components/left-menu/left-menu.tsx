@@ -1,11 +1,11 @@
 import { FC, useEffect } from 'react';
 import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
-import { useIdbLeftMenu } from '../../hooks/indexed-db/use-idb-left-menu';
+import { useLeftMenu } from '../../hooks/use-left-menu';
 import { ImgResource } from '../images/img-resource';
 
 export const LeftMenu: FC = () => {
-  const menuItems = useIdbLeftMenu();
+  const menuItems = useLeftMenu();
   const [activeCategory, setActiveCategory] = useAppConfig(AppConfigKey.ActiveCategory);
   const [favorites] = useAppConfig(AppConfigKey.Favorites);
 

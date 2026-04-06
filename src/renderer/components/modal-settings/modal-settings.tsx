@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import Modal, { ModalProps } from '../modal/modal';
+import Modal, { type ModalProps } from '../modal/modal';
 import { ImgClose } from '../images/img-close';
 import { NumberBaseControl } from './_number-base-control';
 import { IconSizeControl } from './_icon-size-control';

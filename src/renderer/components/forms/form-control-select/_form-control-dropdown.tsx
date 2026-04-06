@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { FixedSizeList, ListChildComponentProps } from 'react-window';
+import { List, RowComponentProps } from 'react-window';
 
 interface ItemData {
   id: string;
@@ -25,7 +25,7 @@ export interface IFormControlDropdown<T extends number | string> {
 
 export function FormControlDropdown<T extends number | string>(props: IFormControlDropdown<T>) {
   const { id, value, valueKey = 'value', labelKey = 'label', options, rect, open, onChange, onDismiss } = props;
-  const ref = useRef<FixedSizeList>();
+  const ref = useRef(null);
   const [process, setProcess] = useState(false);
   const [dropdownClass, setDropdownClass] = useState<string>('animation-from');
 
@@ -114,16 +114,13 @@ export function FormControlDropdown<T extends number | string>(props: IFormContr
     >
       <div className="select-dropdown-overlay" aria-label="dropdown overlay" onClick={onClickOverlay} />
       <div className={`select-dropdown-menu ${dropdownClass}`} aria-label="dropdown">
-        <FixedSizeList
-          height={points.height}
-          itemCount={options.length}
-          itemSize={points.itemHeight}
-          width={points.width}
-          itemData={itemDataRef.current}
+        <List
+          rowComponent={Option}
+          rowProps={itemDataRef.current}
+          rowCount={options.length}
+          rowHeight={points.itemHeight}
           ref={ref}
-        >
-          {Option}
-        </FixedSizeList>
+        />
       </div>
 
     </div>,
@@ -131,7 +128,7 @@ export function FormControlDropdown<T extends number | string>(props: IFormContr
   ) : null;
 }
 
-function Option(props: ListChildComponentProps<ItemData>) {
+function Option(props: RowComponentProps<ItemData>) {
   const { data, style, index } = props;
   const option = data.options[index];
   const label = option[data.labelKey];

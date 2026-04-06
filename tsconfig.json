@@ -18,8 +18,8 @@
     "resolveJsonModule": true,
     "jsx": "react-jsx",
     "paths": {
-      "@app-types": ["src/renderer/types/index.ts"],
-      "@app-context": ["src/renderer/context/index.ts"]
+      "@app-types": ["./src/renderer/types/index.ts"],
+      "@app-context": ["./src/renderer/context/index.ts"]
     }
   },
 }
