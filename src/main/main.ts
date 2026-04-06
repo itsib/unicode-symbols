@@ -26,9 +26,8 @@ function createWindow() {
       nodeIntegration: false,
     },
   });
-  onContextmenu;
 
-  window.webContents.openDevTools();
+  // window.webContents.openDevTools();
   window.setMinimumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
   window.setMenuBarVisibility(true);
   window.maximize();
