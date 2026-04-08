@@ -1,7 +1,8 @@
-import { useIdbReady } from './indexed-db/use-idb-ready';
+import { useContext } from 'react';
+import { IndexedDbContext } from '@app-context';
 
 export function useLoading(): boolean {
-  const isReady = useIdbReady()
+  const { isReady } = useContext(IndexedDbContext);
 
   return !isReady
 }

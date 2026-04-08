@@ -94,7 +94,7 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: 
 
           <BtnCopy className="symbol" text={String.fromCodePoint(...codesSet)}>
             <div style={{ fontFamily: fontFamily }}>
-              <ImgSymbol code={code} size={70}/>
+              <ImgSymbol code={codesSet} size={70}/>
             </div>
           </BtnCopy>
 

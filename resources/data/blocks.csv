@@ -1,4 +1,4 @@
-# plane: Basic Multilingual Plane
+@@ Basic Multilingual Plane
 0000..007F;Basic Latin
 0080..00FF;Latin-1 Supplement
 0100..017F;Latin Extended-A
@@ -163,7 +163,7 @@ FE50..FE6F;Small Form Variants
 FE70..FEFF;Arabic Presentation Forms-B
 FF00..FFEF;Halfwidth and Fullwidth Forms
 FFF0..FFFF;Specials
-# plane: Supplementary Multilingual Plane
+@@ Supplementary Multilingual Plane
 10000..1007F;Linear B Syllabary
 10080..100FF;Linear B Ideograms
 10100..1013F;Aegean Numbers
@@ -185,6 +185,7 @@ FFF0..FFFF;Specials
 10500..1052F;Elbasan
 10530..1056F;Caucasian Albanian
 10570..105BF;Vithkuqi
+105C0..105FF;Todhri
 10600..1077F;Linear A
 10780..107BF;Latin Extended-F
 10800..1083F;Cypriot Syllabary
@@ -194,6 +195,7 @@ FFF0..FFFF;Specials
 108E0..108FF;Hatran
 10900..1091F;Phoenician
 10920..1093F;Lydian
+10940..1095F;Sidetic
 10980..1099F;Meroitic Hieroglyphs
 109A0..109FF;Meroitic Cursive
 10A00..10A5F;Kharoshthi
@@ -207,6 +209,7 @@ FFF0..FFFF;Specials
 10C00..10C4F;Old Turkic
 10C80..10CFF;Old Hungarian
 10D00..10D3F;Hanifi Rohingya
+10D40..10D8F;Garay
 10E60..10E7F;Rumi Numeral Symbols
 10E80..10EBF;Yezidi
 10EC0..10EFF;Arabic Extended-C
@@ -226,12 +229,14 @@ FFF0..FFFF;Specials
 11280..112AF;Multani
 112B0..112FF;Khudawadi
 11300..1137F;Grantha
+11380..113FF;Tulu-Tigalari
 11400..1147F;Newa
 11480..114DF;Tirhuta
 11580..115FF;Siddham
 11600..1165F;Modi
 11660..1167F;Mongolian Supplement
 11680..116CF;Takri
+116D0..116FF;Myanmar Extended-C
 11700..1174F;Ahom
 11800..1184F;Dogra
 118A0..118FF;Warang Citi
@@ -242,10 +247,13 @@ FFF0..FFFF;Specials
 11AB0..11ABF;Unified Canadian Aboriginal Syllabics Extended-A
 11AC0..11AFF;Pau Cin Hau
 11B00..11B5F;Devanagari Extended-A
+11B60..11B7F;Sharada Supplement
+11BC0..11BFF;Sunuwar
 11C00..11C6F;Bhaiksuki
 11C70..11CBF;Marchen
 11D00..11D5F;Masaram Gondi
 11D60..11DAF;Gunjala Gondi
+11DB0..11DEF;Tolong Siki
 11EE0..11EFF;Makasar
 11F00..11F5F;Kawi
 11FB0..11FBF;Lisu Supplement
@@ -256,19 +264,24 @@ FFF0..FFFF;Specials
 12F90..12FFF;Cypro-Minoan
 13000..1342F;Egyptian Hieroglyphs
 13430..1345F;Egyptian Hieroglyph Format Controls
+13460..143FF;Egyptian Hieroglyphs Extended-A
 14400..1467F;Anatolian Hieroglyphs
+16100..1613F;Gurung Khema
 16800..16A3F;Bamum Supplement
 16A40..16A6F;Mro
 16A70..16ACF;Tangsa
 16AD0..16AFF;Bassa Vah
 16B00..16B8F;Pahawh Hmong
+16D40..16D7F;Kirat Rai
 16E40..16E9F;Medefaidrin
+16EA0..16EDF;Beria Erfe
 16F00..16F9F;Miao
 16FE0..16FFF;Ideographic Symbols and Punctuation
 17000..187FF;Tangut
 18800..18AFF;Tangut Components
 18B00..18CFF;Khitan Small Script
 18D00..18D7F;Tangut Supplement
+18D80..18DFF;Tangut Components Supplement
 1AFF0..1AFFF;Kana Extended-B
 1B000..1B0FF;Kana Supplement
 1B100..1B12F;Kana Extended-A
@@ -276,6 +289,8 @@ FFF0..FFFF;Specials
 1B170..1B2FF;Nushu
 1BC00..1BC9F;Duployan
 1BCA0..1BCAF;Shorthand Format Controls
+1CC00..1CEBF;Symbols for Legacy Computing Supplement
+1CEC0..1CEFF;Miscellaneous Symbols Supplement
 1CF00..1CFCF;Znamenny Musical Notation
 1D000..1D0FF;Byzantine Musical Symbols
 1D100..1D1FF;Musical Symbols
@@ -293,6 +308,8 @@ FFF0..FFFF;Specials
 1E290..1E2BF;Toto
 1E2C0..1E2FF;Wancho
 1E4D0..1E4FF;Nag Mundari
+1E5D0..1E5FF;Ol Onal
+1E6C0..1E6FF;Tai Yo
 1E7E0..1E7FF;Ethiopic Extended-B
 1E800..1E8DF;Mende Kikakui
 1E900..1E95F;Adlam
@@ -315,7 +332,7 @@ FFF0..FFFF;Specials
 1FA00..1FA6F;Chess Symbols
 1FA70..1FAFF;Symbols and Pictographs Extended-A
 1FB00..1FBFF;Symbols for Legacy Computing
-# plane: Supplementary Ideographic Plane
+@@ Supplementary Ideographic Plane
 20000..2A6DF;CJK Unified Ideographs Extension B
 2A700..2B73F;CJK Unified Ideographs Extension C
 2B740..2B81F;CJK Unified Ideographs Extension D
@@ -323,13 +340,14 @@ FFF0..FFFF;Specials
 2CEB0..2EBEF;CJK Unified Ideographs Extension F
 2EBF0..2EE5F;CJK Unified Ideographs Extension I
 2F800..2FA1F;CJK Compatibility Ideographs Supplement
-# plane: Tertiary Ideographic Plane
+@@ Tertiary Ideographic Plane
 30000..3134F;CJK Unified Ideographs Extension G
 31350..323AF;CJK Unified Ideographs Extension H
-# plane: Supplementary Special-purpose Plane
+323B0..3347F;CJK Unified Ideographs Extension J
+@@ Supplementary Special-purpose Plane
 E0000..E007F;Tags
 E0100..E01EF;Variation Selectors Supplement
-# plane: Supplementary Private Use Area planes
+@@ Supplementary Private Use Area planes
 F0000..FFFFF;Supplementary Private Use Area-A
-# plane: Supplementary Private Use Area planes
+@@ Supplementary Private Use Area planes
 100000..10FFFF;Supplementary Private Use Area-B

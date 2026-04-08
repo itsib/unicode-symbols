@@ -3,13 +3,11 @@ import { FormControlBaseProps } from '@app-types';
 import { FormControlDropdown } from './_form-control-dropdown';
 
 export interface IFormControlSelect<T extends number | string> extends FormControlBaseProps<T> {
-  options: Record<string, any>[];
-  valueKey?: string;
-  labelKey?: string;
+  options: { label?: string; value: string }[];
 }
 
 export function FormControlSelect<T extends number | string>(props: IFormControlSelect<T>) {
-  const { id, name, label, onChange, value, validate, options, valueKey = 'value', labelKey = 'label' } = props;
+  const { id, name, label, onChange, value, validate, options } = props;
   const ref = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,7 +34,7 @@ export function FormControlSelect<T extends number | string>(props: IFormControl
     if (value == null) {
       input.value = '';
     } else {
-      const selected = options.find(opt => opt[valueKey] === value);
+      const selected = options.find(opt => opt.value === value);
       if (!selected) {
         input.value = '';
       } else {
@@ -45,7 +43,7 @@ export function FormControlSelect<T extends number | string>(props: IFormControl
         input.value = span.innerText;
       }
     }
-  }, [value, options, valueKey]);
+  }, [value, options]);
 
   return (
     <div className="form-control form-control-select">
@@ -63,8 +61,6 @@ export function FormControlSelect<T extends number | string>(props: IFormControl
         id={id}
         value={value}
         options={options}
-        labelKey={labelKey}
-        valueKey={valueKey}
         open={open}
         rect={rect}
         onDismiss={() => setOpen(false)}

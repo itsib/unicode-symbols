@@ -1,31 +1,27 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { List, RowComponentProps } from 'react-window';
+import { List, RowComponentProps, useListRef } from 'react-window';
+import './_form-control-dropdown.css'
 
 interface ItemData {
-  id: string;
   options: Record<string, any>[];
-  valueKey: string;
-  labelKey: string;
   value: number | string;
-  onClickItemBtn(_value: number | string): void
+  onSelect(_value: string | number): void
 }
 
 export interface IFormControlDropdown<T extends number | string> {
   id: string;
   open?: boolean;
   rect?: DOMRect;
+  options: { label?: string; value: string } [];
   value?: T;
-  valueKey?: string;
-  labelKey?: string;
-  options: Record<string, any> [];
   onChange?: (value: T) => void;
   onDismiss?: () => void;
 }
 
 export function FormControlDropdown<T extends number | string>(props: IFormControlDropdown<T>) {
-  const { id, value, valueKey = 'value', labelKey = 'label', options, rect, open, onChange, onDismiss } = props;
-  const ref = useRef(null);
+  const { value, options, rect, open, onChange, onDismiss } = props;
+  const ref = useListRef(null);
   const [process, setProcess] = useState(false);
   const [dropdownClass, setDropdownClass] = useState<string>('animation-from');
 
@@ -47,18 +43,6 @@ export function FormControlDropdown<T extends number | string>(props: IFormContr
 
     return { width, height, left, top, itemHeight, padding }
   }, [rect, options.length])
-
-  const itemDataRef = useRef<ItemData>({
-    id,
-    options,
-    valueKey,
-    labelKey,
-    value,
-    onClickItemBtn(_value: string | number) {
-      onDismiss?.();
-      onChange?.(_value as T);
-    }
-  });
 
   function onClickOverlay(event: React.MouseEvent<HTMLDivElement>) {
     event.stopPropagation();
@@ -85,8 +69,8 @@ export function FormControlDropdown<T extends number | string>(props: IFormContr
   useEffect(() => {
     if (open) {
       const timeout = setTimeout(() => {
-        const index = options.findIndex(opt => opt[valueKey] === value);
-        ref.current.scrollToItem(index, 'center');
+        const index = options.findIndex(opt => opt.value === value);
+        ref.current.scrollToRow({ index, align: 'center' });
       }, 20);
 
       return () => {
@@ -94,15 +78,7 @@ export function FormControlDropdown<T extends number | string>(props: IFormContr
       }
     }
 
-  }, [open, value, valueKey, options]);
-
-  useEffect(() => {
-    itemDataRef.current.id = id;
-    itemDataRef.current.options = options;
-    itemDataRef.current.valueKey = valueKey;
-    itemDataRef.current.labelKey = labelKey;
-    itemDataRef.current.value = value;
-  }, [options, valueKey, labelKey, value, id]);
+  }, [open, value, options]);
 
   return (process || open) && rect && points ? createPortal(
     <div
@@ -113,39 +89,52 @@ export function FormControlDropdown<T extends number | string>(props: IFormContr
       }}
     >
       <div className="select-dropdown-overlay" aria-label="dropdown overlay" onClick={onClickOverlay} />
-      <div className={`select-dropdown-menu ${dropdownClass}`} aria-label="dropdown">
+      <div
+        className={`select-dropdown-menu 
+        ${dropdownClass}`}
+        aria-label="dropdown"
+        style={{
+          width: `${points.width}px`,
+          height: `${points.height}px`,
+          maxHeight: `${points.height}px`,
+        }}
+      >
         <List
           rowComponent={Option}
-          rowProps={itemDataRef.current}
+          rowProps={{
+            options,
+            value,
+            onSelect(_value: string | number) {
+              onDismiss?.();
+              onChange?.(_value as T);
+            }
+          }}
           rowCount={options.length}
           rowHeight={points.itemHeight}
-          ref={ref}
+          listRef={ref}
         />
       </div>
-
     </div>,
     document.body,
   ) : null;
 }
 
 function Option(props: RowComponentProps<ItemData>) {
-  const { data, style, index } = props;
-  const option = data.options[index];
-  const label = option[data.labelKey];
-  const value = option[data.valueKey];
+  const { options, style, index, onSelect, value, ariaAttributes } = props;
+  const option = options[index];
 
-  const id = data.id;
-  const active = data.value === value;
+  const active = option.value === value;
 
   return (
     <button
       type="button"
-      style={style} id={active ? `${id}-active` : null}
+      style={style} id={active ? `${index}-active` : null}
       className={`btn btn-option ${active ? 'active' : ''}`}
       value={value}
-      onClick={() => data.onClickItemBtn(value)}
+      onClick={() => onSelect(options[index]?.value)}
+      {...ariaAttributes}
     >
-      <span dangerouslySetInnerHTML={{ __html: label }}/>
+      <span dangerouslySetInnerHTML={{ __html: option.label || option.value }}/>
 
       {active ? (
         <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" className="active-check">

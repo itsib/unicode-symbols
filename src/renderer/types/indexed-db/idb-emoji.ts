@@ -1,6 +1,6 @@
 export interface IdbEmoji {
   /**
-   * Code
+   * Base Code
    */
   c: number;
   /**
@@ -8,9 +8,9 @@ export interface IdbEmoji {
    */
   g: number;
   /**
-   * Skin color change supports
+   * Options bits
    */
-  s: boolean;
+  o: number;
   /**
    * Name
    */

@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { AppConfigKey, IndexedDbStore } from '@app-context';
 import { useAppConfig } from './use-app-config';
 import { useDatabase } from './use-database';
+import type { Codepoint } from '@app-types';
 
-export function useCodesByGroup(groupId?: number): number[] {
+export function useCodesByGroup(groupId?: number): Codepoint[] {
   const database = useDatabase();
   const [favorites] = useAppConfig(AppConfigKey.Favorites);
 
-  const [codes, setCodes] = useState<number[]>([]);
+  const [codes, setCodes] = useState<Codepoint[]>([]);
 
   useEffect(() => {
     if (!database || !groupId) return;
@@ -15,7 +16,7 @@ export function useCodesByGroup(groupId?: number): number[] {
     setCodes([])
 
     async function getCodes(_id: number) {
-      const _codes: number[] = [];
+      const _codes: Codepoint[] = [];
 
       try {
         const tx = await database.transaction(IndexedDbStore.Emoji, 'readonly');

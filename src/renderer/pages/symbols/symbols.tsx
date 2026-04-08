@@ -4,13 +4,12 @@ import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
 import { useCodesByGroup } from '../../hooks/use-codes-by-group';
 import { SymbolsGrid } from '../../components/symbols-grid/symbols-grid';
-import { useCodesBySearch } from '../../hooks/indexed-db/use-codes-by-search';
+import { useCodesBySearch } from '../../hooks/use-codes-by-search';
 import { ImgClose } from '../../components/images/img-close';
 import { ImgArrow } from '../../components/images/img-arrow';
 import { useOutletContext } from 'react-router-dom';
 import { NothingFound } from '../../components/nothing-found/nothing-found';
 import { debounce } from '../../utils/debounce';
-import { useLog } from '../../hooks/use-log';
 
 export const SymbolsPage: FC = () => {
   const [activeCategory] = useAppConfig(AppConfigKey.ActiveCategory);

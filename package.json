@@ -20,17 +20,19 @@
   ],
   "scripts": {
     "start": "VITE_CJS_IGNORE_WARNING=true electron-forge start",
-    "build": "VITE_CJS_IGNORE_WARNING=true electron-forge make",
+    "build": "npm run db-up && VITE_CJS_IGNORE_WARNING=true electron-forge make",
     "package": "electron-forge package",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "setup": "./install.sh",
-    "help": "electron-forge make --help"
+    "help": "electron-forge make --help",
+    "db-up": "node ./prepare.mjs"
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.18.10",
     "@lottiefiles/dotlottie-web": "^0.69.0",
     "@lottiefiles/relottie": "^1.15.0",
+    "db-up": "^0.3.0",
     "electron-squirrel-startup": "^1.0.1",
     "idb": "^8.0.3",
     "lottie-web": "^5.13.0",

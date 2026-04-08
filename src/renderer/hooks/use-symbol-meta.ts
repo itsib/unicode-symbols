@@ -1,11 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { IdbBlock, IdbEmoji, IdbName, SymbolMeta, type WithLoading } from '@app-types';
+import { type Codepoint, IdbBlock, IdbEmoji, IdbName, SymbolMeta, type WithLoading } from '@app-types';
 import { IndexedDbStore } from '@app-context';
-import { useIdbInstance } from './indexed-db/use-idb-instance';
-import { showIdbError } from '../utils/show-idb-error';
 import { useDatabase } from './use-database';
 
-export function useSymbolMeta(code?: number | number[]): WithLoading<SymbolMeta> {
+export function useSymbolMeta(code?: Codepoint): WithLoading<SymbolMeta> {
   const database = useDatabase();
 
   const [idbBlock, setIdbBlock] = useState<WithLoading<IdbBlock>>(null);
@@ -18,8 +16,10 @@ export function useSymbolMeta(code?: number | number[]): WithLoading<SymbolMeta>
 
     async function getEmoji(_code: number | number[]) {
       try {
+        const key = Array.isArray(_code) ? _code[0] : _code
         const tx = await database.transaction(IndexedDbStore.Emoji, 'readonly')
-        return (await tx.store.index('code').get(_code)) as IdbEmoji | null
+
+        return (await tx.store.index('code').get(key)) as IdbEmoji | null
       } catch (e) {
         console.error(e)
         return undefined;
@@ -92,7 +92,7 @@ export function useSymbolMeta(code?: number | number[]): WithLoading<SymbolMeta>
       code,
       name: idbEmoji ? idbEmoji?.n : idbName?.n,
       block: idbBlock?.n,
-      skin: !!idbEmoji?.s
+      skin: !!(idbEmoji.o & (1 << 1))
     }
   }, [code, idbBlock, idbName, idbEmoji]);
 }

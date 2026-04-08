@@ -14,7 +14,7 @@ export default defineConfig({
   },
   plugins: [
     vitePluginCopyResources([
-      'resources/data/names.csv',
+      'resources/data/unicode.csv',
       'resources/data/blocks.csv',
       'resources/data/emoji.csv',
       'resources/images',

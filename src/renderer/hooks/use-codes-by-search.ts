@@ -1,20 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AppConfigKey, IndexedDbStore } from '@app-context';
-import { IdbName } from '@app-types';
-import { showIdbError } from '../../utils/show-idb-error';
-import { useAppConfig } from '../use-app-config';
-import { useIdbInstance } from './use-idb-instance';
-import { useDatabase } from '../use-database';
+import { useAppConfig } from './use-app-config';
+import { useDatabase } from './use-database';
+import type { Codepoint } from '@app-types';
 
 const MAX_RESULT_ITEMS = 0x1000;
 
-export function useCodesBySearch(search?: string): number[] {
+export function useCodesBySearch(search?: string): Codepoint[] {
   const database = useDatabase();
   const [numberBase] = useAppConfig(AppConfigKey.NumberBase);
 
-  const [symbolCodes, setSymbolCodes] = useState<number[]>([]);
+  const [symbolCodes, setSymbolCodes] = useState<Codepoint[]>([]);
 
-  const foundByNumbers: number[] | null = useMemo(() => {
+  const foundByNumbers: Codepoint[] | null = useMemo(() => {
     if (!search) {
       return null;
     }

@@ -4,10 +4,11 @@ import React, { ReactElement } from 'react';
 import type { CellComponentProps } from 'react-window'
 import { genSymbolCodes } from '../../utils/gen-symbol-view';
 import './_cell-component.css'
+import type { Codepoint } from '@app-types';
 
 export interface GridCellProps {
-  data: number[];
-  onClick: (code: number) => void;
+  data: Codepoint[];
+  onClick: (code: Codepoint) => void;
   numberBase: number;
   columnCount: number;
 }
@@ -19,20 +20,15 @@ export function GridCell(props: CellComponentProps<GridCellProps>): ReactElement
 
   if (code == null) return null;
 
-  let codes: number[] | null = null;
-  if (typeof code === 'number' && code > 0xffffffff) {
-    codes = genSymbolCodes(code);
-  }
-
   return (
-    <div style={style} className="grid-cell" data-code={code} onClick={() => onClick(code)} {...ariaAttributes}>
+    <div style={style} className="grid-cell" onClick={() => onClick(code)} {...ariaAttributes}>
       <div className="inner-container">
-        <ImgSymbol className="symbol" size="1.3em" code={codes || code} />
+        <ImgSymbol className="symbol" size="1.3em" code={code} />
         <div className="separator"/>
         <div className="subscribe">
-          {codes ? (
+          {Array.isArray(code) ? (
             <>
-              {codes.map((_code, i) => (<FormatSymbolCode key={i} code={_code} base={numberBase} />))}
+              {code.map((_code, i) => (<FormatSymbolCode key={i} code={_code} base={numberBase} />))}
             </>
           ) : (
             <FormatSymbolCode code={code} base={numberBase} />

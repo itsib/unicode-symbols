@@ -1,10 +1,10 @@
 import React, { memo } from 'react';
 import { genSymbolCodes } from '../../utils/gen-symbol-view';
-import { SymbolSkinColor } from '@app-types';
+import { type Codepoint, SymbolSkinColor } from '@app-types';
 
 export interface IImgSymbol extends Omit<React.HTMLAttributes<HTMLDivElement>, 'style'> {
   size?: number | string;
-  code?: number | number[];
+  code: Codepoint;
   skin?: SymbolSkinColor;
 }
 

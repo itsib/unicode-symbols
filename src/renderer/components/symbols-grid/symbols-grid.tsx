@@ -6,10 +6,10 @@ import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
 import { ModalManageSymbol } from '../modal-manage-symbol/modal-manage-symbol';
 import { GridCell, type GridCellProps } from './_grid-cell';
-import { useLog } from '../../hooks/use-log';
+import type { Codepoint } from '@app-types';
 
 export interface ISymbolsGrid {
-  codes: number[];
+  codes: Codepoint[];
 }
 
 export const SymbolsGrid: FC<ISymbolsGrid> = ({ codes }) => {

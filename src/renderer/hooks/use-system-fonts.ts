@@ -3,7 +3,7 @@ import { DEFAULT_FONT_FAMILY } from '../constants/common';
 
 const FIRST = {
   label: `<span style="font-family: '${DEFAULT_FONT_FAMILY}'">${DEFAULT_FONT_FAMILY}</span>`,
-  family: DEFAULT_FONT_FAMILY,
+  value: DEFAULT_FONT_FAMILY,
 };
 
 declare global {
@@ -26,24 +26,24 @@ function getFonts(): Promise<FontData[]> {
   return GET_FONTS;
 }
 
-export function useSystemFonts(): { label: string; family: string }[] {
-  const [fontFamilies, setFontFamilies] = useState<{ label: string; family: string }[]>([]);
+export function useSystemFonts(): { label: string; value: string }[] {
+  const [fontFamilies, setFontFamilies] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
     getFonts()
       .then(fonts => {
-        const indexed: {[key: string]: { label: string; family: string }} = {
-          [FIRST.family]: FIRST,
+        const indexed: {[key: string]: { label: string; value: string }} = {
+          [FIRST.value]: FIRST,
         };
 
         for (const font of fonts) {
           indexed[font.family] = {
             label: `<span style="font-family: '${font.family}'">${font.family}</span>`,
-            family: font.family,
+            value: font.family,
           }
         }
 
-        Reflect.deleteProperty(indexed, FIRST.family)
+        Reflect.deleteProperty(indexed, FIRST.value)
 
         setFontFamilies([FIRST, ...Object.values(indexed)]);
       })

@@ -18,8 +18,6 @@ export const SystemFontControl: FC = () => {
         <div className="control-wrap">
           <FormControlSelect
             options={fonts}
-            labelKey="label"
-            valueKey="family"
             id="font-family-selector"
             value={fontFamily}
             onChange={setFontFamily}

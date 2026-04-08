@@ -8,6 +8,7 @@ export * from './indexed-db/idb-store-name';
 export * from './symbols/symbol-block';
 export * from './symbols/symbol-meta';
 export * from './symbols/symbol-skin-color';
+export * from './symbols/codepoint';
 
 export * from './common/storage-usage';
 export * from './common/left-menu-item';
