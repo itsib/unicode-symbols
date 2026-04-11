@@ -6,7 +6,7 @@
   "productDescription": "Unicode Symbols is a simple utility application to find and insert unusual characters. It allows you to quickly find the symbol you are looking for by searching for keywords. \n\nYou can also browse characters by categories, such as Punctuation, Pictures, etc.",
   "config": {
     "idbName": "UnicodeSymbols",
-    "idbVersion": 5
+    "idbVersion": 6
   },
   "author": {
     "name": "Sergey Krainov",
@@ -51,6 +51,7 @@
     "@electron-forge/plugin-fuses": "^7.11.1",
     "@electron-forge/plugin-vite": "^7.11.1",
     "@electron/fuses": "^1.8.0",
+    "@types/electron-squirrel-startup": "^1.0.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.27",

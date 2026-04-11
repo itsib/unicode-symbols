@@ -13,7 +13,8 @@
     z-index: 50;
 
     .animation {
-      width: 200px;
+      margin-bottom: 20px;
+      width: 300px;
     }
 
     .message {

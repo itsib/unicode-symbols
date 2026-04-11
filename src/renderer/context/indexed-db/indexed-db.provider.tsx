@@ -1,13 +1,12 @@
-import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import React, { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { IndexedDbContext } from './indexed-db.context';
 import { Database } from '../../utils/database';
-import { initDatabaseData } from '../../utils/database-init';
-
-let DATABASE: Database | null = null
+import initializationAnimation from '../../../assets/animations/initialization.json';
 
 export const IndexedDbProvider: FC<PropsWithChildren> = ({ children }) => {
   const [database, setDatabase] = useState<Database | null>(null);
-  const [isReady, setIsReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const dropIndexedDb = useCallback(() => {
     Database.drop(window.appAPI.INDEXED_DB_NAME)
@@ -17,23 +16,17 @@ export const IndexedDbProvider: FC<PropsWithChildren> = ({ children }) => {
 
   // Create IndexedDB instance
   useEffect(() => {
-    if (!DATABASE) {
-      DATABASE = Database.get({
+    return window.appAPI.on('ready', () => {
+      const db = Database.get({
         name: window.appAPI.INDEXED_DB_NAME,
         version: window.appAPI.INDEXED_DB_VERSION,
-        async onInit(db: IDBDatabase) {
-          try {
-            await initDatabaseData(db)
-          } catch (error: unknown) {
-            console.error(error)
-          }
+        onConnected() {
+          setIsLoading(false);
         },
-        onReady() {
-          setIsReady(true)
-        }
-      })
-    }
-    setDatabase(DATABASE)
+      });
+
+      setDatabase(db);
+    });
   }, []);
 
   // Delete database
@@ -44,8 +37,15 @@ export const IndexedDbProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [database, dropIndexedDb]);
 
   return (
-    <IndexedDbContext.Provider value={{ isReady, database, dropIndexedDb }}>
-      {children}
+    <IndexedDbContext.Provider value={{ database, dropIndexedDb }}>
+      {isLoading ? (
+        <div className="layout-page">
+          <div className="loading-backdrop">
+            <DotLottieReact className="animation" data={initializationAnimation} loop autoplay/>
+            <div className="message">Updating the Database</div>
+          </div>
+        </div>
+      ) : children}
     </IndexedDbContext.Provider>
-  )
+  );
 };

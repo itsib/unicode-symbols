@@ -7,7 +7,6 @@ import { SymbolsGrid } from '../../components/symbols-grid/symbols-grid';
 import { useCodesBySearch } from '../../hooks/use-codes-by-search';
 import { ImgClose } from '../../components/images/img-close';
 import { ImgArrow } from '../../components/images/img-arrow';
-import { useOutletContext } from 'react-router-dom';
 import { NothingFound } from '../../components/nothing-found/nothing-found';
 import { debounce } from '../../utils/debounce';
 
@@ -19,9 +18,6 @@ export const SymbolsPage: FC = () => {
   const [isSearch, setIsSearch] = useState(false);
   const [isSearchRight, setIsSearchRight] = useState(false);
   const [search, setSearch] = useState('');
-
-  const { loading } = useOutletContext<{ loading: boolean }>();
-  const skeletonItems = useMemo(() => new Array(24).fill(1), []);
 
   const foundCodes = useCodesBySearch(search);
   const groupCodes = useCodesByGroup(activeCategory);
@@ -95,11 +91,7 @@ export const SymbolsPage: FC = () => {
           </div>
         </div>
 
-        {loading ? (
-          <div className="main-loading">
-            {skeletonItems.map((_, key) => (<div key={key} className="pulse"/>))}
-          </div>
-        ) : codes?.length ? (
+        {codes?.length ? (
           <SymbolsGrid codes={codes} />
         ) : search.length ? (
           <NothingFound />

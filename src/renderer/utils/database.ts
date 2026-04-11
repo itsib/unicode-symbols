@@ -1,15 +1,11 @@
-import { extractError, } from './extract-error';
 import { IndexedDbStore } from '@app-context';
-import { LeftMenuItem, IdbStoreName, IdbMenuItem } from '@app-types';
-import { initDatabaseStores } from './database-init';
-import { showIdbError } from './show-idb-error';
-import { openDB, unwrap, type IDBPDatabase, type IDBPTransaction } from 'idb';
+import { IdbStoreName } from '@app-types';
+import { type IDBPDatabase, type IDBPTransaction, openDB } from 'idb';
 
 export interface DatabaseOptions {
   name: string;
   version: number;
-  onInit?: (db: IDBDatabase) => Promise<void>
-  onReady?: () => void
+  onConnected?: () => void
 }
 
 export interface GetAllOptions {
@@ -50,34 +46,15 @@ export class Database {
   }
 
   private constructor(options: DatabaseOptions) {
-    let isUpgraded = false
-    this._db = openDB(options.name, options.version, {
-      upgrade(db: IDBPDatabase, oldVersion, newVersion, transaction, event) {
-        isUpgraded = true
-        initDatabaseStores(unwrap(db));
-      }
-    })
+    this._db = openDB(options.name, options.version)
       .then(db => {
-        if (isUpgraded && options.onInit) {
-          options.onInit(unwrap(db))
-            .then(() => {
-              options?.onReady?.()
-            })
-            .catch(console.error);
-        } else {
-          options?.onReady?.()
-        }
-
+        options?.onConnected?.()
         return db;
       })
   }
 
   get db() {
     return this._db;
-  }
-
-  async getStore(): Promise<IDBDatabase> {
-    return unwrap(await this._db)
   }
 
   async count(storeName: IdbStoreName): Promise<number> {
@@ -108,17 +85,5 @@ export class Database {
     params.signal?.addEventListener('abort', onAbort)
 
     return transaction.store
-  }
-
-  /**
-   * Callback for onupgradeneeded. Remove old db and create new indexes
-   * @private
-   */
-  private _upgrade(event: IDBVersionChangeEvent) {
-    const db = (event.target as any)!.result as IDBDatabase;
-
-    db.onerror = error => console.warn(extractError(error));
-
-    initDatabaseStores(db);
   }
 }

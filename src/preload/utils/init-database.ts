@@ -1,5 +1,6 @@
+import { type IDBPDatabase, openDB, unwrap } from 'idb';
 import { IdbStoreName } from '@app-types';
-import { extractError } from './extract-error';
+import { fileRead } from './file-read';
 
 interface EmojiChunk {
   codes: number[];
@@ -73,60 +74,9 @@ const MENU_ICONS: Record<number, string> = [
   'flags.svg',
 ];
 
-/**
- * Creates database stores and indexes
- * @param db
- */
-export function initDatabaseStores(db: IDBDatabase) {
-  // Delete all static stores
-  if (db.objectStoreNames.contains(IdbStoreName.Names)) db.deleteObjectStore(IdbStoreName.Names);
-  if (db.objectStoreNames.contains(IdbStoreName.Blocks)) db.deleteObjectStore(IdbStoreName.Blocks);
-  if (db.objectStoreNames.contains(IdbStoreName.Menu)) db.deleteObjectStore(IdbStoreName.Menu);
-  if (db.objectStoreNames.contains(IdbStoreName.Planes)) db.deleteObjectStore(IdbStoreName.Planes);
-  if (db.objectStoreNames.contains(IdbStoreName.Emoji)) db.deleteObjectStore(IdbStoreName.Emoji);
-
-  // Create planes store
-  db.createObjectStore(IdbStoreName.Planes, { autoIncrement: true });
-
-  // Create blocks store
-  const blocksStore = db.createObjectStore(IdbStoreName.Blocks, { keyPath: 'i' });
-  blocksStore.createIndex('id', 'i', { unique: true });
-  blocksStore.createIndex('plane', 'p', { unique: false });
-  blocksStore.createIndex('begin', 'b', { unique: true });
-  blocksStore.createIndex('end', 'e', { unique: true });
-
-  // Create names store
-  const namesStore = db.createObjectStore(IdbStoreName.Names, { keyPath: 'c' });
-  namesStore.createIndex('code', 'c', { unique: true });
-  namesStore.createIndex('type', 't', { unique: false });
-  namesStore.createIndex('search', 'k', { unique: false, multiEntry: true });
-
-  // Create emoji store
-  const emojiStore = db.createObjectStore(IdbStoreName.Emoji, { keyPath: 'c' });
-  emojiStore.createIndex('code', 'c', { unique: false, multiEntry: true });
-  emojiStore.createIndex('group', 'g', { unique: false });
-
-  // Create menu store
-  const menuStore = db.createObjectStore(IdbStoreName.Menu, { keyPath: 'i' });
-  menuStore.createIndex('order', 'o', { unique: true });
-}
-
-/**
- *
- * @param db
- */
-export async function initDatabaseData(db: IDBDatabase): Promise<void> {
-  await initBlocks(db)
-  await initNames(db)
-  await initEmoji(db)
-}
-
-/**
- * Create indexes for blocks store
- * @param db
- */
-async function initBlocks(db: IDBDatabase): Promise<void> {
-  const blocks = await window.appAPI.fileRead('blocks.csv');
+async function initBlocks(dbp: IDBPDatabase) {
+  const db = unwrap(dbp)
+  const blocks = await fileRead('blocks.csv');
   const transaction = db!.transaction([IdbStoreName.Blocks, IdbStoreName.Planes], 'readwrite');
   const blockStore = transaction.objectStore(IdbStoreName.Blocks);
   const planeStore = transaction.objectStore(IdbStoreName.Planes);
@@ -165,8 +115,9 @@ async function initBlocks(db: IDBDatabase): Promise<void> {
   })
 }
 
-async function initNames(db: IDBDatabase): Promise<void> {
-  const names = await window.appAPI.fileRead('unicode.csv');
+async function initNames(dbp: IDBPDatabase) {
+  const db = unwrap(dbp)
+  const names = await fileRead('unicode.csv');
   const transaction = db!.transaction([IdbStoreName.Names], 'readwrite');
   const store = transaction.objectStore(IdbStoreName.Names);
 
@@ -216,8 +167,9 @@ async function initNames(db: IDBDatabase): Promise<void> {
   })
 }
 
-async function initEmoji(db: IDBDatabase): Promise<void> {
-  const emoji = await window.appAPI.fileRead('emoji.csv');
+async function initEmoji(dbp: IDBPDatabase): Promise<void> {
+  const db = unwrap(dbp)
+  const emoji = await fileRead('emoji.csv');
   const transaction = db!.transaction([IdbStoreName.Menu, IdbStoreName.Emoji], 'readwrite');
   const menuStore = transaction.objectStore(IdbStoreName.Menu);
   const emojiStore = transaction.objectStore(IdbStoreName.Emoji);
@@ -337,4 +289,61 @@ function parseEmoji(line: string) {
   }
 
   return { codes, name, qualification };
+}
+
+function extractError(error: any): Error {
+  return new Error((error?.target as any)?.error);
+}
+
+export async function initDatabase(name: string, version?: number): Promise<void> {
+  const dbp = await openDB(name, version, {
+    upgrade(db: IDBPDatabase) {
+      // Delete all static stores
+      if (db.objectStoreNames.contains(IdbStoreName.Names)) db.deleteObjectStore(IdbStoreName.Names);
+      if (db.objectStoreNames.contains(IdbStoreName.Blocks)) db.deleteObjectStore(IdbStoreName.Blocks);
+      if (db.objectStoreNames.contains(IdbStoreName.Menu)) db.deleteObjectStore(IdbStoreName.Menu);
+      if (db.objectStoreNames.contains(IdbStoreName.Planes)) db.deleteObjectStore(IdbStoreName.Planes);
+      if (db.objectStoreNames.contains(IdbStoreName.Emoji)) db.deleteObjectStore(IdbStoreName.Emoji);
+
+      // Create planes store
+      db.createObjectStore(IdbStoreName.Planes, { autoIncrement: true });
+
+      // Create blocks store
+      const blocksStore = db.createObjectStore(IdbStoreName.Blocks, { keyPath: 'i' });
+      blocksStore.createIndex('id', 'i', { unique: true });
+      blocksStore.createIndex('plane', 'p', { unique: false });
+      blocksStore.createIndex('begin', 'b', { unique: true });
+      blocksStore.createIndex('end', 'e', { unique: true });
+
+      // Create names store
+      const namesStore = db.createObjectStore(IdbStoreName.Names, { keyPath: 'c' });
+      namesStore.createIndex('code', 'c', { unique: true });
+      namesStore.createIndex('type', 't', { unique: false });
+      namesStore.createIndex('search', 'k', { unique: false, multiEntry: true });
+
+      // Create emoji store
+      const emojiStore = db.createObjectStore(IdbStoreName.Emoji, { keyPath: 'c' });
+      emojiStore.createIndex('code', 'c', { unique: false, multiEntry: true });
+      emojiStore.createIndex('group', 'g', { unique: false });
+
+      // Create menu store
+      const menuStore = db.createObjectStore(IdbStoreName.Menu, { keyPath: 'i' });
+      menuStore.createIndex('order', 'o', { unique: true });
+    },
+  });
+
+  const blocksCount = await dbp.count(IdbStoreName.Blocks)
+  if (blocksCount === 0) {
+    await initBlocks(dbp);
+  }
+
+  const namesCount = await dbp.count(IdbStoreName.Names);
+  if (namesCount === 0) {
+    await initNames(dbp);
+  }
+
+  const emojiCount = await dbp.count(IdbStoreName.Emoji);
+  if (emojiCount === 0) {
+    await initEmoji(dbp);
+  }
 }

@@ -11,13 +11,11 @@ export enum IndexedDbStore {
 }
 
 export interface IIndexedDbContext {
-  isReady: boolean;
   database: Database | null;
   dropIndexedDb: () => void;
 }
 
 export const INDEXED_DB_CONTEXT_DEFAULT: IIndexedDbContext = {
-  isReady: true,
   database: null,
   dropIndexedDb: () => { throw new Error('Not implemented') },
 };
