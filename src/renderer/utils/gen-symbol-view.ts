@@ -1,13 +1,5 @@
-import { SymbolSkinColor } from '@app-types';
-
-const SKIN_CODE: Record<SymbolSkinColor, number> = {
-  [0]: 0,       //    Type 1 - Pale white
-  [1]: 0x1F3FB, // 🏻 Type 2 - White
-  [2]: 0x1F3FC, // 🏼 Type 3 - Light brown
-  [3]: 0x1F3FD, // 🏽 Type 4 - Medium brown
-  [4]: 0x1F3FE, // 🏾 Type 5 - Brown
-  [5]: 0x1F3FF, // 🏿 Type 6 - Black
-};
+import { type Codepoint, SymbolSkinColor } from '@app-types';
+import { SKIN_CODE, UNICODE_ZWJ, UNICODE_VS16 } from '../constants/unicode';
 
 export enum SymbolCodeOutput {
   DEC,
@@ -29,29 +21,15 @@ function codeConverter(code: number, output: SymbolCodeOutput): string {
   }
 }
 
-export function genSymbolCodes(code: number | number[], skin: SymbolSkinColor = 0): number[] {
-  if (typeof code === 'number') {
-    if (code > 0xFFFFFFFF) {
-      const stringCode = code.toString(16);
-      code = [
-        parseInt(stringCode.slice(0, stringCode.length / 2), 16),
-        parseInt(stringCode.slice(stringCode.length / 2), 16),
-      ]
-    } else {
-      const hex = code.toString(16).toLowerCase();
-      if (hex.length === 6 && hex.endsWith('20e3')) {
-        code = [
-          parseInt(hex.slice(0, 2), 16),
-          parseInt(hex.slice(2), 16),
-        ]
-      }
-    }
-  }
-
+export function genSymbolCodes(code: Codepoint, skin: SymbolSkinColor = 0, variant?: boolean): number[] {
   const set = typeof code === 'number' ? [code] : [...code];
 
+  if (set.includes(UNICODE_VS16) && !variant) {
+    return set.filter(i => i !== UNICODE_VS16);
+  }
+
   if (skin) {
-    return [...set, SKIN_CODE[skin]];
+    return [...set, UNICODE_ZWJ, SKIN_CODE[skin]];
   }
 
   return set;

@@ -2,7 +2,7 @@ import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { AppConfig, AppConfigKey, APPLICATION_CONTEXT_DEFAULT, ApplicationContext } from './application.context';
 
 export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [configValue, setConfigValue] = useState<{ [ Key in AppConfigKey ]: AppConfig<Key> }>(APPLICATION_CONTEXT_DEFAULT.config);
+  const [configValue, setConfigValue] = useState<{ [ Key in AppConfigKey ]: AppConfig<Key> } | null>(null);
 
   const setConfig = useCallback(function <K extends AppConfigKey, T extends AppConfig<K>>(key: K, value: T) {
     setConfigValue(_config => ({ ..._config, [key]: value }));
@@ -58,7 +58,7 @@ export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <ApplicationContext.Provider value={{ config: configValue, setConfig }}>
-      {children}
+      {configValue === null ? null : children}
     </ApplicationContext.Provider>
   );
 };

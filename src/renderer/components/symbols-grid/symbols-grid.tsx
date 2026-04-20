@@ -19,7 +19,7 @@ export const SymbolsGrid: FC<ISymbolsGrid> = ({ codes }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const gridRef = useGridRef(null);
 
-  const [active, setActive] = useState<number | null>(null);
+  const [active, setActive] = useState<Codepoint | null>(null);
   const [containerWidth, setContainerWidth] = useState(window.innerWidth - 260 - SCROLL_THUMB_WIDTH);
 
   const gridProps: Omit<GridProps<GridCellProps>, 'cellComponent'> | null = useMemo(() => {
@@ -43,7 +43,7 @@ export const SymbolsGrid: FC<ISymbolsGrid> = ({ codes }) => {
         data: codes,
         numberBase: numberBase,
         columnCount: columnCount,
-        onClick: (code: number) => setActive(code)
+        onClick: (code: Codepoint) => setActive(code)
       }
     }
   }, [codes, containerWidth, iconSize, numberBase]);

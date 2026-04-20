@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { SymbolSkinColor } from '@app-types';
+import { type Codepoint, SymbolSkinColor } from '@app-types';
 import { DEFAULT_FONT_FAMILY } from '../../constants/common';
 
 export enum AppConfigKey {
@@ -17,7 +17,7 @@ export type AppConfig<Key extends AppConfigKey> =
   Key extends AppConfigKey.IconSize ? number :
   Key extends AppConfigKey.ActiveCategory ? number :
   Key extends AppConfigKey.DevMode ? boolean :
-  Key extends AppConfigKey.Favorites ? number[] :
+  Key extends AppConfigKey.Favorites ? Codepoint[] :
   Key extends AppConfigKey.SkinColor ? SymbolSkinColor :
   Key extends AppConfigKey.NumberBase ? number :
   Key extends AppConfigKey.FontFamily ? string :

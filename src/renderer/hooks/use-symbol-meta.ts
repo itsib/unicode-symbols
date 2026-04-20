@@ -92,7 +92,7 @@ export function useSymbolMeta(code?: Codepoint): WithLoading<SymbolMeta> {
       code,
       name: idbEmoji ? idbEmoji?.n : idbName?.n,
       block: idbBlock?.n,
-      skin: !!(idbEmoji.o & (1 << 1))
+      skin: idbEmoji == null ? false : !!(idbEmoji.o & (1 << 1))
     }
   }, [code, idbBlock, idbName, idbEmoji]);
 }

@@ -7,18 +7,19 @@ import { ImgSymbol } from '../images/img-symbol';
 import { ImgStar } from '../images/img-star';
 import { useFavorites } from '../../hooks/use-favorites';
 import { SkinColorPicker } from '../skin-color-picker/skin-color-picker';
-import { SymbolSkinColor } from '@app-types';
+import { type Codepoint, SymbolSkinColor } from '@app-types';
 import { genSymbolCodes, genSymbolView, SymbolCodeOutput } from '../../utils/gen-symbol-view';
 import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
 import { ImgArrow } from '../images/img-arrow';
+import { UNICODE_VS16 } from '../../constants/unicode';
 
 export interface IModalCreateSymbol extends ModalProps {
-  code?: number | null;
+  code?: Codepoint | null;
 }
 
 export const ModalManageSymbol: FC<IModalCreateSymbol> = ({ isOpen, onDismiss, code }) => {
-  const codeRef = useRef<number | undefined | null>(code);
+  const codeRef = useRef<Codepoint | null>(code || null);
 
   useEffect(() => {
     if (code) {
@@ -37,16 +38,15 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: 
   const [fontFamily] = useAppConfig(AppConfigKey.FontFamily);
   const [defaultSkin, setDefaultSkin] = useAppConfig(AppConfigKey.SkinColor);
 
-  const [code, setCode] = useState(_code);
+  const [code, setCode] = useState<Codepoint>(_code);
   const meta = useSymbolMeta(code);
 
   const [_skin, setSkin] = useState<SymbolSkinColor>(defaultSkin);
+  const [variant, setVariant] = useState(Array.isArray(code) && code.includes(UNICODE_VS16))
   const skin = meta?.skin ? _skin : 0;
-  const [isFavorite, toggleFavorite] = useFavorites(code as number);
+  const [isFavorite, toggleFavorite] = useFavorites(code);
 
-  const codesSet = useMemo(() => genSymbolCodes(code, skin), [code, skin]);
-
-  const isSupportArrow = code < 0xffffffff && !(code.toString(16).length === 6 && code.toString(16).endsWith('20e3'));
+  const codesSet = useMemo(() => genSymbolCodes(code, skin, variant), [code, skin, variant]);
 
   const html = genSymbolView(codesSet, SymbolCodeOutput.HTML);
   const css = genSymbolView(codesSet, SymbolCodeOutput.CSS);
@@ -82,6 +82,12 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: 
         </div>
 
         <div className="symbol-wrap">
+          <BtnCopy className="symbol" text={String.fromCodePoint(...codesSet)}>
+            <div style={{ fontFamily: fontFamily }}>
+              <ImgSymbol code={codesSet} size={70}/>
+            </div>
+          </BtnCopy>
+
           <button
             className="btn btn-favorites"
             aria-label="Add to favorites"
@@ -90,25 +96,30 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: 
           >
             <ImgStar className="star" active={isFavorite}/>
           </button>
-
-
-          <BtnCopy className="symbol" text={String.fromCodePoint(...codesSet)}>
-            <div style={{ fontFamily: fontFamily }}>
-              <ImgSymbol code={codesSet} size={70}/>
-            </div>
-          </BtnCopy>
-
+        </div>
 
         {meta?.skin ? (
-            <div className="right-color-picker">
-              <SkinColorPicker value={skin} onChange={setSkin} />
+          <div className="right-color-picker">
+            <SkinColorPicker value={skin} onChange={setSkin} />
 
-              <button type="button" className={`btn btn-primary ${skin === defaultSkin ? 'hidden' : ''}`} onClick={() => setDefaultSkin(skin)}>
-                <span>Make it default</span>
-              </button>
-            </div>
-          ) : null}
-        </div>
+            <button type="button" className={`btn btn-primary ${skin === defaultSkin ? 'hidden' : ''}`} onClick={() => setDefaultSkin(skin)}>
+              <span>Make it default</span>
+            </button>
+          </div>
+        ) : (
+          <div className="right-color-picker" />
+        )}
+
+        {Array.isArray(code) && code.includes(UNICODE_VS16) ? (
+          <div className="variant-checkbox">
+            <label className="checkbox">
+              <input type="checkbox" checked={!variant} onChange={() => setVariant(!variant)} />
+              Monochrome
+            </label>
+          </div>
+        ) : (
+          <div className="variant-checkbox" />
+        )}
 
         <div className="options">
           <div className="table-codes">
@@ -126,13 +137,13 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: 
           </div>
         </div>
 
-        {isSupportArrow ? (
+        {typeof code === 'number' ? (
           <div className="arrows">
             <button
               aria-label="Previous symbol"
               data-tooltip-pos="top"
               className="btn btn-arrow"
-              onClick={() => setCode(i => (i <= 1 ? i : i - 1))}
+              onClick={() => setCode(code <= 1 ? code : code - 1)}
             >
               <ImgArrow direction="left"/>
             </button>
@@ -141,7 +152,7 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: 
               aria-label="Next&nbsp;Symbol"
               data-tooltip-pos="top"
               className="btn btn-arrow"
-              onClick={() => setCode(i => (i >= 0xffffffff ? i : i + 1))}
+              onClick={() => setCode(code >= 0xffffff ? code : code + 1)}
             >
               <ImgArrow direction="right"/>
             </button>

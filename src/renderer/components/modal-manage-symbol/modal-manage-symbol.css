@@ -2,13 +2,21 @@
   width: 500px;
 
   .modal-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.5fr 1fr 1fr;
+    grid-template-rows: 3.5rem 80px 0.5fr 2fr;
     justify-content: center;
+    column-gap: 0.5rem;
+    row-gap: 0.5rem;
     position: relative;
+    grid-template-areas:
+      "th th th th th"
+      "ls ls center rs rs"
+      ". . center variant variant"
+      "opts opts opts opts opts";
 
     .info {
+      grid-area: th;
       text-align: center;
 
       .name {
@@ -28,7 +36,9 @@
     .symbol-wrap {
       width: 76px;
       height: 76px;
-      margin-top: 20px;
+      grid-area: center;
+      align-self: center;
+      justify-self: center;
       position: relative;
 
       .btn-favorites {
@@ -67,29 +77,6 @@
         transition: all .1s linear;
       }
 
-      .right-color-picker {
-        right: -26px;
-        top: 0;
-        margin-left: 26px;
-        transform: translateX(100%);
-        position: absolute;
-
-        .btn-primary {
-          height: auto;
-          width: 100%;
-          margin-top: 8px;
-          padding: 4px;
-          font-size: 11px;
-          font-weight: 400;
-          white-space: nowrap;
-          border-radius: 3px;
-
-          &.hidden {
-            visibility: hidden;
-          }
-        }
-      }
-
       &:hover {
 
         .btn-favorites {
@@ -102,10 +89,50 @@
       }
     }
 
+    .right-color-picker {
+      grid-area: rs;
+      align-self: center;
+      justify-self: start;
+
+      .btn-primary {
+        height: auto;
+        width: 100%;
+        margin-top: 0.5rem;
+        padding: 4px;
+        font-size: 11px;
+        font-weight: 400;
+        white-space: nowrap;
+        border-radius: 3px;
+
+        &.hidden {
+          visibility: hidden;
+        }
+      }
+    }
+
+    .variant-checkbox {
+      grid-area: variant;
+
+      .checkbox {
+        display: flex;
+        align-items: center;
+        user-select: none;
+        gap: 0.5rem;
+
+        input {
+          height: 1rem;
+          aspect-ratio: 1/1;
+          accent-color: rgb(var(--accent));
+        }
+      }
+    }
+
     .options {
-      margin-top: 30px;
       display: flex;
       align-items: center;
+      grid-area: opts;
+      align-self: center;
+      justify-self: center;
 
       .table-codes {
         font-size: 14px;

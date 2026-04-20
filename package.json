@@ -1,12 +1,12 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "name": "unicode-symbols",
   "productName": "Unicode Symbols",
   "description": "Utility application to browse and search unusual characters.",
   "productDescription": "Unicode Symbols is a simple utility application to find and insert unusual characters. It allows you to quickly find the symbol you are looking for by searching for keywords. \n\nYou can also browse characters by categories, such as Punctuation, Pictures, etc.",
   "config": {
     "idbName": "UnicodeSymbols",
-    "idbVersion": 6
+    "idbVersion": 7
   },
   "author": {
     "name": "Sergey Krainov",

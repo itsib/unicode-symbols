@@ -1,8 +1,9 @@
 import { useCallback, useMemo } from 'react';
 import { useAppConfig } from './use-app-config';
 import { AppConfigKey } from '@app-context';
+import type { Codepoint } from '@app-types';
 
-export function useFavorites(symbol: number): [boolean, () => void] {
+export function useFavorites(symbol: Codepoint): [boolean, () => void] {
   const [favorites, setFavorites] = useAppConfig(AppConfigKey.Favorites);
 
   const isFavorite = useMemo(() => (symbol != null ? favorites.includes(symbol) : false), [symbol, favorites]);
