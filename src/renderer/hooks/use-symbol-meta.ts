@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { type Codepoint, IdbBlock, IdbEmoji, IdbName, SymbolMeta, type WithLoading } from '@app-types';
 import { IndexedDbStore } from '@app-context';
 import { useDatabase } from './use-database';
+import { isBitOn } from '../utils/binary-utils';
 
 export function useSymbolMeta(code?: Codepoint): WithLoading<SymbolMeta> {
   const database = useDatabase();
@@ -89,10 +90,11 @@ export function useSymbolMeta(code?: Codepoint): WithLoading<SymbolMeta> {
     }
 
     return {
-      code,
+      code: idbEmoji ? idbEmoji.c : code,
       name: idbEmoji ? idbEmoji?.n : idbName?.n,
       block: idbBlock?.n,
-      skin: idbEmoji == null ? false : !!(idbEmoji.o & (1 << 1))
+      isSupportSkin: idbEmoji == null ? false : isBitOn(idbEmoji.o, 1),
+      isSupportVariants: idbEmoji == null ? false : isBitOn(idbEmoji.o, 0),
     }
   }, [code, idbBlock, idbName, idbEmoji]);
 }

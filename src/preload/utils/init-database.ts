@@ -1,11 +1,11 @@
 import { type IDBPDatabase, openDB, unwrap } from 'idb';
 import { IdbStoreName } from '@app-types';
 import { fileRead } from './file-read';
+import { bitOn, isBitOn } from '../../renderer/utils/binary-utils';
 
 interface EmojiChunk {
   codes: number[];
   name: string;
-  qualification: string;
   menu: number;
 }
 
@@ -73,6 +73,11 @@ const MENU_ICONS: Record<number, string> = [
   'letters.svg',
   'flags.svg',
 ];
+
+enum OptsBit {
+  Modifier = 0,
+  SkinColor,
+}
 
 async function initBlocks(dbp: IDBPDatabase) {
   const db = unwrap(dbp)
@@ -175,41 +180,90 @@ async function initEmoji(dbp: IDBPDatabase): Promise<void> {
   const emojiStore = transaction.objectStore(IdbStoreName.Emoji);
 
   function handleChunk(chunks: EmojiChunk[]) {
-    const [s0, s1, ...ss] = chunks;
-    if (s0 && !s1 && !ss.length) {
+    // Simple emoji
+    if (chunks.length === 1) {
+      const [s0] = chunks
       emojiStore.add({
         c: s0.codes,
         n: s0.name,
         g: s0.menu,
-        q: s0.qualification,
-        o: 0b0000,
+        e: 1,
+        o: 0,
       });
-      return
     }
 
-    if (s0 && s1 && !ss.length) {
-      if ((s0.codes.length === 1 && s1.codes.length === 2 && s1.codes[1] === VS16) || (s1.codes.length === 1 && s0.codes.length === 2 && s0.codes[1] === VS16)) {
-        const s = s1.codes.length === 1 && s0.codes.length === 2 && s0.codes[1] === VS16 ? s0 : s1
-        emojiStore.add({
-          c: s.codes,
-          n: s.name,
-          g: s.menu,
-          q: s.qualification,
-          o: 0b0001,
-        });
-        return
+    // One simple emoji with skin and variant
+    else if (chunks.every(chunk => chunk.codes.length <= 2)) {
+      let options = 0
+      let name = chunks[0].name
+      const codes: number[] = [chunks[0].codes[0]]
+
+      for (let i = 0; i < chunks.length; i++) {
+        const s = chunks[i];
+
+        if (s.codes.length === 2 && s.codes[1] === VS16) {
+          name = s.name
+          options = bitOn(options, OptsBit.Modifier)
+          codes.push(VS16)
+        } else if (s.codes.length === 2 && !isBitOn(options, OptsBit.SkinColor) && EMOJI_SKIN_MODS.includes(s.codes[1])) {
+          options = bitOn(options, OptsBit.SkinColor)
+        }
       }
+
+      emojiStore.add({
+        c: codes,
+        n: name,
+        g: chunks[0].menu,
+        e: 1,
+        o: options,
+      });
     }
 
-    if (chunks.every(c => c.codes.length === 1 || (c.codes.length === 2 && EMOJI_SKIN_MODS.includes(c.codes[1])))) {
+    else {
+      let name: string = ''
+      let options = 0
+      let entities = 1
+      let codes: number[] = [...chunks[0].codes]
+      const group = chunks[0].menu
+
+      for (let i = 0; i < chunks.length; i++) {
+        const _chunk = chunks[i];
+
+        if (!name) {
+          name = _chunk.name;
+        }
+
+        const _codes: number[] = []
+        let _entities = 1
+        for (let j = 0; j < _chunk.codes.length; j++) {
+          const _code = _chunk.codes[j]
+
+          if (_code === ZWJ) {
+            _entities += 1
+            _codes.push(_code)
+          }
+
+          const bitOffset = entities * 3
+
+          if (_code === VS16) {
+            _codes.push(VS16)
+            options = bitOn(options, bitOffset + OptsBit.Modifier)
+          } else if (!isBitOn(options, bitOffset + OptsBit.SkinColor) && EMOJI_SKIN_MODS.includes(_code)) {
+            options = bitOn(options, bitOffset + OptsBit.SkinColor)
+          }
+        }
+
+        codes = _codes.length > codes.length ? _codes : codes
+        entities = Math.max(entities, _entities)
+      }
+
       emojiStore.add({
-        c: [chunks[0].codes[0]],
-        n: chunks[0].name,
-        g: chunks[0].menu,
-        q: chunks[0].qualification,
-        o: 0b0010,
+        c: codes,
+        n: name,
+        g: group,
+        e: entities,
+        o: options,
       });
-      return
     }
   }
 
@@ -237,33 +291,34 @@ async function initEmoji(dbp: IDBPDatabase): Promise<void> {
       continue;
     }
 
-    const { codes, name, qualification } = parseEmoji(line)
-    const code = codes[0];
+    const { codes, name } = parseEmoji(line)
 
-    if (chunks && chunks[0].codes[0] !== code) {
+    // Close chunk if next codepoint
+    if (chunks && !isSameCodepoint(chunks[0].codes, codes)) {
       handleChunk(chunks)
       chunks = null
     }
 
     // Handle flags
-    if (code >= 0x1F1E6 && code <= 0x1F1FF) {
+    if (codes[0] >= 0x1F1E6 && codes[0] <= 0x1F1FF) {
       emojiStore.add({
         c: codes,
         n: name,
         g: menuIndex,
-        q: qualification,
-        o: 0b0000,
+        o: 0,
       });
       continue;
     }
 
+    // Start collect chunks - create first chink
     if (!chunks) {
-      chunks = [{ codes, name, qualification, menu: menuIndex }];
+      chunks = [{ codes, name, menu: menuIndex }];
       continue;
     }
 
-    if (chunks[0].codes[0] === code) {
-      chunks.push({codes, name, qualification, menu: menuIndex });
+    // Collect same codepoints in chunks
+    if (isSameCodepoint(chunks[0].codes, codes)) {
+      chunks.push({codes, name, menu: menuIndex });
     }
   }
 
@@ -280,19 +335,33 @@ async function initEmoji(dbp: IDBPDatabase): Promise<void> {
 }
 
 function parseEmoji(line: string) {
-  let [codesRaw, qualificationRaw, nameRaw] = line.split(';');
+  let [codesRaw, _qualificationRaw, nameRaw] = line.split(';');
   const name = nameRaw.trim();
-  const qualification = qualificationRaw.trim();
   const codes = codesRaw.trim().split(',').map(v => parseInt(v, 16));
   if (codes.length === 0 || codes.some(code => isNaN(code))) {
     throw new Error('NO_CODES');
   }
 
-  return { codes, name, qualification };
+  return { codes, name };
 }
 
 function extractError(error: any): Error {
   return new Error((error?.target as any)?.error);
+}
+
+function isSameCodepoint(codesA: number[], codesB: number[]): boolean {
+  if (codesA[0] !== codesB[0]) return false
+
+  const idsA = codesA.filter(code => !EMOJI_SKIN_MODS.includes(code) && code !== VS16 && code !== ZWJ);
+  const idsB = codesB.filter(code => !EMOJI_SKIN_MODS.includes(code) && code !== VS16 && code !== ZWJ);
+
+  if (idsA.length === idsB.length && idsA.every((code, index) => idsB[index] === code)) {
+    return true;
+  }
+  // console.log([idsA.map(id => id.toString(16).toUpperCase()).join(','), idsB.map(id => id.toString(16).toUpperCase()).join(',')])
+
+  return false
+
 }
 
 export async function initDatabase(name: string, version?: number): Promise<void> {
@@ -332,18 +401,30 @@ export async function initDatabase(name: string, version?: number): Promise<void
     },
   });
 
-  const blocksCount = await dbp.count(IdbStoreName.Blocks)
-  if (blocksCount === 0) {
-    await initBlocks(dbp);
+  try {
+    const blocksCount = await dbp.count(IdbStoreName.Blocks)
+    if (blocksCount === 0) {
+      await initBlocks(dbp);
+    }
+  } catch (error) {
+    console.error('initBlocks', error);
   }
 
-  const namesCount = await dbp.count(IdbStoreName.Names);
-  if (namesCount === 0) {
-    await initNames(dbp);
+  try {
+    const namesCount = await dbp.count(IdbStoreName.Names);
+    if (namesCount === 0) {
+      await initNames(dbp);
+    }
+  } catch (error) {
+    console.error('initNames', error);
   }
 
-  const emojiCount = await dbp.count(IdbStoreName.Emoji);
-  if (emojiCount === 0) {
-    await initEmoji(dbp);
+  try {
+    const emojiCount = await dbp.count(IdbStoreName.Emoji);
+    if (emojiCount === 0) {
+      await initEmoji(dbp);
+    }
+  } catch (error) {
+    console.error('initEmoji', error);
   }
 }

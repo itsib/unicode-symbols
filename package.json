@@ -26,7 +26,8 @@
     "lint": "eslint --ext .ts,.tsx .",
     "setup": "./install.sh",
     "help": "electron-forge make --help",
-    "db-up": "node ./prepare.mjs"
+    "db-up": "node ./prepare.mjs",
+    "test": "vitest"
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.18.10",
@@ -64,6 +65,7 @@
     "svgo": "^4.0.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.9.3",
-    "vite": "^8.0.3"
+    "vite": "^8.0.3",
+    "vitest": "^4.1.5"
   }
 }

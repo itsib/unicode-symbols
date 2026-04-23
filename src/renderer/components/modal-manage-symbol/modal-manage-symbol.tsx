@@ -13,6 +13,7 @@ import { useAppConfig } from '../../hooks/use-app-config';
 import { AppConfigKey } from '@app-context';
 import { ImgArrow } from '../images/img-arrow';
 import { UNICODE_VS16 } from '../../constants/unicode';
+import { useLog } from '../../hooks/use-log';
 
 export interface IModalCreateSymbol extends ModalProps {
   code?: Codepoint | null;
@@ -41,12 +42,14 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: 
   const [code, setCode] = useState<Codepoint>(_code);
   const meta = useSymbolMeta(code);
 
-  const [_skin, setSkin] = useState<SymbolSkinColor>(defaultSkin);
-  const [variant, setVariant] = useState(Array.isArray(code) && code.includes(UNICODE_VS16))
-  const skin = meta?.skin ? _skin : 0;
+  const [_skin, setSkin] = useState<SymbolSkinColor>();
+  const skin = meta?.isSupportSkin ? _skin : 0;
+
+  const [_isSecondVariant, setIsSecondVariant] = useState(false)
+  const isSecondVariant = meta?.isSupportVariants ? _isSecondVariant : false
   const [isFavorite, toggleFavorite] = useFavorites(code);
 
-  const codesSet = useMemo(() => genSymbolCodes(code, skin, variant), [code, skin, variant]);
+  const codesSet = useMemo(() => genSymbolCodes(code, meta, { skin, isSecondVariant }), [code, meta, skin, isSecondVariant]);
 
   const html = genSymbolView(codesSet, SymbolCodeOutput.HTML);
   const css = genSymbolView(codesSet, SymbolCodeOutput.CSS);
@@ -98,11 +101,15 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: 
           </button>
         </div>
 
-        {meta?.skin ? (
+        {meta?.isSupportSkin ? (
           <div className="right-color-picker">
-            <SkinColorPicker value={skin} onChange={setSkin} />
+            <SkinColorPicker value={skin} onChange={setSkin} disabled={isSecondVariant} />
 
-            <button type="button" className={`btn btn-primary ${skin === defaultSkin ? 'hidden' : ''}`} onClick={() => setDefaultSkin(skin)}>
+            <button
+              type="button"
+              className={`btn btn-primary ${skin === defaultSkin ? 'hidden' : ''}`}
+              onClick={() => setDefaultSkin(skin)} disabled={isSecondVariant}
+            >
               <span>Make it default</span>
             </button>
           </div>
@@ -110,10 +117,10 @@ const ModalContent: FC<Required<Omit<IModalCreateSymbol, 'isOpen'>>> = ({ code: 
           <div className="right-color-picker" />
         )}
 
-        {Array.isArray(code) && code.includes(UNICODE_VS16) ? (
+        {meta?.isSupportVariants ? (
           <div className="variant-checkbox">
             <label className="checkbox">
-              <input type="checkbox" checked={!variant} onChange={() => setVariant(!variant)} />
+              <input type="checkbox" checked={isSecondVariant} onChange={() => setIsSecondVariant(!isSecondVariant)} />
               Monochrome
             </label>
           </div>

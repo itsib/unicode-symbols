@@ -1,4 +1,4 @@
-import { type Codepoint, SymbolSkinColor } from '@app-types';
+import { type Codepoint, type SymbolMeta, SymbolSkinColor } from '@app-types';
 import { SKIN_CODE, UNICODE_ZWJ, UNICODE_VS16 } from '../constants/unicode';
 
 export enum SymbolCodeOutput {
@@ -21,18 +21,19 @@ function codeConverter(code: number, output: SymbolCodeOutput): string {
   }
 }
 
-export function genSymbolCodes(code: Codepoint, skin: SymbolSkinColor = 0, variant?: boolean): number[] {
-  const set = typeof code === 'number' ? [code] : [...code];
+export function genSymbolCodes(code: Codepoint, meta?: SymbolMeta | null, opts?: { skin?: SymbolSkinColor; isSecondVariant?: boolean }): number[] {
+  const { isSecondVariant, skin = 0 } = opts || {}
+  const mainCode = typeof code === 'number' ? code : code[0]
 
-  if (set.includes(UNICODE_VS16) && !variant) {
-    return set.filter(i => i !== UNICODE_VS16);
+  if (meta?.isSupportSkin && skin) {
+    return [mainCode, SKIN_CODE[skin]];
   }
 
-  if (skin) {
-    return [...set, UNICODE_ZWJ, SKIN_CODE[skin]];
+  if (meta?.isSupportVariants && !isSecondVariant) {
+    return [mainCode, UNICODE_VS16]
+  } else {
+    return [mainCode];
   }
-
-  return set;
 }
 
 export function genSymbolView(codesSet: number[], output: SymbolCodeOutput): string {

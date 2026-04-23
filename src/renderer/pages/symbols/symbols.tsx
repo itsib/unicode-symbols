@@ -9,7 +9,6 @@ import { ImgClose } from '../../components/images/img-close';
 import { ImgArrow } from '../../components/images/img-arrow';
 import { NothingFound } from '../../components/nothing-found/nothing-found';
 import { debounce } from '../../utils/debounce';
-import { useLog } from '../../hooks/use-log';
 
 export const SymbolsPage: FC = () => {
   const [activeCategory] = useAppConfig(AppConfigKey.ActiveCategory);
